@@ -17,11 +17,12 @@ export default function Footer() {
                   strokeLinejoin="round" 
                   className="w-4.5 h-4.5"
                 >
-                  <circle cx="12" cy="7" r="4" />
-                  <path d="M12 11v10" />
-                  <path d="M12 14h4" />
-                  <path d="M12 17h3" />
-                  <path d="M12 20h2" />
+                  <path d="M6 3h8l4 4v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z" />
+                  <path d="M14 3v4h4" />
+                  <circle cx="12" cy="14" r="3" />
+                  <path d="M12 11v-2" />
+                  <path d="M9.5 15.5l-1.5 1.5" />
+                  <path d="M14.5 15.5l1.5 1.5" />
                 </svg>
               </div>
               <span className="font-bold text-lg">LexiVault</span>
