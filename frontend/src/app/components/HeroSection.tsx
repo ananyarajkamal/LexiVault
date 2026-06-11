@@ -1,4 +1,4 @@
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, FileCheck2, Clock } from 'lucide-react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Mic, Play } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -180,71 +180,69 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 </div>
               </div>
 
-              {/* Left Callout 1: Risk Alert */}
+              {/* Left Callout 1: Portfolio Risk */}
               <div className="absolute left-[0px] top-[100px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
                     <AlertTriangle className="w-2.5 h-2.5" />
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'जोखिम चेतावनी' : 'Risk Alert'}</span>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'पोर्टफोलियो जोखिम' : 'Portfolio Risk'}</span>
                 </div>
                 <div className="mt-2.5">
-                  <span className="inline-block text-[8px] font-bold bg-red-50 text-red-600 border border-red-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'उच्च जोखिम' : 'High Risk'}</span>
+                  <span className="inline-block text-[8px] font-bold bg-red-50 text-red-600 border border-red-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'उच्च देयता' : 'High Liability'}</span>
                 </div>
-                <div className="mt-1.5 text-neutral-800 font-semibold text-[11px]">
-                  {language === 'hi' ? 'देयता सीमा' : 'Liability Cap'}
+                <div className="mt-1.5 text-neutral-800 font-semibold text-[10.5px]">
+                  {language === 'hi' ? 'कुल देयता: ₹50,000' : 'Total: ₹50,000 limit'}
                 </div>
               </div>
 
-              {/* Left Callout 2: AI Recommendation */}
+              {/* Left Callout 2: Counterparty Simulation */}
               <div className="absolute left-[0px] top-[260px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-[#0B7A63] shrink-0">
                     <Sparkles className="w-2.5 h-2.5" />
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'एआई सिफारिश' : 'AI Recommendation'}</span>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'विरोधी पक्ष पुशबैक' : 'Counterparty Pushback'}</span>
                 </div>
                 <div className="mt-2.5">
-                  <span className="inline-block text-[9px] font-semibold bg-[#EAF5F2] text-[#0B7A63] border border-[#D1ECE5] rounded-lg px-2.5 py-1 text-center w-full">
-                    {language === 'hi' ? 'हस्ताक्षर से पहले बातचीत करें' : 'Negotiate before signing'}
-                  </span>
+                  <span className="inline-block text-[8px] font-bold bg-[#EAF5F2] text-[#0B7A63] border border-[#D1ECE5] rounded px-1.5 py-0.5">{language === 'hi' ? 'आक्रामक रवैया' : 'Aggressive Stance'}</span>
+                </div>
+                <div className="mt-1.5 text-neutral-800 font-semibold text-[10.5px]">
+                  {language === 'hi' ? 'धारा 12.1 पर आपत्ति' : 'Objection to Clause 12.1'}
                 </div>
               </div>
 
-              {/* Right Callout 1: Decision Summary */}
+              {/* Right Callout 1: Timeline Predictor */}
               <div className="absolute right-[0px] top-[110px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl flex flex-col">
                 <div className="flex items-center gap-1.5 text-neutral-700">
-                  {/* Little Circular ring indicator */}
-                  <svg className="w-4 h-4 text-[#0B7A63] shrink-0" viewBox="0 0 36 36">
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="#E6F0ED" strokeWidth="4" />
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="60 100" strokeDashoffset="0" strokeLinecap="round" />
-                  </svg>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'निर्णय सारांश' : 'Decision Summary'}</span>
+                  <div className="w-4 h-4 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 shrink-0">
+                    <Clock className="w-2.5 h-2.5" />
+                  </div>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'जीवनचक्र टाइमलाइन' : 'Lifecycle Timeline'}</span>
                 </div>
-                <div className="mt-3 text-neutral-800 font-bold text-[11px]">
-                  {language === 'hi' ? '3 मुद्दों का पता चला' : '3 issues detected'}
+                <div className="mt-2.5">
+                  <span className="inline-block text-[8px] font-bold bg-purple-50 text-purple-600 border border-purple-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'नवीनीकरण: 12 महीने' : 'Renewal: 12 Months'}</span>
                 </div>
-                <div className="mt-2 text-neutral-400 text-[9px] font-medium leading-none">
-                  {language === 'hi' ? 'आत्मविश्वास स्कोर' : 'Confidence Score'}
-                </div>
-                <div className="mt-0.5 text-neutral-800 font-bold text-[15px]">
-                  95%
-                </div>
-                <div className="mt-1.5 w-full bg-neutral-100 rounded-full h-1">
-                  <div className="bg-[#0B7A63] h-1 rounded-full" style={{ width: '95%' }}></div>
+                <div className="mt-1.5 text-neutral-800 font-semibold text-[10.5px]">
+                  {language === 'hi' ? 'अगला क्लिफ: नवंबर 2026' : 'Next Cliff: Nov 2026'}
                 </div>
               </div>
 
-              {/* Right Callout 2: Clause Reference */}
+              {/* Right Callout 2: Voice Briefing */}
               <div className="absolute right-[0px] top-[290px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0">
-                    <FileCheck2 className="w-2.5 h-2.5" />
+                    <Mic className="w-2.5 h-2.5" />
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'खंड संदर्भ' : 'Clause Reference'}</span>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'वॉइस ब्रीफिंग' : 'Voice Briefing'}</span>
                 </div>
-                <div className="mt-2 text-neutral-600 font-semibold text-[10px]">
-                  {language === 'hi' ? 'पृष्ठ 31 • खंड 12.1' : 'Page 31 • Clause 12.1'}
+                <div className="mt-2 flex items-center gap-1.5">
+                  <div className="w-5 h-5 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white cursor-pointer shrink-0">
+                    <Play className="w-2 h-2 fill-current" />
+                  </div>
+                  <span className="text-neutral-600 font-semibold text-[10px]">
+                    {language === 'hi' ? 'सुनने के लिए तैयार' : 'Listen to summary'}
+                  </span>
                 </div>
               </div>
 

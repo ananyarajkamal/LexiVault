@@ -29,7 +29,7 @@ const translations = {
     heroSub: "LexiVault reads contracts, NDAs, vendor agreements and business documents, highlights risks, explains clauses in plain language, compares versions and helps you make confident decisions before you sign.",
     uploadDoc: "Upload Document",
     private: "100% Private",
-    privateSub: "Your data stays on your device",
+    privateSub: "Confidential document analysis",
     enterprise: "Enterprise Ready",
     enterpriseSub: "Built for teams and scale",
     multiLang: "Multi-Language Support",
@@ -79,7 +79,7 @@ const translations = {
     lawyer: "Traditional Lawyers",
     lawyerDesc: "Highly accurate, but costs ₹18,000+ per hour and takes 2 to 3 days to return a simple markup.",
     lexiSolution: "LexiVault Solution",
-    lexiSolutionDesc: "Fast (seconds), 100% private (local execution), and highly accurate (expert legal QA system prompt). All three simultaneously.",
+    lexiSolutionDesc: "Fast (seconds), 100% private (local ingestion & retrieval), and highly accurate (expert legal QA system prompt). All three simultaneously.",
     // Who it is for
     whoTitle: "Who It Is For",
     whoSub: "Built for professionals in India who make decisions from documents they cannot afford to misread.",
@@ -105,7 +105,37 @@ const translations = {
     stage5: "5. Semantic Retrieval",
     stage5Desc: "Top-K semantic search across isolated namespaces simultaneously, with result merging.",
     stage6: "6. Cited Generation",
-    stage6Desc: "Language generation via local API keys with strict system prompts preventing hallucination and enforcing citations."
+    stage6Desc: "Language generation via local API keys with strict system prompts preventing hallucination and enforcing citations.",
+    // Features 5-8
+    feat5Title: "Portfolio Risk Dashboard",
+    feat5Desc: "Cross-document analytics displaying active contracts, total liability, vendor concentration, and cliffs.",
+    feat6Title: "Lifecycle Timeline Predictor",
+    feat6Desc: "Estimate negotiation duration, amendment frequency, renewal risks, and expiration cascades.",
+    feat7Title: "Counterparty Pushback Simulator",
+    feat7Desc: "Input proposed edits to simulate objections, counter-proposals, and strategic legal advice.",
+    feat8Title: "Voice-Powered Q&A Briefing",
+    feat8Desc: "Interact with your contracts hands-free using Speech-to-Text dictation and text-to-speech reading.",
+    // Footer & Column Headers
+    product: "Product",
+    about: "About",
+    allRightsReserved: "All rights reserved.",
+    privateAbout: "Private AI for document decisions. Upload contracts, understand risks, sign with confidence.",
+    // Footer List Items
+    riskAnalysisList: "Risk Analysis",
+    plainLanguageList: "Plain Language Explanations",
+    decisionBriefList: "Decision Brief Generator",
+    contradictionList: "Contradiction Detector",
+    portfolioDashList: "Portfolio Dashboard",
+    timelinePredList: "Timeline Predictor",
+    qaChatList: "Q&A Chat (Voice Enabled)",
+    redlineAutoList: "Redline Autopilot",
+    counterpartySimList: "Counterparty Simulator",
+    negotiationSandboxList: "Negotiation Sandbox",
+    multiLanguageList: "Multi-Language Support",
+    wolframLegalList: "Wolfram Legal Context",
+    privateList: "100% Private",
+    languagesList: "Hindi & English",
+    openSourceList: "Open Source"
   },
   hi: {
     features: "विशेषताएं",
@@ -125,7 +155,7 @@ const translations = {
     heroSub: "लेक्सीवॉल्ट आपके अनुबंधों, एनडीए, विक्रेता समझौतों और व्यावसायिक दस्तावेजों को पढ़ता है, जोखिमों को उजागर करता है, सरल भाषा में खंडों की व्याख्या करता है, संस्करणों की तुलना करता है और हस्ताक्षर करने से पहले आपको आश्वस्त निर्णय लेने में मदद करता है।",
     uploadDoc: "दस्तावेज़ अपलोड करें",
     private: "100% निजी",
-    privateSub: "आपका डेटा आपके डिवाइस पर रहता है",
+    privateSub: "गोपनीय दस्तावेज़ विश्लेषण",
     enterprise: "एंटरप्राइज तैयार",
     enterpriseSub: "टीमों और बड़े पैमाने के लिए निर्मित",
     multiLang: "बहु-भाषा",
@@ -175,7 +205,7 @@ const translations = {
     lawyer: "पारंपरिक वकील",
     lawyerDesc: "अत्यधिक सटीक, लेकिन प्रति घंटे ₹18,000+ की लागत आती है और एक साधारण मार्कअप वापस करने में 2 से 3 दिन लगते हैं।",
     lexiSolution: "लेक्सीवॉल्ट समाधान",
-    lexiSolutionDesc: "तेज़ (सेकंडों में), 100% निजी (स्थानीय निष्पादन), और अत्यधिक सटीक (विशेषज्ञ कानूनी क्यूएंडए प्रणाली संकेत)। तीनों एक साथ।",
+    lexiSolutionDesc: "तेज़ (सेकंडों में), 100% निजी (स्थानीय अंतर्ग्रहण और पुनर्प्राप्ति), और अत्यधिक सटीक (विशेषज्ञ कानूनी क्यूएंडए प्रणाली संकेत)। तीनों एक साथ।",
     // Who it is for
     whoTitle: "यह किसके लिए है",
     whoSub: "भारत में उन पेशेवरों के लिए निर्मित जो उन दस्तावेजों से निर्णय लेते हैं जिन्हें वे गलत पढ़ने का जोखिम नहीं उठा सकते।",
@@ -201,7 +231,37 @@ const translations = {
     stage5: "5. शब्दार्थ पुनर्प्राप्ति",
     stage5Desc: "परिणाम विलय के साथ, एक साथ पृथक नेमस्पेस में टॉप-के सिमेंटिक खोज।",
     stage6: "6. उद्धृत जनरेशन",
-    stage6Desc: "मतिभ्रम को रोकने और पृष्ठ उद्धरणों को लागू करने वाले सख्त सिस्टम संकेतों के साथ स्थानीय एपीआई कुंजी के माध्यम से भाषा निर्माण।"
+    stage6Desc: "मतिभ्रम को रोकने और पृष्ठ उद्धरणों को लागू करने वाले सख्त सिस्टम संकेतों के साथ स्थानीय एपीआई कुंजी के माध्यम से भाषा निर्माण।",
+    // Features 5-8
+    feat5Title: "पोर्टफोलियो जोखिम डैशबोर्ड",
+    feat5Desc: "सक्रिय अनुबंधों, कुल देयता, विक्रेता एकाग्रता और समय-सीमा को प्रदर्शित करने वाला क्रॉस-दस्तावेज़ विश्लेषण।",
+    feat6Title: "जीवनचक्र टाइमलाइन भविष्यवक्ता",
+    feat6Desc: "बातचीत की अवधि, संशोधन आवृत्ति, नवीनीकरण जोखिमों और समाप्ति झरनों का अनुमान लगाएं।",
+    feat7Title: "विरोधी पक्ष पुशबैक सिम्युलेटर",
+    feat7Desc: "आपत्तियों, जवाबी प्रस्तावों और रणनीतिक कानूनी सलाह का अनुकरण करने के लिए प्रस्तावित संपादन दर्ज करें।",
+    feat8Title: "आवाज-संचालित प्रश्नोत्तर ब्रीफिंग",
+    feat8Desc: "स्पीच-टू-टेक्स्ट डिक्टेशन और टेक्स्ट-टू-स्पीच रीडिंग का उपयोग करके अपने अनुबंधों के साथ हैंड्स-फ्री इंटरैक्ट करें।",
+    // Footer & Column Headers
+    product: "उत्पाद",
+    about: "हमारे बारे में",
+    allRightsReserved: "सर्वाधिकार सुरक्षित।",
+    privateAbout: "दस्तावेज़ निर्णयों के लिए निजी एआई। अनुबंध अपलोड करें, जोखिमों को समझें, आत्मविश्वास के साथ हस्ताक्षर करें।",
+    // Footer List Items
+    riskAnalysisList: "जोखिम विश्लेषण",
+    plainLanguageList: "सरल भाषा स्पष्टीकरण",
+    decisionBriefList: "निर्णय संक्षिप्त जनरेटर",
+    contradictionList: "विरोधाभास डिटेक्टर",
+    portfolioDashList: "पोर्टफोलियो डैशबोर्ड",
+    timelinePredList: "टाइमलाइन भविष्यवक्ता",
+    qaChatList: "प्रश्नोत्तर चैट (आवाज सक्षम)",
+    redlineAutoList: "रेडलाइन ऑटोपायलट",
+    counterpartySimList: "विरोधी पक्ष सिम्युलेटर",
+    negotiationSandboxList: "बातचीत सैंडबॉक्स",
+    multiLanguageList: "बहु-भाषा समर्थन",
+    wolframLegalList: "वोल्फ्राम कानूनी संदर्भ",
+    privateList: "100% निजी",
+    languagesList: "हिंदी और अंग्रेजी",
+    openSourceList: "ओपन सोर्स"
   }
 };
 
@@ -213,6 +273,7 @@ export default function App() {
   const [username, setUsername] = useState('');
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const [authError, setAuthError] = useState('');
   
   // Auth form states
   const [fullName, setFullName] = useState('');
@@ -228,22 +289,54 @@ export default function App() {
 
   const handleAuthSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setAuthError('');
+    const cleanUser = loginUser.trim().toLowerCase();
+    const storedUsers = JSON.parse(localStorage.getItem("lexivault_users") || "{}");
+
     if (isSignUpMode) {
-      if (loginPass !== confirmPass) {
-        alert("Passwords do not match!");
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(cleanUser)) {
+        setAuthError(language === 'hi' ? "कृपया एक मान्य ईमेल पता दर्ज करें!" : "Please enter a valid email address!");
         return;
       }
+      if (loginPass.length < 8) {
+        setAuthError(language === 'hi' ? "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए!" : "Password must be at least 8 characters long!");
+        return;
+      }
+      if (loginPass !== confirmPass) {
+        setAuthError(language === 'hi' ? "पासवर्ड मेल नहीं खाते!" : "Passwords do not match!");
+        return;
+      }
+      if (storedUsers[cleanUser]) {
+        setAuthError(language === 'hi' ? "उपयोगकर्ता पहले से मौजूद है! कृपया साइन इन करें।" : "User already exists! Please Sign In instead.");
+        return;
+      }
+      // Save new user info
+      storedUsers[cleanUser] = {
+        password: loginPass,
+        fullName: fullName.trim()
+      };
+      localStorage.setItem("lexivault_users", JSON.stringify(storedUsers));
+      
       setIsLoggedIn(true);
-      setUsername(fullName || loginUser);
+      setUsername(fullName.trim() || loginUser.trim());
       setShowLoginModal(false);
       resetAuthFields();
     } else {
-      if (loginUser.trim()) {
-        setIsLoggedIn(true);
-        setUsername(loginUser);
-        setShowLoginModal(false);
-        resetAuthFields();
+      const userRecord = storedUsers[cleanUser];
+      if (!userRecord) {
+        setAuthError(language === 'hi' ? "उपयोगकर्ता मौजूद नहीं है। कृपया पहले साइन अप करें।" : "User does not exist. Please Sign Up first.");
+        return;
       }
+      if (userRecord.password !== loginPass) {
+        setAuthError(language === 'hi' ? "गलत पासवर्ड!" : "Incorrect password!");
+        return;
+      }
+      
+      setIsLoggedIn(true);
+      setUsername(userRecord.fullName || loginUser.trim());
+      setShowLoginModal(false);
+      resetAuthFields();
     }
   };
 
@@ -252,6 +345,7 @@ export default function App() {
     setLoginUser('');
     setLoginPass('');
     setConfirmPass('');
+    setAuthError('');
   };
 
   return (
@@ -263,6 +357,7 @@ export default function App() {
         onLoginClick={() => {
           setIsSignUpMode(false);
           setShowLoginModal(true);
+          setAuthError('');
         }}
         onLogout={() => {
           setIsLoggedIn(false);
@@ -408,9 +503,7 @@ export default function App() {
 
       <WorkspaceSection globalLanguage={language} />
 
-
-
-      <Footer />
+      <Footer t={t} />
 
       {/* Auth Modal (Sign In / Sign Up) */}
       {showLoginModal && (
@@ -431,6 +524,12 @@ export default function App() {
             <p className="text-xs text-neutral-500 mb-4">
               {isSignUpMode ? t.createSub : t.accessSub}
             </p>
+            
+            {authError && (
+              <div className="bg-red-50 border border-red-200 text-red-600 rounded-lg p-2.5 text-xs font-semibold leading-relaxed mb-4 font-sans">
+                {authError}
+              </div>
+            )}
             
             <form onSubmit={handleAuthSubmit} className="space-y-3">
               {isSignUpMode && (

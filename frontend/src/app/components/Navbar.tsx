@@ -45,15 +45,20 @@ export default function Navbar({
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
-                strokeWidth="2.5" 
+                strokeWidth="2.2" 
                 strokeLinecap="round" 
                 strokeLinejoin="round" 
-                className="w-4.5 h-4.5"
+                className="w-4.5 h-4.5 text-white"
               >
-                <circle cx="8.5" cy="8.5" r="4.5" />
-                <path d="M11.7 11.7l7.8 7.8" />
-                <path d="M14.5 14.5l-2.5 2.5" />
-                <path d="M17.5 17.5l-2.5 2.5" />
+                {/* Shield Outline */}
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                {/* Book Pages Outline */}
+                <path d="M12 8.5c-2-1.2-4.5-1.2-6.5-.2v5.5c2-1 4.5-1 6.5.2M12 8.5c2-1.2 4.5-1.2 6.5-.2v5.5c-2-1-4.5-1-6.5.2" />
+                {/* Spine */}
+                <path d="M12 8.5v5.7" />
+                {/* Keyhole Silhouette */}
+                <circle cx="12" cy="11.2" r="0.95" fill="currentColor" stroke="none" />
+                <path d="M11.6 11.9l-0.2 1.4h1.2l-0.2-1.4" fill="currentColor" stroke="none" />
               </svg>
             </div>
             <span className="font-bold text-[20px] text-[#092E26] tracking-tight font-sans">LexiVault</span>
