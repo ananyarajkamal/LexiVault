@@ -1,0 +1,50 @@
+# Environment Variables & Credentials
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python Caches & Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+pyenv/
+
+# Locally Generated Database & Vector Indexes
+data/faiss_index/
+
+# Node/React Frontend dependencies and build outputs
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# Logs
+logs/
+*.log
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor files
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
