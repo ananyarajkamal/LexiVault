@@ -30,6 +30,9 @@ from wolfram.legal_context import get_legal_context
 from export.exporter import export_pdf, export_docx
 from features.negotiation_sandbox import simulate_negotiation
 from features.semantic_diff import compute_semantic_diff
+from features.portfolio_manager import extract_and_save_metadata, get_portfolio_dashboard_stats, load_metadata
+from features.timeline_predictor import predict_lifecycle
+from features.counterparty_simulator import simulate_counterparty_pushback
 
 # ---------------------------------------------------------------------------
 # Global State & Services
@@ -89,6 +92,15 @@ class SemanticDiffRequest(BaseModel):
     text_v2: str
     language: str = "English"
 
+class CounterpartySimRequest(BaseModel):
+    clause_text: str
+    proposed_edit: str
+    language: str = "English"
+
+class TimelineRequest(BaseModel):
+    namespace: str
+    language: str = "English"
+
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
@@ -128,6 +140,12 @@ async def upload_documents(files: List[UploadFile] = File(...)):
             if namespace not in session_state["namespaces"]:
                 session_state["namespaces"].append(namespace)
             session_state["uploaded_files"][namespace] = temp_path
+            
+            # Extract and cache portfolio metadata for dashboard analytics
+            try:
+                extract_and_save_metadata(namespace, text)
+            except Exception as metadata_err:
+                print(f"Failed to automatically extract portfolio metadata: {metadata_err}")
             
             results.append({"file": file.filename, "status": "success", "namespace": namespace})
             
@@ -264,6 +282,31 @@ def semantic_diff(req: SemanticDiffRequest):
         language=req.language
     )
     return res
+
+@app.post("/api/features/predict-timeline")
+def predict_timeline(req: TimelineRequest):
+    if req.namespace not in session_state["uploaded_files"]:
+        raise HTTPException(status_code=400, detail="Document not found or not indexed yet.")
+    temp_path = session_state["uploaded_files"][req.namespace]
+    text = parse_pdf(temp_path)
+    if not text:
+        raise HTTPException(status_code=400, detail="Could not read document text.")
+    res = predict_lifecycle(text, req.language)
+    return res
+
+@app.post("/api/features/counterparty-sim")
+def counterparty_sim(req: CounterpartySimRequest):
+    res = simulate_counterparty_pushback(
+        clause_text=req.clause_text,
+        proposed_edit=req.proposed_edit,
+        language=req.language
+    )
+    return res
+
+@app.get("/api/portfolio/dashboard")
+def portfolio_dashboard():
+    stats = get_portfolio_dashboard_stats()
+    return stats
 
 if __name__ == "__main__":
     import uvicorn

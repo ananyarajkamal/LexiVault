@@ -115,3 +115,38 @@ SEMANTIC_DIFF_PROMPT = (
 )
 """Prompt template for semantic diff auditing. Placeholders: {version_1}, {version_2}, {language}."""
 
+LIFECYCLE_TIMELINE_PROMPT = (
+    "You are LexiVault, a predictive contract manager. Analyze the following contract "
+    "text and predict its full lifecycle. Output valid JSON only with these exact keys: "
+    "negotiation_duration_days (estimated negotiation timeline in days as an integer), "
+    "amendment_frequency (Low, Medium, or High), "
+    "renewal_risk_score (0-100 integer representing the risk of not renewing or termination issues), "
+    "cascade_effects (a clear description of expiration gaps or dependencies, e.g., 'This NDA "
+    "expires 30 days before the master agreement, creating a coverage gap'). "
+    "Respond in the specified language. Contract text: {contract_text} Language: {language}"
+)
+"""Prompt template for predicting contract lifecycles. Placeholders: {contract_text}, {language}."""
+
+COUNTERPARTY_SIMULATION_PROMPT = (
+    "You are the opposing party's legal counsel. Review the original contract clause: "
+    "'{clause_text}'. The other party has proposed this edit: '{proposed_edit}'.\n"
+    "Your job is to formulate realistic pushback. Output your response exactly in this format:\n"
+    "COUNTER_ARGUMENTS:\n[Your objections and counterarguments to the proposed edit]\n\n"
+    "PUSHBACK_CLAUSES:\n[Alternate counter-proposed clause phrasing you would accept]\n\n"
+    "RECOMMENDATION:\n[Brief strategy advice for the user to reach a compromise]\n\n"
+    "Respond in {language}."
+)
+"""Prompt template for counterparty negotiation simulator. Placeholders: {clause_text}, {proposed_edit}, {language}."""
+
+PORTFOLIO_EXTRACTION_PROMPT = (
+    "You are an expert contract metadata parser. Analyze the contract text and extract "
+    "metadata. Return valid JSON only with these exact keys: "
+    "vendor_name (name of the vendor or counterparty), "
+    "liability_limit (maximum liability value in USD/INR as an integer, default 0 if unlimited/not found), "
+    "effective_date (YYYY-MM-DD format, default null if not found), "
+    "expiration_date (YYYY-MM-DD format, default null if not found). "
+    "Contract text: {contract_text}"
+)
+"""Prompt template for portfolio metadata extraction. Placeholders: {contract_text}."""
+
+

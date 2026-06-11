@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
-  CheckCircle2, XCircle, Scale, Diff
+  CheckCircle2, XCircle, Scale, Diff, Mic, Volume2, Clock, LayoutDashboard
 } from 'lucide-react';
 
 const workspaceTranslations = {
@@ -78,7 +78,13 @@ const workspaceTranslations = {
     runningDiffBtn: "Analyzing...",
     semanticMatchHeader: "Semantic Similarity Score",
     literalDiffHeader: "Literal Text Comparison",
-    shiftExplanationHeader: "AI Legal Shift Audit"
+    shiftExplanationHeader: "AI Legal Shift Audit",
+    timelineTab: "Timeline",
+    portfolioTab: "Portfolio",
+    timelineHeader: "Lifecycle Timeline Predictor",
+    timelineSub: "Analyze estimated negotiation duration, amendment frequency, renewal risks, and expiration cascades",
+    portfolioHeader: "Portfolio Risk Dashboard",
+    portfolioSub: "Cross-document dashboard of liabilities, concentration risk, and renewal cliffs"
   },
   hi: {
     title: "लेक्सीवॉल्ट का अभी प्रयास करें",
@@ -152,13 +158,19 @@ const workspaceTranslations = {
     runningDiffBtn: "विश्लेषण जारी...",
     semanticMatchHeader: "शब्दार्थ समानता स्कोर",
     literalDiffHeader: "शाब्दिक पाठ तुलना",
-    shiftExplanationHeader: "एआई कानूनी बदलाव ऑडिट"
+    shiftExplanationHeader: "एआई कानूनी बदलाव ऑडिट",
+    timelineTab: "समयरेखा",
+    portfolioTab: "पोर्टफोलियो",
+    timelineHeader: "जीवनचक्र समयरेखा भविष्यवक्ता",
+    timelineSub: "बातचीत की अवधि, संशोधन आवृत्ति, नवीनीकरण जोखिमों और समाप्ति प्रभावों का अनुमान लगाएं",
+    portfolioHeader: "पोर्टफोलियो जोखिम डैशबोर्ड",
+    portfolioSub: "वित्तीय दायित्वों, विक्रेता संकेंद्रण जोखिम और आगामी नवीनीकरण का क्रॉस-दस्तावेज़ डैशबोर्ड"
   }
 };
 
 const API_BASE = `http://${window.location.hostname}:8000/api`;
 
-type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff';
+type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard';
 
 export default function WorkspaceSection({ globalLanguage }: { globalLanguage: 'en' | 'hi' }) {
   const t = workspaceTranslations[globalLanguage];
@@ -173,6 +185,8 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     { id: 'contradictions', label: t.contraTab, icon: Search },
     { id: 'negotiation', label: t.negotiationTab, icon: Scale },
     { id: 'semanticDiff', label: t.semanticDiffTab, icon: Diff },
+    { id: 'timeline', label: t.timelineTab, icon: Clock },
+    { id: 'portfolioDashboard', label: t.portfolioTab, icon: LayoutDashboard },
   ];
 
   const [activeTab, setActiveTab] = useState<Tab>('upload');
@@ -235,6 +249,82 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
   const [diffExplanation, setDiffExplanation] = useState('');
   const [isDiffing, setIsDiffing] = useState(false);
 
+  // Counterparty Simulator state
+  const [negMode, setNegMode] = useState<'selfPlay' | 'counterparty'>('selfPlay');
+  const [counterOriginal, setCounterOriginal] = useState('');
+  const [counterProposed, setCounterProposed] = useState('');
+  const [counterSimResult, setCounterSimResult] = useState<{
+    counter_arguments: string;
+    pushback_clauses: string;
+    recommendation: string;
+  } | null>(null);
+  const [isCounterSimulating, setIsCounterSimulating] = useState(false);
+
+  // Timeline Predictor state
+  const [selectedTimelineDoc, setSelectedTimelineDoc] = useState('');
+  const [timelineResult, setTimelineResult] = useState<{
+    negotiation_duration_days: number;
+    amendment_frequency: string;
+    renewal_risk_score: number;
+    cascade_effects: string;
+  } | null>(null);
+  const [isPredictingTimeline, setIsPredictingTimeline] = useState(false);
+
+  // Portfolio Dashboard state
+  const [portfolioStats, setPortfolioStats] = useState<{
+    total_contracts: number;
+    total_liability: number;
+    concentration_risk: { vendor: string; value: number; share: number }[];
+    upcoming_renewals: { contract: string; vendor: string; expiration_date: string; days_remaining: number }[];
+  } | null>(null);
+  const [isFetchingPortfolio, setIsFetchingPortfolio] = useState(false);
+
+  // Voice State & Helpers
+  const [isListening, setIsListening] = useState(false);
+
+  const startSpeechRecognition = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice input is not supported in this browser. Please use Chrome, Edge, or Safari.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = globalLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.onresult = (event: any) => {
+      const speechToText = event.results[0][0].transcript;
+      setChatInput(speechToText);
+    };
+
+    recognition.start();
+  };
+
+  const speakText = (text: string) => {
+    if (!window.speechSynthesis) {
+      alert("Text-to-speech is not supported in this browser.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = globalLanguage === 'hi' ? 'hi-IN' : 'en-US';
+    window.speechSynthesis.speak(utterance);
+  };
+
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatHistory]);
 
   useEffect(() => {
@@ -246,6 +336,82 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     setNegotiationLang(l);
     setDiffLang(l);
   }, [globalLanguage]);
+
+  useEffect(() => {
+    const successDocs = documents.filter(d => d.status === 'success');
+    if (successDocs.length > 0 && !selectedTimelineDoc) {
+      setSelectedTimelineDoc(successDocs[0].namespace);
+    }
+  }, [documents, selectedTimelineDoc]);
+
+  useEffect(() => {
+    if (activeTab === 'portfolioDashboard') {
+      fetchPortfolioStats();
+    }
+  }, [activeTab]);
+
+  const fetchPortfolioStats = async () => {
+    setIsFetchingPortfolio(true);
+    try {
+      const res = await fetch(`${API_BASE}/portfolio/dashboard`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Failed to fetch portfolio stats');
+      setPortfolioStats(data);
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setIsFetchingPortfolio(false);
+    }
+  };
+
+  const handlePredictTimeline = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedTimelineDoc) return;
+    setIsPredictingTimeline(true);
+    setTimelineResult(null);
+    try {
+      const res = await fetch(`${API_BASE}/features/predict-timeline`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          namespace: selectedTimelineDoc,
+          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Timeline prediction failed');
+      setTimelineResult(data);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsPredictingTimeline(false);
+    }
+  };
+
+  const handleCounterpartySim = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!counterOriginal.trim() || !counterProposed.trim()) return;
+    setIsCounterSimulating(true);
+    setCounterSimResult(null);
+    try {
+      const res = await fetch(`${API_BASE}/features/counterparty-sim`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clause_text: counterOriginal,
+          proposed_edit: counterProposed,
+          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Counterparty simulation failed');
+      setCounterSimResult(data);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsCounterSimulating(false);
+    }
+  };
 
   // ---- API Handlers ----
 
@@ -525,6 +691,16 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
                   Sources: {msg.sources.length} chunks referenced
                 </div>
               )}
+              {msg.role === 'assistant' && (
+                <button 
+                  type="button"
+                  onClick={() => speakText(msg.content)} 
+                  className="mt-2 text-neutral-400 hover:text-[#092E26] transition-colors p-1 rounded hover:bg-neutral-200/20 cursor-pointer flex items-center gap-1 text-[10px] font-semibold"
+                  title="Read aloud"
+                >
+                  <Volume2 className="w-3.5 h-3.5" /> Read Aloud
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -543,6 +719,14 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
           placeholder={t.placeholderChat}
           disabled={documents.length === 0}
           className="flex-1 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#092E26] disabled:opacity-50 disabled:cursor-not-allowed" />
+        <button type="button" onClick={startSpeechRecognition} disabled={documents.length === 0}
+          className={`w-11 h-11 border text-neutral-500 rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0 ${
+            isListening ? 'bg-red-50 border-red-200 text-red-500 animate-pulse' : 'bg-white border-neutral-200 hover:bg-neutral-50 hover:text-[#092E26]'
+          }`}
+          title="Voice Input"
+        >
+          <Mic className="w-4 h-4" />
+        </button>
         <button type="submit" disabled={!chatInput.trim() || isAsking || documents.length === 0}
           className="w-11 h-11 bg-[#092E26] hover:bg-[#051C17] disabled:bg-neutral-200 text-white rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
           <Send className="w-4 h-4" />
@@ -761,97 +945,190 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
           <p className="text-xs text-neutral-500">{t.negotiationSub}</p>
         </div>
       </div>
-      <form onSubmit={handleNegotiation} className="space-y-4">
-        <div className="grid sm:grid-cols-3 gap-4">
-          <div>
-            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.clauseTypeLabel}</label>
-            <select value={negotiationClauseType} onChange={e => setNegotiationClauseType(e.target.value)}
-              className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
-              <option value="Limitation of Liability">Limitation of Liability</option>
-              <option value="Indemnification">Indemnification</option>
-              <option value="IP Ownership">Intellectual Property</option>
-              <option value="Termination">Termination Rights</option>
-              <option value="Governing Law">Governing Law</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.buyerLabel}</label>
-            <select value={buyerStance} onChange={e => setBuyerStance(e.target.value)}
-              className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
-              <option value="Conservative (Protects Buyer strictly)">Conservative</option>
-              <option value="Standard (Balanced risk)">Standard</option>
-              <option value="Aggressive (Pushes liability onto Seller)">Aggressive</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.sellerLabel}</label>
-            <select value={sellerStance} onChange={e => setSellerStance(e.target.value)}
-              className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
-              <option value="Conservative (Protects Seller strictly)">Conservative</option>
-              <option value="Standard (Balanced risk)">Standard</option>
-              <option value="Aggressive (Pushes liability onto Buyer)">Aggressive</option>
-            </select>
-          </div>
-        </div>
 
-        <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
-          <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
-        </div>
-
-        <div>
-          <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Paste Clause to Negotiate</label>
-          <textarea value={negotiationText} onChange={e => setNegotiationText(e.target.value)}
-            placeholder="Paste the original contract clause here..."
-            className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" />
-        </div>
-
-        <button type="submit" disabled={!negotiationText.trim() || isNegotiating}
-          className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
-          {isNegotiating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
-          {isNegotiating ? t.simulatingBtn : t.simulateBtn}
+      <div className="flex gap-2 p-1 bg-neutral-100 rounded-lg max-w-sm mb-4">
+        <button
+          type="button"
+          onClick={() => setNegMode('selfPlay')}
+          className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+            negMode === 'selfPlay'
+              ? 'bg-[#092E26] text-white shadow'
+              : 'text-neutral-600 hover:text-neutral-800'
+          }`}
+        >
+          AI Counsel Self-Play
         </button>
-      </form>
+        <button
+          type="button"
+          onClick={() => setNegMode('counterparty')}
+          className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+            negMode === 'counterparty'
+              ? 'bg-[#092E26] text-white shadow'
+              : 'text-neutral-600 hover:text-neutral-800'
+          }`}
+        >
+          Opposing Counsel Pushback
+        </button>
+      </div>
 
-      {/* Transcript Simulation dialogue */}
-      {negotiationTranscript.length > 0 && (
-        <div className="space-y-4 border-t border-neutral-100 pt-6">
-          <h4 className="text-sm font-bold text-neutral-700">Negotiation Dialogue Transcript</h4>
-          <div className="space-y-3 bg-neutral-50 rounded-xl p-4 border border-neutral-150 max-h-[300px] overflow-y-auto">
-            {negotiationTranscript.map((turn, i) => (
-              <div key={i} className={`p-3 rounded-lg border text-xs leading-relaxed ${
-                turn.role.includes("Buyer") 
-                  ? "bg-blue-50/50 border-blue-100 text-blue-900 ml-4 rounded-br-none" 
-                  : "bg-amber-50/50 border-amber-100 text-amber-900 mr-4 rounded-bl-none"
-              }`}>
-                <span className="font-bold block mb-1">{turn.role}:</span>
-                <div className="whitespace-pre-wrap">{turn.message}</div>
+      {negMode === 'selfPlay' ? (
+        <>
+          <form onSubmit={handleNegotiation} className="space-y-4">
+            <div className="grid sm:grid-cols-3 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.clauseTypeLabel}</label>
+                <select value={negotiationClauseType} onChange={e => setNegotiationClauseType(e.target.value)}
+                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+                  <option value="Limitation of Liability">Limitation of Liability</option>
+                  <option value="Indemnification">Indemnification</option>
+                  <option value="IP Ownership">Intellectual Property</option>
+                  <option value="Termination">Termination Rights</option>
+                  <option value="Governing Law">Governing Law</option>
+                </select>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <div>
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.buyerLabel}</label>
+                <select value={buyerStance} onChange={e => setBuyerStance(e.target.value)}
+                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+                  <option value="Conservative (Protects Buyer strictly)">Conservative</option>
+                  <option value="Standard (Balanced risk)">Standard</option>
+                  <option value="Aggressive (Pushes liability onto Seller)">Aggressive</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.sellerLabel}</label>
+                <select value={sellerStance} onChange={e => setSellerStance(e.target.value)}
+                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+                  <option value="Conservative (Protects Seller strictly)">Conservative</option>
+                  <option value="Standard (Balanced risk)">Standard</option>
+                  <option value="Aggressive (Pushes liability onto Buyer)">Aggressive</option>
+                </select>
+              </div>
+            </div>
 
-      {/* Final Compromise Output */}
-      {(negotiationCompromise || negotiationExplanation) && (
-        <div className="grid md:grid-cols-2 gap-4 border-t border-neutral-100 pt-6">
-          {negotiationCompromise && (
-            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-              <h4 className="font-bold text-sm text-[#092E26] mb-2">{t.compromiseResultHeader}</h4>
-              <div className="text-xs text-neutral-800 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
-                {renderFormattedText(negotiationCompromise)}
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+              <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Paste Clause to Negotiate</label>
+              <textarea value={negotiationText} onChange={e => setNegotiationText(e.target.value)}
+                placeholder="Paste the original contract clause here..."
+                className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" />
+            </div>
+
+            <button type="submit" disabled={!negotiationText.trim() || isNegotiating}
+              className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+              {isNegotiating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
+              {isNegotiating ? t.simulatingBtn : t.simulateBtn}
+            </button>
+          </form>
+
+          {negotiationTranscript.length > 0 && (
+            <div className="space-y-4 border-t border-neutral-100 pt-6">
+              <h4 className="text-sm font-bold text-neutral-700">Negotiation Dialogue Transcript</h4>
+              <div className="space-y-3 bg-neutral-50 rounded-xl p-4 border border-neutral-150 max-h-[300px] overflow-y-auto">
+                {negotiationTranscript.map((turn, i) => (
+                  <div key={i} className={`p-3 rounded-lg border text-xs leading-relaxed ${
+                    turn.role.includes("Buyer") 
+                      ? "bg-blue-50/50 border-blue-100 text-blue-900 ml-4 rounded-br-none" 
+                      : "bg-amber-50/50 border-amber-100 text-amber-900 mr-4 rounded-bl-none"
+                  }`}>
+                    <span className="font-bold block mb-1">{turn.role}:</span>
+                    <div className="whitespace-pre-wrap">{turn.message}</div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
-          {negotiationExplanation && (
-            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
-              <h4 className="font-bold text-sm text-neutral-700 mb-2">{t.explanationHeader}</h4>
-              <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
-                {renderFormattedText(negotiationExplanation)}
+
+          {(negotiationCompromise || negotiationExplanation) && (
+            <div className="grid md:grid-cols-2 gap-4 border-t border-neutral-100 pt-6">
+              {negotiationCompromise && (
+                <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+                  <h4 className="font-bold text-sm text-[#092E26] mb-2">{t.compromiseResultHeader}</h4>
+                  <div className="text-xs text-neutral-800 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                    {renderFormattedText(negotiationCompromise)}
+                  </div>
+                </div>
+              )}
+              {negotiationExplanation && (
+                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
+                  <h4 className="font-bold text-sm text-neutral-700 mb-2">{t.explanationHeader}</h4>
+                  <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
+                    {renderFormattedText(negotiationExplanation)}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <form onSubmit={handleCounterpartySim} className="space-y-4">
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+              <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Original Clause</label>
+                <textarea 
+                  value={counterOriginal} 
+                  onChange={e => setCounterOriginal(e.target.value)}
+                  placeholder="Paste the original contract clause here..."
+                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Your Proposed Edit</label>
+                <textarea 
+                  value={counterProposed} 
+                  onChange={e => setCounterProposed(e.target.value)}
+                  placeholder="Paste or describe your proposed amendment or edit here..."
+                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                />
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={!counterOriginal.trim() || !counterProposed.trim() || isCounterSimulating}
+              className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+            >
+              {isCounterSimulating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
+              {isCounterSimulating ? "Simulating Counsel..." : "Predict Opposition"}
+            </button>
+          </form>
+
+          {counterSimResult && (
+            <div className="space-y-6 border-t border-neutral-100 pt-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-red-50/30 border border-red-150 rounded-xl p-5">
+                  <h4 className="font-bold text-sm text-red-800 mb-2">Opposing Counsel Objections & Arguments</h4>
+                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
+                    {renderFormattedText(counterSimResult.counter_arguments)}
+                  </div>
+                </div>
+                <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+                  <h4 className="font-bold text-sm text-[#092E26] mb-2">Opposing Counter-Proposals</h4>
+                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
+                    {renderFormattedText(counterSimResult.pushback_clauses)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
+                <h4 className="font-bold text-sm text-neutral-800 mb-2">Negotiation Strategy Recommendation</h4>
+                <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
+                  {renderFormattedText(counterSimResult.recommendation)}
+                </div>
               </div>
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );
@@ -924,11 +1201,280 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     </div>
   );
 
+  const renderTimeline = () => {
+    const successDocs = documents.filter(d => d.status === 'success');
+    
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900">{t.timelineHeader}</h3>
+          <p className="text-xs text-neutral-500">{t.timelineSub}</p>
+        </div>
+        
+        {successDocs.length === 0 ? (
+          <div className="text-center py-16 text-neutral-400">
+            <Clock className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <p className="text-sm">Upload documents first to predict contract timelines.</p>
+          </div>
+        ) : (
+          <form onSubmit={handlePredictTimeline} className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+              <div className="flex-1">
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <select 
+                  value={selectedTimelineDoc} 
+                  onChange={e => setSelectedTimelineDoc(e.target.value)}
+                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                >
+                  {successDocs.map((doc, i) => (
+                    <option key={i} value={doc.namespace}>{doc.name}</option>
+                  ))}
+                </select>
+              </div>
+              <button 
+                type="submit" 
+                disabled={isPredictingTimeline}
+                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+              >
+                {isPredictingTimeline ? <Loader2 className="w-4 h-4 animate-spin" /> : <Clock className="w-4 h-4" />}
+                {isPredictingTimeline ? "Predicting..." : "Predict Timeline"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {timelineResult && (
+          <div className="grid md:grid-cols-2 gap-6 border-t border-neutral-150 pt-6">
+            {/* Visual Timeline Column */}
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-4">
+              <h4 className="font-bold text-sm text-neutral-800">Visual Contract Lifecycle Timeline</h4>
+              
+              <div className="relative pl-6 border-l-2 border-[#092E26]/20 space-y-6 py-2">
+                {/* Node 1 */}
+                <div className="relative">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  </div>
+                  <h5 className="text-xs font-bold text-neutral-800">Negotiation Stage</h5>
+                  <p className="text-xs text-neutral-500 mt-0.5">
+                    Estimated Duration: <span className="font-semibold text-[#092E26]">{timelineResult.negotiation_duration_days} days</span>
+                  </p>
+                </div>
+                
+                {/* Node 2 */}
+                <div className="relative">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  </div>
+                  <h5 className="text-xs font-bold text-neutral-800">Active Monitoring Stage</h5>
+                  <p className="text-xs text-neutral-500 mt-0.5">
+                    Effective date initialized and obligations tracked.
+                  </p>
+                </div>
+                
+                {/* Node 3 */}
+                <div className="relative">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  </div>
+                  <h5 className="text-xs font-bold text-neutral-800">Amendment / Change Cliffs</h5>
+                  <p className="text-xs text-neutral-500 mt-0.5">
+                    Likely Update Frequency: <span className="font-semibold text-neutral-700">{timelineResult.amendment_frequency}</span>
+                  </p>
+                </div>
+                
+                {/* Node 4 */}
+                <div className="relative">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  </div>
+                  <h5 className="text-xs font-bold text-neutral-800">Expiration & Renewal</h5>
+                  <p className="text-xs text-neutral-500 mt-0.5">
+                    Critical renewal tracking based on contract dates.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Metrics & Cascade Warnings Column */}
+            <div className="space-y-6">
+              {/* Renewal Risk Score */}
+              <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
+                <h4 className="font-bold text-sm text-neutral-800 mb-3">Renewal Risk Audit</h4>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-medium text-neutral-600">Renewal Risk Score:</span>
+                    <span className={`font-bold ${
+                      timelineResult.renewal_risk_score > 70 ? 'text-red-600' : timelineResult.renewal_risk_score > 30 ? 'text-amber-600' : 'text-green-600'
+                    }`}>{timelineResult.renewal_risk_score} / 100</span>
+                  </div>
+                  
+                  {/* Gauge Bar */}
+                  <div className="h-3 w-full bg-neutral-200 rounded-full overflow-hidden relative">
+                    <div 
+                      className={`h-full rounded-full ${
+                        timelineResult.renewal_risk_score > 70 
+                          ? 'bg-red-500' 
+                          : timelineResult.renewal_risk_score > 30 
+                          ? 'bg-amber-500' 
+                          : 'bg-green-500'
+                      }`}
+                      style={{ width: `${timelineResult.renewal_risk_score}%` }}
+                    />
+                  </div>
+                  <p className="text-[10px] text-neutral-400 mt-1">
+                    Risk calculations based on termination clauses, notification periods, and governing law clauses.
+                  </p>
+                </div>
+              </div>
+
+              {/* Cascade effects / Coverage gaps */}
+              <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+                <h4 className="font-bold text-sm text-[#092E26] mb-2">Cascade Gaps & Dependency Warnings</h4>
+                <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                  {renderFormattedText(timelineResult.cascade_effects)}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderPortfolioDashboard = () => {
+    if (isFetchingPortfolio && !portfolioStats) {
+      return (
+        <div className="flex items-center justify-center py-20 gap-2">
+          <Loader2 className="w-6 h-6 animate-spin text-[#092E26]" />
+          <span className="text-sm text-neutral-500 font-semibold">Loading dashboard stats...</span>
+        </div>
+      );
+    }
+
+    if (!portfolioStats || portfolioStats.total_contracts === 0) {
+      return (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900">{t.portfolioHeader}</h3>
+              <p className="text-xs text-neutral-500">{t.portfolioSub}</p>
+            </div>
+            <button 
+              onClick={fetchPortfolioStats}
+              className="bg-[#092E26] hover:bg-[#051C17] text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Loader2 className={`w-3.5 h-3.5 ${isFetchingPortfolio ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+          </div>
+          <div className="text-center py-16 text-neutral-400">
+            <LayoutDashboard className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <p className="text-sm">Upload PDF contracts to begin building your portfolio dashboard.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-bold text-neutral-900">{t.portfolioHeader}</h3>
+            <p className="text-xs text-neutral-500">{t.portfolioSub}</p>
+          </div>
+          <button 
+            onClick={fetchPortfolioStats}
+            className="bg-[#092E26] hover:bg-[#051C17] text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Loader2 className={`w-3.5 h-3.5 ${isFetchingPortfolio ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 flex flex-col justify-between">
+            <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">Total Active Contracts</span>
+            <span className="text-3xl font-serif font-black text-[#092E26] mt-2">{portfolioStats.total_contracts}</span>
+          </div>
+          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 flex flex-col justify-between">
+            <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">Total Portfolio Liability Cap</span>
+            <span className="text-3xl font-serif font-black text-[#092E26] mt-2">
+              ${portfolioStats.total_liability.toLocaleString()}
+            </span>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Concentration Risk */}
+          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-4">
+            <h4 className="font-bold text-sm text-neutral-800">Vendor Concentration Risk</h4>
+            {portfolioStats.concentration_risk.length === 0 ? (
+              <p className="text-xs text-neutral-400">No concentration risk metrics calculated.</p>
+            ) : (
+              <div className="space-y-3">
+                {portfolioStats.concentration_risk.map((item, idx) => (
+                  <div key={idx} className="space-y-1.5">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-bold text-neutral-700">{item.vendor}</span>
+                      <span className="text-neutral-500 font-semibold">
+                        ${item.value.toLocaleString()} ({item.share}%)
+                      </span>
+                    </div>
+                    <div className="h-2.5 w-full bg-neutral-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-[#092E26] rounded-full transition-all duration-500" 
+                        style={{ width: `${item.share}%` }} 
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Upcoming Renewal Cliffs */}
+          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-4">
+            <h4 className="font-bold text-sm text-neutral-800">Upcoming Renewal Timeline Cliffs</h4>
+            {portfolioStats.upcoming_renewals.length === 0 ? (
+              <p className="text-xs text-neutral-400">No upcoming renewals found.</p>
+            ) : (
+              <div className="space-y-2">
+                {portfolioStats.upcoming_renewals.map((renewal, idx) => {
+                  let badgeClass = "bg-green-50 text-green-700 border-green-150";
+                  if (renewal.days_remaining < 30) {
+                    badgeClass = "bg-red-50 text-red-700 border-red-150 animate-pulse";
+                  } else if (renewal.days_remaining < 90) {
+                    badgeClass = "bg-amber-50 text-amber-700 border-amber-150";
+                  }
+                  
+                  return (
+                    <div key={idx} className="bg-white border border-neutral-150 rounded-lg p-3 flex justify-between items-center gap-3">
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-neutral-800 truncate">{renewal.vendor}</div>
+                        <div className="text-[10px] text-neutral-400 mt-0.5">Expires: {renewal.expiration_date}</div>
+                      </div>
+                      <span className={`text-[10px] font-bold border px-2 py-0.5 rounded-full shrink-0 ${badgeClass}`}>
+                        {renewal.days_remaining} Days Left
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderers = {
     upload: renderUpload, chat: renderChat, risks: renderRisks,
     plain: renderPlainLanguage, brief: renderBrief,
     redline: renderRedline, contradictions: renderContradictions,
     negotiation: renderNegotiation, semanticDiff: renderSemanticDiff,
+    timeline: renderTimeline, portfolioDashboard: renderPortfolioDashboard,
   };
 
   return (

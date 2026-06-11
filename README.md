@@ -14,9 +14,12 @@ When a contract, NDA, vendor agreement, or other legal document needs to be revi
 LexiVault is designed to be fast, private, and accurate simultaneously. It allows users to upload documents, ask questions in a chat interface, generate structured summaries (decision briefs), compare versions to find changes (redline autopilot), and audit conflict terms (contradiction detector) without any of the document content leaving the local machine.
 
 Furthermore, LexiVault features advanced contract intelligence tools:
-* AI Negotiation Sandbox: Simulate clause-by-clause debates between customizable Buyer and Seller legal counsel personas and retrieve a mediated compromise terms proposal.
+* AI Negotiation Sandbox & Opposing Counsel Pushback Simulator: Simulate clause-by-clause debates between customizable Buyer and Seller counsel personas, or input a proposed edit to predict counterarguments and alternative clauses from opposing counsel.
 * Semantic Diff Analyzer: Compute similarity changes between two clauses using local sentence vector embeddings and generate a structured audit explaining the legal shifts in rights or obligations.
 * Hinglish Code-Switching explaining engine: Translate complex legal legalese directly into conversational Hinglish (Hindi written in the Latin alphabet) for simple and intuitive understanding.
+* Contract Lifecycle Timeline Predictor: Estimate negotiation duration, renewal risks, and expiration cascades using LLM temporal graph analysis on contract metadata.
+* Voice-Powered Contract Briefing: Interact with your document repository hands-free using browser-native SpeechRecognition and SpeechSynthesis read-aloud features.
+* Cross-Document Portfolio Risk Dashboard: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
 
 ---
 
