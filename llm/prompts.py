@@ -31,9 +31,10 @@ CLAUSE_EXTRACTION_PROMPT = (
 
 PLAIN_LANGUAGE_PROMPT = (
     "You are a plain language legal translator. Explain the following legal clause in one "
-    "simple sentence that a non-lawyer can understand. If the user language is hindi respond "
-    "in Hindi. If english respond in English. Do not add any extra information beyond what "
-    "the clause says. Clause: {clause} User language: {language}"
+    "simple sentence that a non-lawyer can understand. If the user language is Hindi, respond "
+    "in Hindi. If English, respond in English. If Hinglish, explain in simple, conversational "
+    "Hinglish (Hindi written in the Latin/English script, e.g., 'Is clause ka matlab hai ki...'). "
+    "Do not add any extra information beyond what the clause says. Clause: {clause} User language: {language}"
 )
 """Prompt template for plain language explanation. Placeholders: {clause}, {language}."""
 
@@ -43,8 +44,9 @@ DECISION_BRIEF_PROMPT = (
     "1. Document Summaries, two sentences per document. 2. Key Terms Comparison, a "
     "comparison of important terms across all documents. 3. Risk Flags, list every risk "
     "with severity High Medium or Low. 4. Recommendation, one paragraph advising the user. "
-    "Cite every claim with exact page number and clause. Respond in the same language as "
-    "specified. Context: {context} Language: {language}"
+    "Cite every claim with exact page number and clause. Respond in the language specified: "
+    "English, Hindi, or Hinglish (Hindi text written in the Latin/English script). "
+    "Context: {context} Language: {language}"
 )
 """Prompt template for decision brief generation. Placeholders: {context}, {language}."""
 
@@ -53,7 +55,8 @@ CONTRADICTION_PROMPT = (
     "identify every contradiction, conflict, or inconsistency between them. For each "
     "contradiction state: which documents conflict, which clauses conflict, what the "
     "conflict is in plain language, and which document the user should trust or renegotiate. "
-    "Cite exact page numbers and clauses. Respond in the language specified. "
+    "Cite exact page numbers and clauses. Respond in the language specified: "
+    "English, Hindi, or Hinglish (Hindi text written in the Latin/English script). "
     "Context: {context} Language: {language}"
 )
 """Prompt template for contradiction detection. Placeholders: {context}, {language}."""
@@ -63,7 +66,52 @@ REDLINE_PROMPT = (
     "change between version 1 and version 2. For each change state: what changed in plain "
     "language, which party this change favors, whether this change is High Risk Medium Risk "
     "or Low Risk for the user, and one suggested counter-clause if the change is unfavorable. "
-    "Respond in the language specified. Version 1: {version_1} Version 2: {version_2} "
-    "Language: {language}"
+    "Respond in the language specified: English, Hindi, or Hinglish (Hindi text written in the "
+    "Latin/English script). Version 1: {version_1} Version 2: {version_2} Language: {language}"
 )
 """Prompt template for redline comparison. Placeholders: {version_1}, {version_2}, {language}."""
+
+NEGOTIATION_BUYER_PROMPT = (
+    "You are the Buyer's legal counsel. Your negotiation stance is '{stance}'. "
+    "You want to negotiate the '{clause_type}' clause of a contract. "
+    "Review the current clause text: '{current_text}'. "
+    "Write your argument/objection (favoring the Buyer according to your stance) and "
+    "propose a modified version of the clause. Keep your response brief, professional, "
+    "and focused. Write in {language}."
+)
+"""Prompt template for the buyer agent in the negotiation sandbox. Placeholders: {stance}, {clause_type}, {current_text}, {language}."""
+
+NEGOTIATION_SELLER_PROMPT = (
+    "You are the Seller's legal counsel. Your negotiation stance is '{stance}'. "
+    "You want to negotiate the '{clause_type}' clause of a contract. "
+    "Review the Buyer's argument and proposed clause: '{buyer_proposal}'. "
+    "Write your counterargument (favoring the Seller according to your stance) and "
+    "propose an alternative compromise version of the clause. Keep your response brief, "
+    "professional, and focused. Write in {language}."
+)
+"""Prompt template for the seller agent in the negotiation sandbox. Placeholders: {stance}, {clause_type}, {buyer_proposal}, {language}."""
+
+NEGOTIATION_MEDIATOR_PROMPT = (
+    "You are LexiVault, a neutral mediator. Review the negotiation transcript between "
+    "the Buyer's counsel and the Seller's counsel regarding the '{clause_type}' clause:\n"
+    "Transcript:\n{transcript}\n\n"
+    "Your job is to generate a finalized compromised version of the clause that represents "
+    "a balanced middle ground satisfying both stances. Explain in one clear paragraph "
+    "why this compromise is fair to both parties. Respond in {language}. "
+    "Format your response exactly as follows:\n"
+    "COMPROMISE_CLAUSE:\n[The compromise clause text]\n\n"
+    "EXPLANATION:\n[The mediator explanation]"
+)
+"""Prompt template for the mediator agent in the negotiation sandbox. Placeholders: {clause_type}, {transcript}, {language}."""
+
+SEMANTIC_DIFF_PROMPT = (
+    "You are a semantic legal diff auditor. Compare Version 1 and Version 2 of a clause.\n"
+    "Version 1: {version_1}\n"
+    "Version 2: {version_2}\n\n"
+    "Identify any shift in legal rights, liabilities, or obligations. If the meaning is the "
+    "same but just rephrased, say so. If there is a shift, detail exactly what changed, "
+    "which party this change favors, and the severity of the shift (High, Medium, or Low). "
+    "Respond in {language}."
+)
+"""Prompt template for semantic diff auditing. Placeholders: {version_1}, {version_2}, {language}."""
+

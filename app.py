@@ -28,6 +28,8 @@ from features.redline_autopilot import redline_compare
 from features.contradiction_detector import detect_contradictions
 from wolfram.legal_context import get_legal_context
 from export.exporter import export_pdf, export_docx
+from features.negotiation_sandbox import simulate_negotiation
+from features.semantic_diff import compute_semantic_diff
 
 # ---------------------------------------------------------------------------
 # Global State & Services
@@ -74,6 +76,18 @@ class ContradictionRequest(BaseModel):
 
 class ExportRequest(BaseModel):
     pass # Uses state
+
+class NegotiationRequest(BaseModel):
+    clause_text: str
+    clause_type: str = "Limitation of Liability"
+    buyer_stance: str = "Conservative"
+    seller_stance: str = "Aggressive"
+    language: str = "English"
+
+class SemanticDiffRequest(BaseModel):
+    text_v1: str
+    text_v2: str
+    language: str = "English"
 
 # ---------------------------------------------------------------------------
 # Endpoints
@@ -230,6 +244,26 @@ def contradictions(req: ContradictionRequest):
         return {"contradictions": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/features/negotiate")
+def negotiate_clause(req: NegotiationRequest):
+    res = simulate_negotiation(
+        clause_text=req.clause_text,
+        clause_type=req.clause_type,
+        buyer_stance=req.buyer_stance,
+        seller_stance=req.seller_stance,
+        language=req.language
+    )
+    return res
+
+@app.post("/api/features/semantic-diff")
+def semantic_diff(req: SemanticDiffRequest):
+    res = compute_semantic_diff(
+        text_v1=req.text_v1,
+        text_v2=req.text_v2,
+        language=req.language
+    )
+    return res
 
 if __name__ == "__main__":
     import uvicorn

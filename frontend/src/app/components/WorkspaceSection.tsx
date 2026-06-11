@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
-  CheckCircle2, XCircle
+  CheckCircle2, XCircle, Scale, Diff
 } from 'lucide-react';
 
 const workspaceTranslations = {
@@ -60,7 +60,25 @@ const workspaceTranslations = {
     contraSub: "Find conflicts across multiple uploaded documents (requires 2+ documents)",
     detectBtn: "Detect Contradictions",
     detectingBtn: "Detecting...",
-    noContra: "Upload at least 2 documents to detect contradictions. Click \"Detect Contradictions\" to find conflicts."
+    noContra: "Upload at least 2 documents to detect contradictions. Click \"Detect Contradictions\" to find conflicts.",
+    negotiationTab: "Negotiation Sandbox",
+    semanticDiffTab: "Semantic Diff",
+    negotiationHeader: "AI Negotiation Sandbox",
+    negotiationSub: "Simulate a contract clause debate between Buyer and Seller counsel to see a compromise",
+    semanticDiffHeader: "Semantic Diff Analyzer",
+    semanticDiffSub: "Compare two clauses to see character changes, semantic similarity, and AI shift analysis",
+    buyerLabel: "Buyer Stance",
+    sellerLabel: "Seller Stance",
+    clauseTypeLabel: "Clause Focus",
+    simulateBtn: "Simulate Negotiation",
+    simulatingBtn: "Negotiating...",
+    compromiseResultHeader: "Mediated Compromise Clause",
+    explanationHeader: "Mediator Explanation",
+    runDiffBtn: "Run Semantic Diff",
+    runningDiffBtn: "Analyzing...",
+    semanticMatchHeader: "Semantic Similarity Score",
+    literalDiffHeader: "Literal Text Comparison",
+    shiftExplanationHeader: "AI Legal Shift Audit"
   },
   hi: {
     title: "लेक्सीवॉल्ट का अभी प्रयास करें",
@@ -116,13 +134,31 @@ const workspaceTranslations = {
     contraSub: "अपलोड किए गए कई दस्तावेजों में संघर्ष खोजें (कम से कम 2 दस्तावेजों की आवश्यकता है)",
     detectBtn: "विरोधाभासों का पता लगाएं",
     detectingBtn: "पता लगाया जा रहा है...",
-    noContra: "विरोधाभासों का पता लगाने के लिए कम से कम 2 दस्तावेज़ अपलोड करें। संघर्षों को खोजने के लिए \"विरोधाभासों का पता लगाएं\" पर क्लिक करें।"
+    noContra: "विरोधाभासों का पता लगाने के लिए कम से कम 2 दस्तावेज़ अपलोड करें। संघर्षों को खोजने के लिए \"विरोधाभासों का पता लगाएं\" पर क्लिक करें।",
+    negotiationTab: "वार्ता सैंडबॉक्स",
+    semanticDiffTab: "शब्दार्थ अंतर",
+    negotiationHeader: "एआई वार्ता सैंडबॉक्स",
+    negotiationSub: "एक समझौता देखने के लिए खरीदार और विक्रेता वकील के बीच एक खंड बहस का अनुकरण करें",
+    semanticDiffHeader: "शब्दार्थ अंतर विश्लेषक",
+    semanticDiffSub: "चरित्र परिवर्तन, शब्दार्थ समानता और एआई परिवर्तन विश्लेषण देखने के लिए दो खंडों की तुलना करें",
+    buyerLabel: "खरीदार का रुख",
+    sellerLabel: "विक्रेता का रुख",
+    clauseTypeLabel: "खंड फोकस",
+    simulateBtn: "वार्ता का अनुकरण करें",
+    simulatingBtn: "वार्ता जारी...",
+    compromiseResultHeader: "मध्यस्थता समझौता खंड",
+    explanationHeader: "मध्यस्थ का स्पष्टीकरण",
+    runDiffBtn: "शब्दार्थ अंतर चलाएं",
+    runningDiffBtn: "विश्लेषण जारी...",
+    semanticMatchHeader: "शब्दार्थ समानता स्कोर",
+    literalDiffHeader: "शाब्दिक पाठ तुलना",
+    shiftExplanationHeader: "एआई कानूनी बदलाव ऑडिट"
   }
 };
 
 const API_BASE = `http://${window.location.hostname}:8000/api`;
 
-type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions';
+type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff';
 
 export default function WorkspaceSection({ globalLanguage }: { globalLanguage: 'en' | 'hi' }) {
   const t = workspaceTranslations[globalLanguage];
@@ -135,6 +171,8 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     { id: 'brief', label: t.briefTab, icon: Sparkles },
     { id: 'redline', label: t.redlineTab, icon: GitCompareArrows },
     { id: 'contradictions', label: t.contraTab, icon: Search },
+    { id: 'negotiation', label: t.negotiationTab, icon: Scale },
+    { id: 'semanticDiff', label: t.semanticDiffTab, icon: Diff },
   ];
 
   const [activeTab, setActiveTab] = useState<Tab>('upload');
@@ -178,6 +216,25 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
   const [contraResult, setContraResult] = useState('');
   const [isDetecting, setIsDetecting] = useState(false);
 
+  // Negotiation Sandbox state
+  const [negotiationText, setNegotiationText] = useState('');
+  const [negotiationClauseType, setNegotiationClauseType] = useState('Limitation of Liability');
+  const [buyerStance, setBuyerStance] = useState('Conservative');
+  const [sellerStance, setSellerStance] = useState('Aggressive');
+  const [negotiationLang, setNegotiationLang] = useState('English');
+  const [negotiationTranscript, setNegotiationTranscript] = useState<any[]>([]);
+  const [negotiationCompromise, setNegotiationCompromise] = useState('');
+  const [negotiationExplanation, setNegotiationExplanation] = useState('');
+  const [isNegotiating, setIsNegotiating] = useState(false);
+
+  // Semantic Diff state
+  const [diffTextV1, setDiffTextV1] = useState('');
+  const [diffTextV2, setDiffTextV2] = useState('');
+  const [diffLang, setDiffLang] = useState('English');
+  const [diffSimilarity, setDiffSimilarity] = useState<number | null>(null);
+  const [diffExplanation, setDiffExplanation] = useState('');
+  const [isDiffing, setIsDiffing] = useState(false);
+
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatHistory]);
 
   useEffect(() => {
@@ -186,6 +243,8 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     setBriefLang(l);
     setRedlineLang(l);
     setContraLang(l);
+    setNegotiationLang(l);
+    setDiffLang(l);
   }, [globalLanguage]);
 
   // ---- API Handlers ----
@@ -306,12 +365,71 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     finally { setIsDetecting(false); }
   };
 
-  // ---- Language selector helper ----
+  const handleNegotiation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!negotiationText.trim()) return;
+    setIsNegotiating(true);
+    setNegotiationTranscript([]);
+    setNegotiationCompromise('');
+    setNegotiationExplanation('');
+    try {
+      const res = await fetch(`${API_BASE}/features/negotiate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clause_text: negotiationText,
+          clause_type: negotiationClauseType,
+          buyer_stance: buyerStance,
+          seller_stance: sellerStance,
+          language: negotiationLang,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error');
+      setNegotiationTranscript(data.transcript || []);
+      setNegotiationCompromise(data.compromise_clause || '');
+      setNegotiationExplanation(data.explanation || '');
+    } catch (err: any) {
+      setNegotiationExplanation('❌ ' + err.message);
+    } finally {
+      setIsNegotiating(false);
+    }
+  };
+
+  const handleSemanticDiff = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!diffTextV1.trim() || !diffTextV2.trim()) return;
+    setIsDiffing(true);
+    setDiffSimilarity(null);
+    setDiffExplanation('');
+    try {
+      const res = await fetch(`${API_BASE}/features/semantic-diff`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text_v1: diffTextV1,
+          text_v2: diffTextV2,
+          language: diffLang,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error');
+      setDiffSimilarity(data.similarity_score);
+      setDiffExplanation(data.explanation || '');
+    } catch (err: any) {
+      setDiffExplanation('❌ ' + err.message);
+    } finally {
+      setIsDiffing(false);
+    }
+  };
+
+  // ---- Language selector helper (Updated with Hinglish) ----
   const LangSelect = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
     <select value={value} onChange={e => onChange(e.target.value)}
-      className="border border-neutral-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+      className="border border-neutral-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer font-medium text-neutral-800">
       <option value="English">English</option>
       <option value="Hindi">Hindi</option>
+      <option value="Hinglish">Hinglish</option>
     </select>
   );
 
@@ -635,10 +753,182 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     </div>
   );
 
+  const renderNegotiation = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900">{t.negotiationHeader}</h3>
+          <p className="text-xs text-neutral-500">{t.negotiationSub}</p>
+        </div>
+      </div>
+      <form onSubmit={handleNegotiation} className="space-y-4">
+        <div className="grid sm:grid-cols-3 gap-4">
+          <div>
+            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.clauseTypeLabel}</label>
+            <select value={negotiationClauseType} onChange={e => setNegotiationClauseType(e.target.value)}
+              className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+              <option value="Limitation of Liability">Limitation of Liability</option>
+              <option value="Indemnification">Indemnification</option>
+              <option value="IP Ownership">Intellectual Property</option>
+              <option value="Termination">Termination Rights</option>
+              <option value="Governing Law">Governing Law</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.buyerLabel}</label>
+            <select value={buyerStance} onChange={e => setBuyerStance(e.target.value)}
+              className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+              <option value="Conservative (Protects Buyer strictly)">Conservative</option>
+              <option value="Standard (Balanced risk)">Standard</option>
+              <option value="Aggressive (Pushes liability onto Seller)">Aggressive</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.sellerLabel}</label>
+            <select value={sellerStance} onChange={e => setSellerStance(e.target.value)}
+              className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+              <option value="Conservative (Protects Seller strictly)">Conservative</option>
+              <option value="Standard (Balanced risk)">Standard</option>
+              <option value="Aggressive (Pushes liability onto Buyer)">Aggressive</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+          <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
+        </div>
+
+        <div>
+          <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Paste Clause to Negotiate</label>
+          <textarea value={negotiationText} onChange={e => setNegotiationText(e.target.value)}
+            placeholder="Paste the original contract clause here..."
+            className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" />
+        </div>
+
+        <button type="submit" disabled={!negotiationText.trim() || isNegotiating}
+          className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          {isNegotiating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
+          {isNegotiating ? t.simulatingBtn : t.simulateBtn}
+        </button>
+      </form>
+
+      {/* Transcript Simulation dialogue */}
+      {negotiationTranscript.length > 0 && (
+        <div className="space-y-4 border-t border-neutral-100 pt-6">
+          <h4 className="text-sm font-bold text-neutral-700">Negotiation Dialogue Transcript</h4>
+          <div className="space-y-3 bg-neutral-50 rounded-xl p-4 border border-neutral-150 max-h-[300px] overflow-y-auto">
+            {negotiationTranscript.map((turn, i) => (
+              <div key={i} className={`p-3 rounded-lg border text-xs leading-relaxed ${
+                turn.role.includes("Buyer") 
+                  ? "bg-blue-50/50 border-blue-100 text-blue-900 ml-4 rounded-br-none" 
+                  : "bg-amber-50/50 border-amber-100 text-amber-900 mr-4 rounded-bl-none"
+              }`}>
+                <span className="font-bold block mb-1">{turn.role}:</span>
+                <div className="whitespace-pre-wrap">{turn.message}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Final Compromise Output */}
+      {(negotiationCompromise || negotiationExplanation) && (
+        <div className="grid md:grid-cols-2 gap-4 border-t border-neutral-100 pt-6">
+          {negotiationCompromise && (
+            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+              <h4 className="font-bold text-sm text-[#092E26] mb-2">{t.compromiseResultHeader}</h4>
+              <div className="text-xs text-neutral-800 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                {renderFormattedText(negotiationCompromise)}
+              </div>
+            </div>
+          )}
+          {negotiationExplanation && (
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
+              <h4 className="font-bold text-sm text-neutral-700 mb-2">{t.explanationHeader}</h4>
+              <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
+                {renderFormattedText(negotiationExplanation)}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  const renderSemanticDiff = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-bold text-neutral-900">{t.semanticDiffHeader}</h3>
+        <p className="text-xs text-neutral-500">{t.semanticDiffSub}</p>
+      </div>
+      <form onSubmit={handleSemanticDiff} className="space-y-4">
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+          <LangSelect value={diffLang} onChange={setDiffLang} />
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Version 1 (Original Text)</label>
+            <textarea value={diffTextV1} onChange={e => setDiffTextV1(e.target.value)}
+              placeholder="Paste original clause or wording..."
+              className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#092E26]" />
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Version 2 (Revised Text)</label>
+            <textarea value={diffTextV2} onChange={e => setDiffTextV2(e.target.value)}
+              placeholder="Paste revised clause or wording..."
+              className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#092E26]" />
+          </div>
+        </div>
+
+        <button type="submit" disabled={!diffTextV1.trim() || !diffTextV2.trim() || isDiffing}
+          className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          {isDiffing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Diff className="w-4 h-4" />}
+          {isDiffing ? t.runningDiffBtn : t.runDiffBtn}
+        </button>
+      </form>
+
+      {/* Similarity score & Explanation */}
+      {(diffSimilarity !== null || diffExplanation) && (
+        <div className="space-y-4 border-t border-neutral-100 pt-6">
+          {diffSimilarity !== null && (
+            <div className="flex items-center gap-4 bg-neutral-50 rounded-xl p-4 border border-neutral-150">
+              <div className="shrink-0 flex items-center justify-center w-16 h-16 rounded-full border-4 border-[#092E26] bg-[#092E26]/5">
+                <span className="font-bold text-base text-[#092E26]">{diffSimilarity}%</span>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-neutral-800">{t.semanticMatchHeader}</h4>
+                <p className="text-xs text-neutral-500 mt-0.5">
+                  {diffSimilarity > 90 
+                    ? "Very High semantic match. The wording changed but the core legal intent/meaning is preserved." 
+                    : diffSimilarity > 70 
+                    ? "Moderate semantic match. Standard modifications or small obligations added/removed." 
+                    : "Low semantic match. Significant legal shifts in rights, liabilities, or responsibilities detected."}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {diffExplanation && (
+            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+              <h4 className="font-bold text-sm text-[#092E26] mb-2">{t.shiftExplanationHeader}</h4>
+              <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                {renderFormattedText(diffExplanation)}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
   const renderers = {
     upload: renderUpload, chat: renderChat, risks: renderRisks,
     plain: renderPlainLanguage, brief: renderBrief,
     redline: renderRedline, contradictions: renderContradictions,
+    negotiation: renderNegotiation, semanticDiff: renderSemanticDiff,
   };
 
   return (
