@@ -13,6 +13,11 @@ When a contract, NDA, vendor agreement, or other legal document needs to be revi
 
 LexiVault is designed to be fast, private, and accurate simultaneously. It allows users to upload documents, ask questions in a chat interface, generate structured summaries (decision briefs), compare versions to find changes (redline autopilot), and audit conflict terms (contradiction detector) without any of the document content leaving the local machine.
 
+Furthermore, LexiVault features advanced contract intelligence tools:
+* AI Negotiation Sandbox: Simulate clause-by-clause debates between customizable Buyer and Seller legal counsel personas and retrieve a mediated compromise terms proposal.
+* Semantic Diff Analyzer: Compute similarity changes between two clauses using local sentence vector embeddings and generate a structured audit explaining the legal shifts in rights or obligations.
+* Hinglish Code-Switching explaining engine: Translate complex legal legalese directly into conversational Hinglish (Hindi written in the Latin alphabet) for simple and intuitive understanding.
+
 ---
 
 ## Target Audience
@@ -35,6 +40,7 @@ LexiVault uses a hybrid, local-first RAG (Retrieval-Augmented Generation) pipeli
 4. Vector Storage: Vector embeddings are indexed and stored locally on your system using a FAISS vector database.
 5. Retrieval: When a query is made, the most relevant chunks are retrieved from the local FAISS index.
 6. Local-First Inference: Only the relevant retrieved text chunks are sent to the LLM (Llama 3.3 70B via the Groq Cloud API) to generate final answers, summaries, and assessments, ensuring that entire documents are never uploaded to a cloud environment. High-risk clauses are cross-referenced with Wolfram to retrieve legal definitions and context.
+7. Local Semantic Similarity: The Semantic Diff Analyzer calculates sentence vector similarity locally on your CPU using the local embedding model, before calling the LLM to audit the legal shifts, ensuring comparison data remains completely private.
 
 ---
 
