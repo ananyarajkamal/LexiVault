@@ -50,10 +50,11 @@ export default function Navbar({
                 strokeLinejoin="round" 
                 className="w-4.5 h-4.5"
               >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <path d="M9 8h6" strokeWidth="2" />
-                <path d="M9 12h6" strokeWidth="2" />
-                <path d="M9 16h3" strokeWidth="2" />
+                <path d="M8 8V5a4 4 0 0 1 8 0v3" />
+                <path d="M6 8h6l6 6v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z" />
+                <path d="M12 8v6h6" />
+                <circle cx="12" cy="16" r="1.5" />
+                <path d="M12 17.5v2" />
               </svg>
             </div>
             <span className="font-bold text-[20px] text-[#092E26] tracking-tight font-sans">LexiVault</span>
