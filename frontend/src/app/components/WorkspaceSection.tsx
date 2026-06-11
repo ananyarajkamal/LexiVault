@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
-  CheckCircle2, XCircle, Cloud
+  CheckCircle2, XCircle
 } from 'lucide-react';
 
 const workspaceTranslations = {
@@ -390,7 +390,7 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
       <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4">
         {chatHistory.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-neutral-400">
-            <Cloud className="w-10 h-10 mb-3 opacity-40" />
+            <MessageSquare className="w-10 h-10 mb-3 opacity-40 text-[#092E26]" />
             <p className="text-sm">{t.noDocsChat}</p>
           </div>
         )}

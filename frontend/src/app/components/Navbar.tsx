@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Globe, Menu, X, LogOut, Cloud } from 'lucide-react';
+import { Globe, Menu, X, LogOut, Shield } from 'lucide-react';
 import type { Language } from '../App';
 
 interface NavbarProps {
@@ -40,7 +40,7 @@ export default function Navbar({
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0 cursor-pointer" onClick={() => scrollTo('workspace')}>
             <div className="w-8 h-8 rounded-lg bg-[#092E26]/10 flex items-center justify-center text-[#092E26] shrink-0">
-              <Cloud className="w-4.5 h-4.5" />
+              <Shield className="w-4.5 h-4.5" />
             </div>
             <span className="font-bold text-[19px] text-[#092E26] tracking-tight font-sans">LexiVault</span>
           </div>
