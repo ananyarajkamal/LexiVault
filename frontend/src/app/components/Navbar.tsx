@@ -39,7 +39,7 @@ export default function Navbar({
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0 cursor-pointer" onClick={() => scrollTo('workspace')}>
-            <div className="w-9 h-9 rounded-xl bg-[#092E26] text-white flex items-center justify-center shrink-0 shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#092E26] to-[#0A3D32] text-white flex items-center justify-center shrink-0 shadow-md">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 viewBox="0 0 24 24" 
@@ -50,11 +50,8 @@ export default function Navbar({
                 strokeLinejoin="round" 
                 className="w-4.5 h-4.5"
               >
-                <path d="M8 8V5a4 4 0 0 1 8 0v3" />
-                <path d="M6 8h6l6 6v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z" />
-                <path d="M12 8v6h6" />
-                <circle cx="12" cy="16" r="1.5" />
-                <path d="M12 17.5v2" />
+                <path d="M5 4v13a2 2 0 0 0 2 2h9" />
+                <path d="M11 19l4-12l4 12" />
               </svg>
             </div>
             <span className="font-bold text-[20px] text-[#092E26] tracking-tight font-sans">LexiVault</span>
