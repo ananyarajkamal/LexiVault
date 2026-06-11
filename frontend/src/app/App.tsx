@@ -34,6 +34,8 @@ const translations = {
     enterpriseSub: "Built for teams and scale",
     multiLang: "Multi-Language Support",
     multiLangSub: "English & Hindi",
+    intelligence: "Advanced Intelligence",
+    intelligenceSub: "Simulate edits & predict lifecycles",
     // How it works
     howItWorksSub: "Three steps to confident decisions",
     step1Title: "Upload",
@@ -128,6 +130,8 @@ const translations = {
     enterpriseSub: "टीमों और बड़े पैमाने के लिए निर्मित",
     multiLang: "बहु-भाषा",
     multiLangSub: "अंग्रेजी और हिंदी",
+    intelligence: "उन्नत बुद्धिमत्ता",
+    intelligenceSub: "संशोधनों का अनुकरण और जीवनचक्र का अनुमान लगाएं",
     // How it works
     howItWorksSub: "आश्वस्त निर्णयों के लिए तीन कदम",
     step1Title: "अपलोड",

@@ -1,4 +1,4 @@
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, FileCheck2 } from 'lucide-react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, FileCheck2, Clock } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -78,6 +78,17 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 <div>
                   <h4 className="font-bold text-xs text-neutral-900 leading-none">{t.multiLang}</h4>
                   <p className="text-[10px] text-neutral-500 mt-1">{t.multiLangSub}</p>
+                </div>
+              </div>
+
+              {/* Intelligence */}
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[#F3E8FF] text-[#7C3AED] shrink-0 border border-[#E9D5FF]">
+                  <Clock className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-xs text-neutral-900 leading-none">{t.intelligence}</h4>
+                  <p className="text-[10px] text-neutral-500 mt-1">{t.intelligenceSub}</p>
                 </div>
               </div>
             </div>

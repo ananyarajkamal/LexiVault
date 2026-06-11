@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Globe, Menu, X, LogOut, Shield } from 'lucide-react';
+import { Globe, Menu, X, LogOut } from 'lucide-react';
 import type { Language } from '../App';
 
 interface NavbarProps {
@@ -39,10 +39,24 @@ export default function Navbar({
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0 cursor-pointer" onClick={() => scrollTo('workspace')}>
-            <div className="w-8 h-8 rounded-lg bg-[#092E26]/10 flex items-center justify-center text-[#092E26] shrink-0">
-              <Shield className="w-4.5 h-4.5" />
+            <div className="w-9 h-9 rounded-xl bg-[#092E26] text-white flex items-center justify-center shrink-0 shadow-sm">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="w-4.5 h-4.5"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="M9 8h6" strokeWidth="2" />
+                <path d="M9 12h6" strokeWidth="2" />
+                <path d="M9 16h3" strokeWidth="2" />
+              </svg>
             </div>
-            <span className="font-bold text-[19px] text-[#092E26] tracking-tight font-sans">LexiVault</span>
+            <span className="font-bold text-[20px] text-[#092E26] tracking-tight font-sans">LexiVault</span>
           </div>
 
           {/* Desktop Nav Links */}

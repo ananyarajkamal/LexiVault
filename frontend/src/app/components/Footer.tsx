@@ -1,5 +1,3 @@
-import { Shield } from 'lucide-react';
-
 export default function Footer() {
   return (
     <footer id="footer" className="bg-neutral-900 text-white py-12">
@@ -8,8 +6,22 @@ export default function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                <Shield className="w-4.5 h-4.5" />
+              <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2.5" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  className="w-4.5 h-4.5"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="M9 8h6" strokeWidth="2" />
+                  <path d="M9 12h6" strokeWidth="2" />
+                  <path d="M9 16h3" strokeWidth="2" />
+                </svg>
               </div>
               <span className="font-bold text-lg">LexiVault</span>
             </div>
