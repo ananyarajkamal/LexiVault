@@ -149,4 +149,16 @@ PORTFOLIO_EXTRACTION_PROMPT = (
 )
 """Prompt template for portfolio metadata extraction. Placeholders: {contract_text}."""
 
+NEGOTIATION_GHOSTWRITER_PROMPT = (
+    "You are LexiVault, an expert legal negotiation co-pilot. You are given an original "
+    "contract clause: '{clause_text}' and a redlined edit proposed by the other party: "
+    "'{redlined_text}'.\n"
+    "Your job is to draft diplomatic, legally sound response options for the user. "
+    "Output your response exactly in this format:\n"
+    "ACCEPT_WITH_MODIFICATION:\n[Drafted softened compromise language that accepts the intent but protects the user]\n\n"
+    "REJECT_WITH_RATIONALE:\n[Legal rationale or precedent explaining the rejection, followed by a proposed alternative/fallback clause]\n\n"
+    "Respond in the specified language: {language}."
+)
+"""Prompt template for negotiation ghostwriter. Placeholders: {clause_text}, {redlined_text}, {language}."""
+
 

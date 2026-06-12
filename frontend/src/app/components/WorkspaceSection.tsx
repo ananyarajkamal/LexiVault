@@ -63,6 +63,9 @@ const workspaceTranslations = {
     noContra: "Upload at least 2 documents to detect contradictions. Click \"Detect Contradictions\" to find conflicts.",
     negotiationTab: "Negotiation Sandbox",
     semanticDiffTab: "Semantic Diff",
+    negModeSelfPlay: "AI Counsel Self-Play",
+    negModePushback: "Opposing Counsel Pushback",
+    negModeGhostwriter: "Negotiation Ghostwriter",
     negotiationHeader: "AI Negotiation Sandbox",
     negotiationSub: "Simulate a contract clause debate between Buyer and Seller counsel to see a compromise",
     semanticDiffHeader: "Semantic Diff Analyzer",
@@ -143,6 +146,9 @@ const workspaceTranslations = {
     noContra: "विरोधाभासों का पता लगाने के लिए कम से कम 2 दस्तावेज़ अपलोड करें। संघर्षों को खोजने के लिए \"विरोधाभासों का पता लगाएं\" पर क्लिक करें।",
     negotiationTab: "वार्ता सैंडबॉक्स",
     semanticDiffTab: "शब्दार्थ अंतर",
+    negModeSelfPlay: "एआई वकील सेल्फ-प्ले",
+    negModePushback: "विरोधी वकील पुशबैक",
+    negModeGhostwriter: "वार्ता घोस्टराइटर",
     negotiationHeader: "एआई वार्ता सैंडबॉक्स",
     negotiationSub: "एक समझौता देखने के लिए खरीदार और विक्रेता वकील के बीच एक खंड बहस का अनुकरण करें",
     semanticDiffHeader: "शब्दार्थ अंतर विश्लेषक",
@@ -250,9 +256,16 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
   const [isDiffing, setIsDiffing] = useState(false);
 
   // Counterparty Simulator state
-  const [negMode, setNegMode] = useState<'selfPlay' | 'counterparty'>('selfPlay');
+  const [negMode, setNegMode] = useState<'selfPlay' | 'counterparty' | 'ghostwriter'>('selfPlay');
   const [counterOriginal, setCounterOriginal] = useState('');
   const [counterProposed, setCounterProposed] = useState('');
+  const [ghostOriginal, setGhostOriginal] = useState('');
+  const [ghostCounter, setGhostCounter] = useState('');
+  const [ghostResult, setGhostResult] = useState<{
+    accept_with_modification: string;
+    reject_with_rationale: string;
+  } | null>(null);
+  const [isGhostwriting, setIsGhostwriting] = useState(false);
   const [counterSimResult, setCounterSimResult] = useState<{
     counter_arguments: string;
     pushback_clauses: string;
@@ -410,6 +423,31 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
       alert(err.message);
     } finally {
       setIsCounterSimulating(false);
+    }
+  };
+
+  const handleGhostwrite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ghostOriginal.trim() || !ghostCounter.trim()) return;
+    setIsGhostwriting(true);
+    setGhostResult(null);
+    try {
+      const res = await fetch(`${API_BASE}/features/ghostwrite`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clause_text: ghostOriginal,
+          redlined_text: ghostCounter,
+          language: negotiationLang,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Ghostwriting failed');
+      setGhostResult(data);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsGhostwriting(false);
     }
   };
 
@@ -946,7 +984,7 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
         </div>
       </div>
 
-      <div className="flex gap-2 p-1 bg-neutral-100 rounded-lg max-w-sm mb-4">
+      <div className="flex gap-2 p-1 bg-neutral-100 rounded-lg max-w-lg mb-4">
         <button
           type="button"
           onClick={() => setNegMode('selfPlay')}
@@ -956,7 +994,7 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
               : 'text-neutral-600 hover:text-neutral-800'
           }`}
         >
-          AI Counsel Self-Play
+          {t.negModeSelfPlay}
         </button>
         <button
           type="button"
@@ -967,11 +1005,22 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
               : 'text-neutral-600 hover:text-neutral-800'
           }`}
         >
-          Opposing Counsel Pushback
+          {t.negModePushback}
+        </button>
+        <button
+          type="button"
+          onClick={() => setNegMode('ghostwriter')}
+          className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+            negMode === 'ghostwriter'
+              ? 'bg-[#092E26] text-white shadow'
+              : 'text-neutral-600 hover:text-neutral-800'
+          }`}
+        >
+          {t.negModeGhostwriter}
         </button>
       </div>
 
-      {negMode === 'selfPlay' ? (
+      {negMode === 'selfPlay' && (
         <>
           <form onSubmit={handleNegotiation} className="space-y-4">
             <div className="grid sm:grid-cols-3 gap-4">
@@ -1064,7 +1113,9 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
             </div>
           )}
         </>
-      ) : (
+      )}
+
+      {negMode === 'counterparty' && (
         <>
           <form onSubmit={handleCounterpartySim} className="space-y-4">
             <div className="flex items-center gap-3">
@@ -1124,6 +1175,66 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
                 <h4 className="font-bold text-sm text-neutral-800 mb-2">Negotiation Strategy Recommendation</h4>
                 <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
                   {renderFormattedText(counterSimResult.recommendation)}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {negMode === 'ghostwriter' && (
+        <>
+          <form onSubmit={handleGhostwrite} className="space-y-4">
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+              <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Original Clause</label>
+                <textarea 
+                  value={ghostOriginal} 
+                  onChange={e => setGhostOriginal(e.target.value)}
+                  placeholder="Paste the original contract clause here..."
+                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Counterparty's Redlined Edit</label>
+                <textarea 
+                  value={ghostCounter} 
+                  onChange={e => setGhostCounter(e.target.value)}
+                  placeholder="Paste the counterparty's proposed edit or redline here..."
+                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                />
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={!ghostOriginal.trim() || !ghostCounter.trim() || isGhostwriting}
+              className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+            >
+              {isGhostwriting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
+              {isGhostwriting ? "Drafting..." : "Ghostwrite Response"}
+            </button>
+          </form>
+
+          {ghostResult && (
+            <div className="space-y-6 border-t border-neutral-100 pt-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+                  <h4 className="font-bold text-sm text-[#092E26] mb-2 font-sans">Accept with Modification</h4>
+                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
+                    {renderFormattedText(ghostResult.accept_with_modification)}
+                  </div>
+                </div>
+                <div className="bg-red-50/30 border border-red-150 rounded-xl p-5">
+                  <h4 className="font-bold text-sm text-red-800 mb-2 font-sans">Reject with Rationale & Precedent</h4>
+                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
+                    {renderFormattedText(ghostResult.reject_with_rationale)}
+                  </div>
                 </div>
               </div>
             </div>

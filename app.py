@@ -33,6 +33,7 @@ from features.semantic_diff import compute_semantic_diff
 from features.portfolio_manager import extract_and_save_metadata, get_portfolio_dashboard_stats, load_metadata
 from features.timeline_predictor import predict_lifecycle
 from features.counterparty_simulator import simulate_counterparty_pushback
+from features.negotiation_ghostwriter import draft_ghostwrite_response
 
 # ---------------------------------------------------------------------------
 # Global State & Services
@@ -99,6 +100,11 @@ class CounterpartySimRequest(BaseModel):
 
 class TimelineRequest(BaseModel):
     namespace: str
+    language: str = "English"
+
+class GhostwriterRequest(BaseModel):
+    clause_text: str
+    redlined_text: str
     language: str = "English"
 
 # ---------------------------------------------------------------------------
@@ -299,6 +305,15 @@ def counterparty_sim(req: CounterpartySimRequest):
     res = simulate_counterparty_pushback(
         clause_text=req.clause_text,
         proposed_edit=req.proposed_edit,
+        language=req.language
+    )
+    return res
+
+@app.post("/api/features/ghostwrite")
+def ghostwrite(req: GhostwriterRequest):
+    res = draft_ghostwrite_response(
+        clause_text=req.clause_text,
+        redlined_text=req.redlined_text,
         language=req.language
     )
     return res
