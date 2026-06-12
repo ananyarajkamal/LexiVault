@@ -468,7 +468,7 @@ export default function WorkspaceSection({
       return;
     }
 
-    // Otherwise, start playing new text
+    // Cancel any ongoing speech
     window.speechSynthesis.cancel();
     setIsSpeakingPaused(false);
 
@@ -477,21 +477,18 @@ export default function WorkspaceSection({
       .replace(/^(#+\s+)/gm, '')
       .replace(/\*\*([^*]+)\*\*/g, '$1')
       .replace(/###?\s+/g, '')
-      .replace(/`([^`]+)`/g, '$1');
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/[#*`]/g, ''); // Remove any remaining markdown chars
 
-    const utterance = new SpeechSynthesisUtterance(cleanedText);
-    
     // Determine target voice language based on script + user selection
     const hasDevanagari = /[\u0900-\u097F]/.test(cleanedText);
     let voiceLang: string;
 
     if (hasDevanagari) {
-      // Text contains Devanagari characters — use native Hindi voice
       voiceLang = 'hi-IN';
     } else if (langName) {
       const lower = langName.toLowerCase();
       if (lower === 'hindi' || lower === 'hinglish') {
-        // Latin-script Hindi/Hinglish — use Indian English voice for natural reading
         voiceLang = 'en-IN';
       } else {
         voiceLang = 'en-US';
@@ -500,35 +497,43 @@ export default function WorkspaceSection({
       voiceLang = globalLanguage === 'hi' ? 'en-IN' : 'en-US';
     }
 
-    utterance.lang = voiceLang;
-
     // Use cached voices (preloaded via voiceschanged event)
     const voices = cachedVoices.length > 0 ? cachedVoices : (window.speechSynthesis.getVoices() || []);
     const selectedVoice = pickVoice(voices, voiceLang);
-    
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-    }
 
-    // For Hindi, slow down rate slightly for clarity
-    if (voiceLang === 'hi-IN') {
-      utterance.rate = 0.9;
-    }
+    console.log(`TTS: lang=${voiceLang}, voice=${selectedVoice?.name || 'default'}, devanagari=${hasDevanagari}, dropdown=${langName || 'auto'}, voices=${voices.length}`);
 
-    console.log(`TTS: lang=${voiceLang}, voice=${selectedVoice?.name || 'default'}, devanagari=${hasDevanagari}, dropdown=${langName || 'auto'}, cachedVoices=${voices.length}`);
+    // Chrome has a bug where speak() silently fails after cancel().
+    // Workaround: use a small setTimeout to let the engine reset.
+    setTimeout(() => {
+      const utterance = new SpeechSynthesisUtterance(cleanedText);
+      utterance.lang = voiceLang;
+      
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
 
-    utterance.onend = () => {
-      setActiveSpeakingText(null);
-      setIsSpeakingPaused(false);
-    };
-    utterance.onerror = (e) => {
-      console.error('TTS error:', e);
-      setActiveSpeakingText(null);
-      setIsSpeakingPaused(false);
-    };
+      // For Hindi, slow down rate slightly for clarity
+      if (voiceLang === 'hi-IN') {
+        utterance.rate = 0.9;
+      }
+
+      utterance.onend = () => {
+        setActiveSpeakingText(null);
+        setIsSpeakingPaused(false);
+      };
+      utterance.onerror = (e) => {
+        console.error('TTS error:', e);
+        setActiveSpeakingText(null);
+        setIsSpeakingPaused(false);
+      };
+
+      // Chrome workaround: calling getVoices() right before speak helps wake up the engine
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.speak(utterance);
+    }, 100);
 
     setActiveSpeakingText(text);
-    window.speechSynthesis.speak(utterance);
   };
 
   const stopSpeaking = () => {
