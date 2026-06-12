@@ -419,58 +419,94 @@ export default function WorkspaceSection({
 
   const [activeSpeakingText, setActiveSpeakingText] = useState<string | null>(null);
   const [isSpeakingPaused, setIsSpeakingPaused] = useState(false);
-  const [cachedVoices, setCachedVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioQueueRef = useRef<string[]>([]);
+  const isPlayingGoogleTTSRef = useRef(false);
 
-  // Preload voices — getVoices() returns [] on first call in Chrome/Edge.
-  // We must listen for the voiceschanged event to get the actual list.
-  useEffect(() => {
-    const loadVoices = () => {
-      const voices = window.speechSynthesis?.getVoices() || [];
-      if (voices.length > 0) {
-        setCachedVoices(voices);
-        console.log('TTS voices loaded:', voices.length, voices.map(v => `${v.name} (${v.lang})`).join(', '));
+  // Helper: split text into chunks of ~190 chars at sentence boundaries for Google TTS URL limit
+  const chunkText = (text: string, maxLen = 190): string[] => {
+    const chunks: string[] = [];
+    let remaining = text;
+    while (remaining.length > 0) {
+      if (remaining.length <= maxLen) {
+        chunks.push(remaining);
+        break;
       }
-    };
-    loadVoices(); // try immediately (works in Firefox)
-    window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
-    return () => window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
-  }, []);
+      // Try to split at sentence boundaries
+      let splitAt = -1;
+      for (const sep of ['. ', '। ', '? ', '! ', ', ', '; ', ' ']) {
+        const idx = remaining.lastIndexOf(sep, maxLen);
+        if (idx > 0) { splitAt = idx + sep.length; break; }
+      }
+      if (splitAt <= 0) splitAt = maxLen; // hard split
+      chunks.push(remaining.substring(0, splitAt));
+      remaining = remaining.substring(splitAt);
+    }
+    return chunks;
+  };
 
-  const pickVoice = (voices: SpeechSynthesisVoice[], targetLang: string): SpeechSynthesisVoice | undefined => {
-    const target = targetLang.toLowerCase().replace('_', '-');
-    // 1. Exact match (e.g. hi-IN === hi-IN)
-    let v = voices.find(v => v.lang.toLowerCase().replace('_', '-') === target);
-    if (v) return v;
-    // 2. Region prefix (e.g. hi-IN starts with hi)
-    const prefix = target.split('-')[0];
-    v = voices.find(v => v.lang.toLowerCase().replace('_', '-').startsWith(prefix + '-'));
-    if (v) return v;
-    // 3. Language prefix only
-    v = voices.find(v => v.lang.toLowerCase().startsWith(prefix));
-    return v;
+  // Play next chunk in the Google TTS queue
+  const playNextGoogleChunk = () => {
+    if (audioQueueRef.current.length === 0) {
+      isPlayingGoogleTTSRef.current = false;
+      setActiveSpeakingText(null);
+      setIsSpeakingPaused(false);
+      return;
+    }
+    const url = audioQueueRef.current.shift()!;
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    audio.onended = () => playNextGoogleChunk();
+    audio.onerror = (e) => {
+      console.error('Google TTS audio error:', e);
+      playNextGoogleChunk(); // skip to next chunk
+    };
+    audio.play().catch(e => {
+      console.error('Google TTS play error:', e);
+      // Fallback: try browser TTS for this text
+      isPlayingGoogleTTSRef.current = false;
+    });
+  };
+
+  // Google Translate TTS - works for Hindi without any installation
+  const speakWithGoogleTTS = (text: string, lang: string) => {
+    const chunks = chunkText(text);
+    const urls = chunks.map(chunk => {
+      const encoded = encodeURIComponent(chunk);
+      return `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=${lang}&client=tw-ob`;
+    });
+    audioQueueRef.current = urls;
+    isPlayingGoogleTTSRef.current = true;
+    playNextGoogleChunk();
   };
 
   const speakText = (text: string, langName?: string) => {
-    if (!window.speechSynthesis) {
-      alert("Text-to-speech is not supported in this browser.");
-      return;
-    }
-    
     // Toggle Play/Pause if clicking on the currently active text
     if (activeSpeakingText === text) {
-      if (isSpeakingPaused) {
-        window.speechSynthesis.resume();
-        setIsSpeakingPaused(false);
-      } else {
-        window.speechSynthesis.pause();
-        setIsSpeakingPaused(true);
+      if (isPlayingGoogleTTSRef.current && audioRef.current) {
+        // Google TTS pause/resume
+        if (isSpeakingPaused) {
+          audioRef.current.play();
+          setIsSpeakingPaused(false);
+        } else {
+          audioRef.current.pause();
+          setIsSpeakingPaused(true);
+        }
+      } else if (window.speechSynthesis) {
+        // Browser TTS pause/resume
+        if (isSpeakingPaused) {
+          window.speechSynthesis.resume();
+          setIsSpeakingPaused(false);
+        } else {
+          window.speechSynthesis.pause();
+          setIsSpeakingPaused(true);
+        }
       }
       return;
     }
 
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
-    setIsSpeakingPaused(false);
+    // Stop any current playback
+    stopSpeaking();
 
     // Clean up markdown syntax so it reads naturally
     const cleanedText = text
@@ -478,86 +514,73 @@ export default function WorkspaceSection({
       .replace(/\*\*([^*]+)\*\*/g, '$1')
       .replace(/###?\s+/g, '')
       .replace(/`([^`]+)`/g, '$1')
-      .replace(/[#*`]/g, ''); // Remove any remaining markdown chars
+      .replace(/[#*`]/g, '');
 
-    // Determine target voice language based on script + user selection
+    // Determine if we need Hindi TTS
     const hasDevanagari = /[\u0900-\u097F]/.test(cleanedText);
-    let voiceLang: string;
+    let useGoogleTTS = false;
+    let googleLang = 'en';
 
     if (hasDevanagari) {
-      voiceLang = 'hi-IN';
+      useGoogleTTS = true;
+      googleLang = 'hi';
     } else if (langName) {
       const lower = langName.toLowerCase();
-      if (lower === 'hindi' || lower === 'hinglish') {
-        voiceLang = 'en-IN';
-      } else {
-        voiceLang = 'en-US';
+      if (lower === 'hindi') {
+        useGoogleTTS = true;
+        googleLang = 'hi';
+      } else if (lower === 'hinglish') {
+        useGoogleTTS = true;
+        googleLang = 'hi'; // Google handles romanized Hindi well
       }
-    } else {
-      voiceLang = globalLanguage === 'hi' ? 'en-IN' : 'en-US';
+    } else if (globalLanguage === 'hi') {
+      useGoogleTTS = true;
+      googleLang = 'hi';
     }
-
-    // Use cached voices (preloaded via voiceschanged event)
-    const voices = cachedVoices.length > 0 ? cachedVoices : (window.speechSynthesis.getVoices() || []);
-    let selectedVoice = pickVoice(voices, voiceLang);
-    
-    // CRITICAL: If no voice found for hi-IN or en-IN, fall back to en-US
-    // Without this, the browser silently fails (no audio at all)
-    if (!selectedVoice && voiceLang !== 'en-US') {
-      console.warn(`TTS: No voice found for ${voiceLang}, falling back to en-US`);
-      selectedVoice = pickVoice(voices, 'en-US');
-      voiceLang = 'en-US'; // Update lang to match the fallback voice
-    }
-
-    console.log(`TTS: lang=${voiceLang}, voice=${selectedVoice?.name || 'browser-default'}, devanagari=${hasDevanagari}, dropdown=${langName || 'auto'}, voices=${voices.length}`);
-
-    // Chrome has a bug where speak() silently fails after cancel().
-    // Workaround: use a small setTimeout to let the engine reset.
-    setTimeout(() => {
-      const utterance = new SpeechSynthesisUtterance(cleanedText);
-      utterance.lang = voiceLang;
-      
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-
-      // For Hindi, slow down rate slightly for clarity
-      if (voiceLang === 'hi-IN') {
-        utterance.rate = 0.9;
-      }
-
-      utterance.onend = () => {
-        setActiveSpeakingText(null);
-        setIsSpeakingPaused(false);
-      };
-      utterance.onerror = (e) => {
-        console.error('TTS error:', e);
-        setActiveSpeakingText(null);
-        setIsSpeakingPaused(false);
-      };
-
-      // Chrome workaround: calling getVoices() right before speak helps wake up the engine
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.speak(utterance);
-    }, 100);
 
     setActiveSpeakingText(text);
+    setIsSpeakingPaused(false);
+
+    if (useGoogleTTS) {
+      console.log(`TTS: Using Google Translate TTS, lang=${googleLang}, textLen=${cleanedText.length}`);
+      speakWithGoogleTTS(cleanedText, googleLang);
+    } else {
+      // English: use browser SpeechSynthesis (works fine)
+      console.log(`TTS: Using browser SpeechSynthesis, lang=en-US`);
+      window.speechSynthesis?.cancel();
+      setTimeout(() => {
+        const utterance = new SpeechSynthesisUtterance(cleanedText);
+        utterance.lang = 'en-US';
+        utterance.onend = () => {
+          setActiveSpeakingText(null);
+          setIsSpeakingPaused(false);
+        };
+        utterance.onerror = () => {
+          setActiveSpeakingText(null);
+          setIsSpeakingPaused(false);
+        };
+        window.speechSynthesis?.speak(utterance);
+      }, 100);
+    }
   };
 
   const stopSpeaking = () => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
+    // Stop Google TTS
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
     }
+    audioQueueRef.current = [];
+    isPlayingGoogleTTSRef.current = false;
+    // Stop browser TTS
+    window.speechSynthesis?.cancel();
     setActiveSpeakingText(null);
     setIsSpeakingPaused(false);
   };
 
   useEffect(() => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-    setActiveSpeakingText(null);
-    setIsSpeakingPaused(false);
+    stopSpeaking();
   }, [activeTab]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatHistory]);
