@@ -203,7 +203,15 @@ const API_BASE = `http://${window.location.hostname}:8000/api`;
 
 type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow' | 'residue' | 'echo' | 'alchemy';
 
-export default function WorkspaceSection({ globalLanguage }: { globalLanguage: 'en' | 'hi' }) {
+export default function WorkspaceSection({ 
+  globalLanguage,
+  isFullscreen,
+  setIsFullscreen
+}: { 
+  globalLanguage: 'en' | 'hi';
+  isFullscreen: boolean;
+  setIsFullscreen: (val: boolean) => void;
+}) {
   const t = workspaceTranslations[globalLanguage];
 
   const tabs: { id: Tab; label: string; icon: any }[] = [
@@ -376,7 +384,6 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
 
   // Voice State & Helpers
   const [isListening, setIsListening] = useState(false);
-  const [isMaximized, setIsMaximized] = useState(false);
 
   const startSpeechRecognition = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -638,6 +645,7 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
+    if (!isFullscreen) setIsFullscreen(true);
     setIsUploading(true);
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) formData.append('files', e.target.files[i]);
@@ -882,7 +890,7 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
   );
 
   const renderChat = () => (
-    <div className="flex flex-col h-[500px]">
+    <div className={`flex flex-col ${isFullscreen ? 'h-full flex-1' : 'h-[500px]'}`}>
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-bold text-neutral-900">{t.chatHeader}</h3>
@@ -2138,25 +2146,47 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
   };
 
   return (
-    <section id="workspace" className="py-16 sm:py-24 bg-[#F6F4F0]">
-      <div className={`mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out ${
-        isMaximized ? 'max-w-[98%] w-full' : 'max-w-5xl'
+    <section 
+      id="workspace" 
+      onClick={() => {
+        if (!isFullscreen) {
+          setIsFullscreen(true);
+        }
+      }}
+      onFocusCapture={() => {
+        if (!isFullscreen) {
+          setIsFullscreen(true);
+        }
+      }}
+      className={`bg-[#F6F4F0] overflow-hidden flex flex-col ${
+        isFullscreen ? 'h-[calc(100vh-64px)] w-full' : 'py-16 sm:py-24'
+      }`}
+    >
+      <div className={`transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 ${
+        isFullscreen ? 'max-w-full w-full p-0' : 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full'
       }`}>
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.uploadTab}</p>
-          <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
-            {t.title}
-          </h2>
-          <p className="mt-3 text-neutral-500 text-sm font-sans">{t.subtitle}</p>
-        </div>
+        {!isFullscreen && (
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.uploadTab}</p>
+            <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
+              {t.title}
+            </h2>
+            <p className="mt-3 text-neutral-500 text-sm font-sans">{t.subtitle}</p>
+          </div>
+        )}
 
-        <div className="bg-white rounded-2xl shadow-xl border border-neutral-200 overflow-hidden">
+        <div className={`bg-white border border-neutral-200 overflow-hidden flex flex-col flex-1 min-h-0 ${
+          isFullscreen ? 'rounded-none border-0' : 'rounded-2xl shadow-xl'
+        }`}>
           {/* Tab bar */}
           <div className="border-b border-neutral-200 flex items-center justify-between bg-white pr-4">
             <div className="flex-1 overflow-x-auto min-w-0">
               <div className="flex min-w-max">
                 {tabs.map(t => (
-                  <button key={t.id} onClick={() => setActiveTab(t.id)}
+                  <button key={t.id} onClick={() => {
+                    setActiveTab(t.id);
+                    if (!isFullscreen) setIsFullscreen(true);
+                  }}
                     className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
                       activeTab === t.id
                         ? 'border-[#092E26] text-[#092E26] bg-[#092E26]/5'
@@ -2171,11 +2201,11 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
             {/* Maximize Toggle Button */}
             <button
               type="button"
-              onClick={() => setIsMaximized(!isMaximized)}
+              onClick={() => setIsFullscreen(!isFullscreen)}
               className="ml-2 p-2 text-neutral-500 hover:text-[#092E26] hover:bg-neutral-50 rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center"
-              title={isMaximized ? "Collapse View" : "Maximize View"}
+              title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Workspace"}
             >
-              {isMaximized ? (
+              {isFullscreen ? (
                 <Minimize2 className="w-4.5 h-4.5" />
               ) : (
                 <Maximize2 className="w-4.5 h-4.5" />
@@ -2184,7 +2214,7 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
           </div>
 
           {/* Tab content */}
-          <div className="p-5 sm:p-8">
+          <div className={`p-5 sm:p-8 overflow-y-auto flex-1 min-h-0`}>
             {renderers[activeTab]()}
           </div>
         </div>

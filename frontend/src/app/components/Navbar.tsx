@@ -11,6 +11,8 @@ interface NavbarProps {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: any;
+  isFullscreen: boolean;
+  setIsFullscreen: (val: boolean) => void;
 }
 
 export default function Navbar({ 
@@ -21,15 +23,28 @@ export default function Navbar({
   onLogout,
   language,
   setLanguage,
-  t
+  t,
+  isFullscreen,
+  setIsFullscreen
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const scrollTo = (id: string) => {
+  const handleNavClick = (id: string) => {
     setMobileOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (id === 'workspace') {
+      setIsFullscreen(true);
+      return;
+    }
+    
+    if (isFullscreen) {
+      setIsFullscreen(false);
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      element?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -38,7 +53,13 @@ export default function Navbar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2 shrink-0 cursor-pointer group" onClick={() => scrollTo('workspace')}>
+          <div 
+            className="flex items-center gap-2 shrink-0 cursor-pointer group" 
+            onClick={() => {
+              setIsFullscreen(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          >
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#092E26] to-[#0A3D32] text-white flex items-center justify-center shrink-0 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -64,19 +85,19 @@ export default function Navbar({
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-8 text-sm">
-            <button onClick={() => scrollTo('why-us')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
+            <button onClick={() => handleNavClick('why-us')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
               {t.whyUs}
             </button>
-            <button onClick={() => scrollTo('features')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
+            <button onClick={() => handleNavClick('features')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
               {t.features}
             </button>
-            <button onClick={() => scrollTo('how-it-works')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
+            <button onClick={() => handleNavClick('how-it-works')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
               {t.howItWorks}
             </button>
-            <button onClick={() => scrollTo('who-it-is-for')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
+            <button onClick={() => handleNavClick('who-it-is-for')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
               {t.whoItIsFor}
             </button>
-            <button onClick={() => scrollTo('workspace')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
+            <button onClick={() => handleNavClick('workspace')} className="!text-[#092E26]/80 hover:!text-[#092E26] font-sans font-semibold transition-colors cursor-pointer">
               {t.workspace}
             </button>
           </div>
@@ -160,7 +181,7 @@ export default function Navbar({
           ].map(item => (
             <button
               key={item.label}
-              onClick={() => scrollTo(item.id)}
+              onClick={() => handleNavClick(item.id)}
               className="block w-full text-left text-sm font-medium text-[#092E26]/80 hover:text-[#092E26] hover:bg-[#092E26]/5 rounded-lg px-3 py-2.5 transition-colors cursor-pointer"
             >
               {item.label}

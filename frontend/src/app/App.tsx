@@ -274,6 +274,7 @@ export default function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [workspaceFullscreen, setWorkspaceFullscreen] = useState(false);
   
   // Auth form states
   const [fullName, setFullName] = useState('');
@@ -283,9 +284,6 @@ export default function App() {
 
   const t = translations[language];
 
-  const scrollToWorkspace = () => {
-    document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const handleAuthSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -349,9 +347,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div className="min-h-screen bg-[#FDFBF7] flex flex-col">
       <Navbar 
-        onGetStarted={scrollToWorkspace} 
+        onGetStarted={() => setWorkspaceFullscreen(true)} 
         isLoggedIn={isLoggedIn}
         username={username}
         onLoginClick={() => {
@@ -366,144 +364,157 @@ export default function App() {
         language={language}
         setLanguage={setLanguage}
         t={t}
+        isFullscreen={workspaceFullscreen}
+        setIsFullscreen={setWorkspaceFullscreen}
       />
-      <HeroSection onUploadClick={scrollToWorkspace} language={language} t={t} />
-
-      {/* CORE PROBLEM COMPARISON */}
-      <section id="why-us" className="py-16 sm:py-24 bg-white border-b border-neutral-200/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.problemTitle}</p>
-            <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
-              {t.problemSub}
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6">
-            {/* ChatGPT */}
-            <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 relative flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 border border-red-100 flex items-center justify-center mb-4">
-                  <AlertCircle className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-neutral-950 text-base mb-2">{t.chatgpt}</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed font-sans">{t.chatgptDesc}</p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-neutral-100 flex justify-between items-center text-[11px] font-bold text-red-600">
-                <span>Fast & Leaky</span>
-                <span>Security Risk</span>
-              </div>
-            </div>
-
-            {/* Manual Review */}
-            <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 relative flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-100 flex items-center justify-center mb-4">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-neutral-950 text-base mb-2">{t.manual}</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed font-sans">{t.manualDesc}</p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-neutral-100 flex justify-between items-center text-[11px] font-bold text-amber-700">
-                <span>Slow & Private</span>
-                <span>Human Error Risk</span>
-              </div>
-            </div>
-
-            {/* Traditional Lawyer */}
-            <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 relative flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center mb-4">
-                  <Coins className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-neutral-950 text-base mb-2">{t.lawyer}</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed font-sans">{t.lawyerDesc}</p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-neutral-100 flex justify-between items-center text-[11px] font-bold text-blue-700">
-                <span>Accurate & Private</span>
-                <span>₹18,000 / Hr Cost</span>
-              </div>
-            </div>
-
-            {/* LexiVault */}
-            <div className="bg-[#E6F0ED] border border-[#D1E6DF] rounded-2xl p-6 relative flex flex-col justify-between shadow-lg ring-2 ring-[#0B7A63]/20">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-[#092E26] text-white flex items-center justify-center mb-4">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-[#092E26] text-base mb-2">{t.lexiSolution}</h3>
-                <p className="text-xs text-[#092E26]/80 leading-relaxed font-sans">{t.lexiSolutionDesc}</p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-[#D1E6DF] flex justify-between items-center text-[11px] font-bold text-[#0B7A63]">
-                <span>Fast, Private & Accurate</span>
-                <span>100% Private Analytics</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       
-      <FeaturesSection t={t} />
+      {!workspaceFullscreen && (
+        <>
+          <HeroSection onUploadClick={() => setWorkspaceFullscreen(true)} language={language} t={t} />
 
-      {/* How It Works */}
-      <section id="how-it-works" className="py-16 sm:py-24 bg-white border-t border-neutral-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.howItWorks}</p>
-            <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
-              {t.howItWorksSub}
-            </h2>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-8">
-            {[
-              { step: '01', title: t.step1Title, desc: t.step1Desc },
-              { step: '02', title: t.step2Title, desc: t.step2Desc },
-              { step: '03', title: t.step3Title, desc: t.step3Desc },
-            ].map(item => (
-              <div key={item.step} className="text-center">
-                <div className="w-12 h-12 rounded-2xl bg-[#092E26]/10 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-[#092E26] font-bold text-lg">{item.step}</span>
-                </div>
-                <h3 className="font-bold text-neutral-900 text-lg mb-2">{item.title}</h3>
-                <p className="text-sm text-neutral-500 leading-relaxed font-sans">{item.desc}</p>
+          {/* CORE PROBLEM COMPARISON */}
+          <section id="why-us" className="py-16 sm:py-24 bg-white border-b border-neutral-200/40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-2xl mx-auto mb-16">
+                <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.problemTitle}</p>
+                <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
+                  {t.problemSub}
+                </h2>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* WHO IT IS FOR SECTION */}
-      <section id="who-it-is-for" className="py-16 sm:py-24 bg-gradient-to-b from-[#FDFBF7] to-[#F6F4F0] border-t border-neutral-200/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.whoTitle}</p>
-            <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
-              {t.whoSub}
-            </h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, title: t.founder, desc: t.founderDesc },
-              { icon: SlidersHorizontal, title: t.pm, desc: t.pmDesc },
-              { icon: Zap, title: t.consultant, desc: t.consultantDesc },
-              { icon: ShieldCheck, title: t.hr, desc: t.hrDesc },
-            ].map((item, idx) => (
-              <div key={idx} className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-full bg-[#092E26]/10 flex items-center justify-center text-[#092E26] mb-4">
-                  <item.icon className="w-5 h-5" />
+              <div className="grid md:grid-cols-4 gap-6">
+                {/* ChatGPT */}
+                <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 relative flex flex-col justify-between">
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 border border-red-100 flex items-center justify-center mb-4">
+                      <AlertCircle className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-bold text-neutral-950 text-base mb-2">{t.chatgpt}</h3>
+                    <p className="text-xs text-neutral-500 leading-relaxed font-sans">{t.chatgptDesc}</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-neutral-100 flex justify-between items-center text-[11px] font-bold text-red-600">
+                    <span>Fast & Leaky</span>
+                    <span>Security Risk</span>
+                  </div>
                 </div>
-                <h3 className="font-bold text-neutral-950 text-sm mb-2">{item.title}</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed font-sans">{item.desc}</p>
+
+                {/* Manual Review */}
+                <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 relative flex flex-col justify-between">
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-100 flex items-center justify-center mb-4">
+                      <Clock className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-bold text-neutral-950 text-base mb-2">{t.manual}</h3>
+                    <p className="text-xs text-neutral-500 leading-relaxed font-sans">{t.manualDesc}</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-neutral-100 flex justify-between items-center text-[11px] font-bold text-amber-700">
+                    <span>Slow & Private</span>
+                    <span>Human Error Risk</span>
+                  </div>
+                </div>
+
+                {/* Traditional Lawyer */}
+                <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 relative flex flex-col justify-between">
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center mb-4">
+                      <Coins className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-bold text-neutral-950 text-base mb-2">{t.lawyer}</h3>
+                    <p className="text-xs text-neutral-500 leading-relaxed font-sans">{t.lawyerDesc}</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-neutral-100 flex justify-between items-center text-[11px] font-bold text-blue-700">
+                    <span>Accurate & Private</span>
+                    <span>₹18,000 / Hr Cost</span>
+                  </div>
+                </div>
+
+                {/* LexiVault */}
+                <div className="bg-[#E6F0ED] border border-[#D1E6DF] rounded-2xl p-6 relative flex flex-col justify-between shadow-lg ring-2 ring-[#0B7A63]/20">
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-[#092E26] text-white flex items-center justify-center mb-4">
+                      <ShieldCheck className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-bold text-[#092E26] text-base mb-2">{t.lexiSolution}</h3>
+                    <p className="text-xs text-[#092E26]/80 leading-relaxed font-sans">{t.lexiSolutionDesc}</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-[#D1E6DF] flex justify-between items-center text-[11px] font-bold text-[#0B7A63]">
+                    <span>Fast, Private & Accurate</span>
+                    <span>100% Private Analytics</span>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </div>
+          </section>
+          
+          <FeaturesSection t={t} />
 
-      <WorkspaceSection globalLanguage={language} />
+          {/* How It Works */}
+          <section id="how-it-works" className="py-16 sm:py-24 bg-white border-t border-neutral-100">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-2xl mx-auto mb-12">
+                <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.howItWorks}</p>
+                <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
+                  {t.howItWorksSub}
+                </h2>
+              </div>
+              <div className="grid sm:grid-cols-3 gap-8">
+                {[
+                  { step: '01', title: t.step1Title, desc: t.step1Desc },
+                  { step: '02', title: t.step2Title, desc: t.step2Desc },
+                  { step: '03', title: t.step3Title, desc: t.step3Desc },
+                ].map(item => (
+                  <div key={item.step} className="text-center">
+                    <div className="w-12 h-12 rounded-2xl bg-[#092E26]/10 flex items-center justify-center mx-auto mb-4">
+                      <span className="text-[#092E26] font-bold text-lg">{item.step}</span>
+                    </div>
+                    <h3 className="font-bold text-neutral-900 text-lg mb-2">{item.title}</h3>
+                    <p className="text-sm text-neutral-500 leading-relaxed font-sans">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
-      <Footer t={t} />
+          {/* WHO IT IS FOR SECTION */}
+          <section id="who-it-is-for" className="py-16 sm:py-24 bg-gradient-to-b from-[#FDFBF7] to-[#F6F4F0] border-t border-neutral-200/40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-2xl mx-auto mb-16">
+                <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.whoTitle}</p>
+                <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
+                  {t.whoSub}
+                </h2>
+              </div>
+
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: Users, title: t.founder, desc: t.founderDesc },
+                  { icon: SlidersHorizontal, title: t.pm, desc: t.pmDesc },
+                  { icon: Zap, title: t.consultant, desc: t.consultantDesc },
+                  { icon: ShieldCheck, title: t.hr, desc: t.hrDesc },
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 rounded-full bg-[#092E26]/10 flex items-center justify-center text-[#092E26] mb-4">
+                      <item.icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-bold text-neutral-950 text-sm mb-2">{item.title}</h3>
+                    <p className="text-xs text-neutral-500 leading-relaxed font-sans">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      <div className={workspaceFullscreen ? "flex-1 flex flex-col min-h-0 bg-[#F6F4F0]" : ""}>
+        <WorkspaceSection 
+          globalLanguage={language} 
+          isFullscreen={workspaceFullscreen}
+          setIsFullscreen={setWorkspaceFullscreen}
+        />
+      </div>
+
+      {!workspaceFullscreen && <Footer t={t} />}
 
       {/* Auth Modal (Sign In / Sign Up) */}
       {showLoginModal && (

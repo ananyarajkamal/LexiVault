@@ -1,0 +1,12 @@
+{
+    "contracts": {
+        "Vendor Services Agreement": {
+            "namespace": "Vendor Services Agreement",
+            "vendor_name": "CloudEdge Services LLP",
+            "liability_limit": 50000,
+            "effective_date": "2026-01-01",
+            "expiration_date": "2029-01-01",
+            "updated_at": "2026-06-12 10:12:57"
+        }
+    }
+}

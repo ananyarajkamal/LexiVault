@@ -26,6 +26,12 @@ Furthermore, LexiVault features advanced contract intelligence tools:
 * The Echo (Cross-Language Legal Harmonics): Compare semantic legal weight and translation traps (e.g. "best efforts" vs "reasonable efforts") across English, Hindi, and Hinglish.
 * The Alchemy (Contract to Executable Code): Parse SLA performance bounds (uptime, latency, resolution times) and compile them into Prometheus Alert YAML rules.
 
+### Seamless Workspace Transition
+LexiVault blends a content-rich landing page with a dedicated, focused web-application dashboard:
+* **Zero-Friction Entry:** The interactive Workspace is accessible directly at the bottom of the landing page.
+* **Instant Fullscreen App Mode:** The moment you engage with the workspace—whether by uploading a file, selecting a tab, clicking interactive cards, or focusing a chat/text input—the landing page copy, headers, and footers are hidden, and the workspace instantly transitions into a distraction-free 100vw/100vh application viewport.
+* **Full State Preservation:** Using a single-mount layout architecture, all React state (such as indexed documents, active chat history, form inputs, and compiled outputs) is fully preserved during fullscreen toggling.
+
 ---
 
 ## Target Audience
