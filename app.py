@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from ingestion.pdf_parser import parse_pdf
+from ingestion.docx_parser import parse_docx
 from ingestion.chunker import chunk_text
 from embeddings.embedder import Embedder
 from vectorstore.faiss_store import FAISSStore
@@ -43,6 +44,21 @@ from features.alchemy_exporter import convert_sla_to_code
 # Global State & Services
 # ---------------------------------------------------------------------------
 embedder = Embedder()
+
+def extract_text_from_file(file_path: str) -> str:
+    """Extract text from PDF, DOCX, DOC, or TXT file based on extension."""
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext == ".docx" or ext == ".doc":
+        return parse_docx(file_path)
+    elif ext == ".pdf":
+        return parse_pdf(file_path)
+    else:
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                return f.read()
+        except Exception:
+            return ""
+
 app = FastAPI(title="LexiVault API")
 
 app.add_middleware(
@@ -148,7 +164,7 @@ async def upload_documents(files: List[UploadFile] = File(...)):
             namespace = os.path.splitext(file.filename)[0]
             
             # Parse & Index
-            text = parse_pdf(temp_path)
+            text = extract_text_from_file(temp_path)
             if not text:
                 results.append({"file": file.filename, "status": "error", "message": "Failed to extract text."})
                 continue
@@ -215,7 +231,7 @@ def analyze_risks():
             if not file_path or not os.path.exists(file_path):
                 continue
                 
-            text = parse_pdf(file_path)
+            text = extract_text_from_file(file_path)
             if not text: continue
             
             clauses = extract_clauses(text)
@@ -269,8 +285,8 @@ async def redline_compare_api(language: str = Form("English"), file_v1: UploadFi
             f1.write(await file_v1.read())
             f2.write(await file_v2.read())
             
-        text_v1 = parse_pdf(t1)
-        text_v2 = parse_pdf(t2)
+        text_v1 = extract_text_from_file(t1)
+        text_v2 = extract_text_from_file(t2)
         
         result = redline_compare(text_v1, text_v2, _lang_code(language))
         return {"redline": result}
@@ -314,7 +330,7 @@ def predict_timeline(req: TimelineRequest):
     if req.namespace not in session_state["uploaded_files"]:
         raise HTTPException(status_code=400, detail="Document not found or not indexed yet.")
     temp_path = session_state["uploaded_files"][req.namespace]
-    text = parse_pdf(temp_path)
+    text = extract_text_from_file(temp_path)
     if not text:
         raise HTTPException(status_code=400, detail="Could not read document text.")
     res = predict_lifecycle(text, req.language)
@@ -343,7 +359,7 @@ def shadow_battle(req: ShadowRequest):
     if req.namespace not in session_state["uploaded_files"]:
         raise HTTPException(status_code=400, detail="Document not found or not indexed yet.")
     temp_path = session_state["uploaded_files"][req.namespace]
-    text = parse_pdf(temp_path)
+    text = extract_text_from_file(temp_path)
     if not text:
         raise HTTPException(status_code=400, detail="Could not read document text.")
     res = conduct_shadow_battle(text, req.language)
@@ -354,7 +370,7 @@ def residue_forensics(req: ResidueRequest):
     if req.namespace not in session_state["uploaded_files"]:
         raise HTTPException(status_code=400, detail="Document not found or not indexed yet.")
     temp_path = session_state["uploaded_files"][req.namespace]
-    text = parse_pdf(temp_path)
+    text = extract_text_from_file(temp_path)
     if not text:
         raise HTTPException(status_code=400, detail="Could not read document text.")
     res = analyze_residue(temp_path, text, req.language)
@@ -370,7 +386,7 @@ def alchemy_exporter(req: AlchemyRequest):
     if req.namespace not in session_state["uploaded_files"]:
         raise HTTPException(status_code=400, detail="Document not found or not indexed yet.")
     temp_path = session_state["uploaded_files"][req.namespace]
-    text = parse_pdf(temp_path)
+    text = extract_text_from_file(temp_path)
     if not text:
         raise HTTPException(status_code=400, detail="Could not read document text.")
     res = convert_sla_to_code(text, req.language)

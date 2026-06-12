@@ -18,9 +18,9 @@ const workspaceTranslations = {
     redlineTab: "Redline Compare",
     contraTab: "Contradictions",
     uploadHeader: "Upload Documents",
-    uploadSub: "Upload PDF contracts to start analysis. Supports multiple files.",
+    uploadSub: "Upload PDF or Word contracts to start analysis. Supports multiple files.",
     uploadClick: "Click to upload or drag and drop",
-    pdfOnly: "PDF files only",
+    pdfOnly: "PDF or Word files (.docx, .doc)",
     uploadedDocs: "Uploaded Documents",
     successMsg: "Indexed successfully",
     uploadingMsg: "Uploading & indexing...",
@@ -113,9 +113,9 @@ const workspaceTranslations = {
     redlineTab: "रेडलाइन तुलना",
     contraTab: "विरोधाभास",
     uploadHeader: "दस्तावेज़ अपलोड करें",
-    uploadSub: "विश्लेषण शुरू करने के लिए पीडीएफ अनुबंध अपलोड करें। कई दस्तावेजों का समर्थन करता है।",
+    uploadSub: "विश्लेषण शुरू करने के लिए पीडीएफ या वर्ड अनुबंध अपलोड करें। कई दस्तावेजों का समर्थन करता है।",
     uploadClick: "अपलोड करने के लिए क्लिक करें या खींचकर छोड़ें",
-    pdfOnly: "केवल पीडीएफ फाइलें",
+    pdfOnly: "केवल पीडीएफ या वर्ड फाइलें (.docx, .doc)",
     uploadedDocs: "अपलोड किए गए दस्तावेज़",
     successMsg: "सफलतापूर्वक अनुक्रमित किया गया",
     uploadingMsg: "अपलोड और अनुक्रमण जारी है...",
@@ -850,7 +850,7 @@ export default function WorkspaceSection({
         <h3 className="text-lg font-bold text-neutral-900 mb-1">{t.uploadHeader}</h3>
         <p className="text-sm text-neutral-500">{t.uploadSub}</p>
       </div>
-      <input type="file" multiple accept=".pdf" className="hidden" ref={fileInputRef} onChange={handleUpload} />
+      <input type="file" multiple accept=".pdf,.docx,.doc" className="hidden" ref={fileInputRef} onChange={handleUpload} />
       <div
         onClick={() => fileInputRef.current?.click()}
         className="border-2 border-dashed border-neutral-300 hover:border-[#092E26] rounded-2xl p-10 text-center cursor-pointer transition-colors group bg-neutral-50 hover:bg-[#092E26]/5"
@@ -1102,12 +1102,12 @@ export default function WorkspaceSection({
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium text-neutral-700 mb-1.5 block">{t.ver1Label}</label>
-            <input type="file" accept=".pdf" onChange={e => e.target.files?.[0] && setRedlineV1(e.target.files[0])}
+            <input type="file" accept=".pdf,.docx,.doc" onChange={e => e.target.files?.[0] && setRedlineV1(e.target.files[0])}
               className="w-full text-sm border border-neutral-200 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#092E26]/10 file:text-[#092E26] file:font-semibold file:text-xs file:cursor-pointer" />
           </div>
           <div>
             <label className="text-sm font-medium text-neutral-700 mb-1.5 block">{t.ver2Label}</label>
-            <input type="file" accept=".pdf" onChange={e => e.target.files?.[0] && setRedlineV2(e.target.files[0])}
+            <input type="file" accept=".pdf,.docx,.doc" onChange={e => e.target.files?.[0] && setRedlineV2(e.target.files[0])}
               className="w-full text-sm border border-neutral-200 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#092E26]/10 file:text-[#092E26] file:font-semibold file:text-xs file:cursor-pointer" />
           </div>
         </div>
