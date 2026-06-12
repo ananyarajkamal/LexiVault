@@ -417,16 +417,33 @@ export default function WorkspaceSection({
     recognition.start();
   };
 
+  const [activeSpeakingText, setActiveSpeakingText] = useState<string | null>(null);
+
   const speakText = (text: string) => {
     if (!window.speechSynthesis) {
       alert("Text-to-speech is not supported in this browser.");
       return;
     }
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = globalLanguage === 'hi' ? 'hi-IN' : 'en-US';
-    window.speechSynthesis.speak(utterance);
+    if (window.speechSynthesis.speaking && activeSpeakingText === text) {
+      window.speechSynthesis.cancel();
+      setActiveSpeakingText(null);
+    } else {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = globalLanguage === 'hi' ? 'hi-IN' : 'en-US';
+      utterance.onend = () => setActiveSpeakingText(null);
+      utterance.onerror = () => setActiveSpeakingText(null);
+      setActiveSpeakingText(text);
+      window.speechSynthesis.speak(utterance);
+    }
   };
+
+  useEffect(() => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    setActiveSpeakingText(null);
+  }, [activeTab]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatHistory]);
 
@@ -1099,9 +1116,23 @@ export default function WorkspaceSection({
       </form>
       {plainResult && (
         <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="w-4 h-4 text-[#092E26]" />
-            <span className="font-bold text-sm text-[#092E26]">{t.plainResultHeader}</span>
+          <div className="flex items-center justify-between mb-3 border-b border-[#092E26]/10 pb-2">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#092E26]" />
+              <span className="font-bold text-sm text-[#092E26]">{t.plainResultHeader}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => speakText(plainResult)}
+              className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
+                activeSpeakingText === plainResult
+                  ? 'bg-amber-500 border-amber-500 text-white animate-pulse'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+              }`}
+            >
+              <Volume2 className="w-3.5 h-3.5" />
+              {activeSpeakingText === plainResult ? 'Stop' : 'Listen'}
+            </button>
           </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(plainResult)}</div>
         </div>
@@ -1128,6 +1159,21 @@ export default function WorkspaceSection({
       </div>
       {briefResult ? (
         <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
+          <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
+            <span className="text-xs font-bold uppercase text-neutral-400">Brief Output</span>
+            <button
+              type="button"
+              onClick={() => speakText(briefResult)}
+              className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                activeSpeakingText === briefResult
+                  ? 'bg-amber-500 border-amber-500 text-white animate-pulse'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+              }`}
+            >
+              <Volume2 className="w-3.5 h-3.5" />
+              {activeSpeakingText === briefResult ? 'Stop Listening' : 'Listen to Brief'}
+            </button>
+          </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(briefResult)}</div>
         </div>
       ) : (
@@ -1172,6 +1218,21 @@ export default function WorkspaceSection({
       </form>
       {redlineResult && (
         <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
+          <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
+            <span className="text-xs font-bold uppercase text-neutral-400">Redline Audit</span>
+            <button
+              type="button"
+              onClick={() => speakText(redlineResult)}
+              className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                activeSpeakingText === redlineResult
+                  ? 'bg-amber-500 border-amber-500 text-white animate-pulse'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+              }`}
+            >
+              <Volume2 className="w-3.5 h-3.5" />
+              {activeSpeakingText === redlineResult ? 'Stop Listening' : 'Listen'}
+            </button>
+          </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(redlineResult)}</div>
         </div>
       )}
@@ -1197,6 +1258,21 @@ export default function WorkspaceSection({
       </div>
       {contraResult ? (
         <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
+          <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
+            <span className="text-xs font-bold uppercase text-neutral-400">Contradictions Audit</span>
+            <button
+              type="button"
+              onClick={() => speakText(contraResult)}
+              className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                activeSpeakingText === contraResult
+                  ? 'bg-amber-500 border-amber-500 text-white animate-pulse'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+              }`}
+            >
+              <Volume2 className="w-3.5 h-3.5" />
+              {activeSpeakingText === contraResult ? 'Stop Listening' : 'Listen'}
+            </button>
+          </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(contraResult)}</div>
         </div>
       ) : (
