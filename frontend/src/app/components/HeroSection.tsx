@@ -9,7 +9,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onUploadClick, language, t }: HeroSectionProps) {
   return (
-    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_75%_50%,#1B1218_0%,#080709_60%,#080709_100%)] border-b border-neutral-900/60">
+    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_75%_50%,#200c2e_0%,#0e0617_60%,#0e0617_100%)] border-b border-neutral-900/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-16 sm:pb-24">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
           

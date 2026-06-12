@@ -2198,8 +2198,8 @@ export default function WorkspaceSection({
   return (
     <section id="workspace" className={
       isFullscreen 
-        ? "bg-[#080709] overflow-hidden flex flex-col h-[calc(100vh-64px)] w-full" 
-        : "bg-[#080709] overflow-hidden flex flex-col py-16 sm:py-24"
+        ? "bg-[#0e0617] overflow-hidden flex flex-col h-[calc(100vh-64px)] w-full" 
+        : "bg-[#0e0617] overflow-hidden flex flex-col py-16 sm:py-24"
     }>
       <div className={
         isFullscreen 

@@ -347,7 +347,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080709] text-neutral-100 flex flex-col">
+    <div className="min-h-screen bg-[#0e0617] text-neutral-100 flex flex-col">
       <Navbar 
         onGetStarted={() => setWorkspaceFullscreen(true)} 
         isLoggedIn={isLoggedIn}
@@ -373,7 +373,7 @@ export default function App() {
           <HeroSection onUploadClick={() => setWorkspaceFullscreen(true)} language={language} t={t} />
 
           {/* CORE PROBLEM COMPARISON */}
-          <section id="why-us" className="py-16 sm:py-24 bg-[#080709] border-b border-neutral-900/60">
+          <section id="why-us" className="py-16 sm:py-24 bg-[#0e0617] border-b border-neutral-900/60">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center max-w-2xl mx-auto mb-16">
                 <p className="text-[#D92662] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.problemTitle}</p>
@@ -465,7 +465,7 @@ export default function App() {
           <FeaturesSection t={t} />
 
           {/* How It Works */}
-          <section id="how-it-works" className="py-16 sm:py-24 bg-[#080709] border-t border-neutral-900/60">
+          <section id="how-it-works" className="py-16 sm:py-24 bg-[#0e0617] border-t border-neutral-900/60">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center max-w-2xl mx-auto mb-12">
                 <p className="text-[#D92662] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.howItWorks}</p>
@@ -492,7 +492,7 @@ export default function App() {
           </section>
 
           {/* WHO IT IS FOR SECTION */}
-          <section id="who-it-is-for" className="py-16 sm:py-24 bg-[#080709] border-t border-neutral-900/60">
+          <section id="who-it-is-for" className="py-16 sm:py-24 bg-[#0e0617] border-t border-neutral-900/60">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center max-w-2xl mx-auto mb-16">
                 <p className="text-[#D92662] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.whoTitle}</p>
@@ -522,7 +522,7 @@ export default function App() {
         </>
       )}
 
-      <div className={workspaceFullscreen ? "flex-1 flex flex-col min-h-0 bg-[#080709]" : ""}>
+      <div className={workspaceFullscreen ? "flex-1 flex flex-col min-h-0 bg-[#0e0617]" : ""}>
         <WorkspaceSection 
           globalLanguage={language} 
           isFullscreen={workspaceFullscreen}
@@ -534,7 +534,7 @@ export default function App() {
 
       {/* Auth Modal (Sign In / Sign Up) */}
       {showLoginModal && (
-        <div className="fixed inset-0 bg-[#080709]/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[#0e0617]/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
           <div className="bg-[#131118] border border-neutral-800 rounded-2xl w-full max-w-[340px] p-6 shadow-2xl relative text-neutral-100">
             <button 
               onClick={() => {

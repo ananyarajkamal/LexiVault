@@ -65,7 +65,7 @@ export default function FeaturesSection({ t }: FeaturesSectionProps) {
   ];
 
   return (
-    <section id="features" className="py-16 sm:py-24 bg-[#080709]">
+    <section id="features" className="py-16 sm:py-24 bg-[#0e0617]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="text-[#D92662] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.featuresPill}</p>

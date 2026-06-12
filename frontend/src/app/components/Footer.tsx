@@ -48,7 +48,7 @@ const LogoIcon = ({ className }: { className?: string }) => (
 
 export default function Footer({ t }: { t: any }) {
   return (
-    <footer id="footer" className="bg-[#080709] border-t border-neutral-900/60 text-white py-12">
+    <footer id="footer" className="bg-[#0e0617] border-t border-neutral-900/60 text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
