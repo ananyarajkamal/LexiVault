@@ -6,13 +6,16 @@ risk analysis, advanced features, and exports.
 """
 
 import os
+import io
 import tempfile
 import uuid
 from typing import List, Dict, Any, Optional
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from gtts import gTTS
 
 from ingestion.pdf_parser import parse_pdf
 from ingestion.docx_parser import parse_docx
@@ -461,6 +464,40 @@ def alchemy_exporter(req: AlchemyRequest):
 def portfolio_dashboard():
     stats = get_portfolio_dashboard_stats()
     return stats
+
+# ---------------------------------------------------------------------------
+# Text-to-Speech Endpoint (using gTTS - Google Text-to-Speech)
+# ---------------------------------------------------------------------------
+class TTSRequest(BaseModel):
+    text: str
+    language: str = "en"  # 'en' for English, 'hi' for Hindi
+
+@app.post("/api/tts")
+def text_to_speech(req: TTSRequest):
+    """Generate MP3 audio from text using Google TTS. Supports Hindi, English, etc."""
+    if not req.text or not req.text.strip():
+        raise HTTPException(status_code=400, detail="Text is required.")
+    
+    # Clean markdown from text
+    import re
+    cleaned = req.text
+    cleaned = re.sub(r'^#+\s+', '', cleaned, flags=re.MULTILINE)
+    cleaned = re.sub(r'\*\*([^*]+)\*\*', r'\1', cleaned)
+    cleaned = re.sub(r'`([^`]+)`', r'\1', cleaned)
+    cleaned = re.sub(r'[#*`]', '', cleaned)
+    
+    try:
+        tts = gTTS(text=cleaned, lang=req.language, slow=False)
+        audio_buffer = io.BytesIO()
+        tts.write_to_fp(audio_buffer)
+        audio_buffer.seek(0)
+        return StreamingResponse(
+            audio_buffer,
+            media_type="audio/mpeg",
+            headers={"Content-Disposition": "inline; filename=speech.mp3"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"TTS generation failed: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

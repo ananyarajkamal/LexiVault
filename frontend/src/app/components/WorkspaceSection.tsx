@@ -420,71 +420,57 @@ export default function WorkspaceSection({
   const [activeSpeakingText, setActiveSpeakingText] = useState<string | null>(null);
   const [isSpeakingPaused, setIsSpeakingPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioQueueRef = useRef<string[]>([]);
-  const isPlayingGoogleTTSRef = useRef(false);
+  const isPlayingAudioRef = useRef(false);
 
-  // Helper: split text into chunks of ~190 chars at sentence boundaries for Google TTS URL limit
-  const chunkText = (text: string, maxLen = 190): string[] => {
-    const chunks: string[] = [];
-    let remaining = text;
-    while (remaining.length > 0) {
-      if (remaining.length <= maxLen) {
-        chunks.push(remaining);
-        break;
+  // Backend TTS - calls /api/tts which uses gTTS (Google Text-to-Speech Python library)
+  // Works for Hindi, Hinglish, English - no browser voice packs needed
+  const speakWithBackendTTS = async (text: string, lang: string) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, language: lang }),
+      });
+      if (!response.ok) {
+        console.error('TTS API error:', response.status);
+        setActiveSpeakingText(null);
+        setIsSpeakingPaused(false);
+        return;
       }
-      // Try to split at sentence boundaries
-      let splitAt = -1;
-      for (const sep of ['. ', '। ', '? ', '! ', ', ', '; ', ' ']) {
-        const idx = remaining.lastIndexOf(sep, maxLen);
-        if (idx > 0) { splitAt = idx + sep.length; break; }
-      }
-      if (splitAt <= 0) splitAt = maxLen; // hard split
-      chunks.push(remaining.substring(0, splitAt));
-      remaining = remaining.substring(splitAt);
-    }
-    return chunks;
-  };
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      isPlayingAudioRef.current = true;
 
-  // Play next chunk in the Google TTS queue
-  const playNextGoogleChunk = () => {
-    if (audioQueueRef.current.length === 0) {
-      isPlayingGoogleTTSRef.current = false;
+      audio.onended = () => {
+        URL.revokeObjectURL(url);
+        isPlayingAudioRef.current = false;
+        audioRef.current = null;
+        setActiveSpeakingText(null);
+        setIsSpeakingPaused(false);
+      };
+      audio.onerror = (e) => {
+        console.error('TTS audio playback error:', e);
+        URL.revokeObjectURL(url);
+        isPlayingAudioRef.current = false;
+        audioRef.current = null;
+        setActiveSpeakingText(null);
+        setIsSpeakingPaused(false);
+      };
+      audio.play();
+    } catch (e) {
+      console.error('TTS fetch error:', e);
       setActiveSpeakingText(null);
       setIsSpeakingPaused(false);
-      return;
     }
-    const url = audioQueueRef.current.shift()!;
-    const audio = new Audio(url);
-    audioRef.current = audio;
-    audio.onended = () => playNextGoogleChunk();
-    audio.onerror = (e) => {
-      console.error('Google TTS audio error:', e);
-      playNextGoogleChunk(); // skip to next chunk
-    };
-    audio.play().catch(e => {
-      console.error('Google TTS play error:', e);
-      // Fallback: try browser TTS for this text
-      isPlayingGoogleTTSRef.current = false;
-    });
-  };
-
-  // Google Translate TTS - works for Hindi without any installation
-  const speakWithGoogleTTS = (text: string, lang: string) => {
-    const chunks = chunkText(text);
-    const urls = chunks.map(chunk => {
-      const encoded = encodeURIComponent(chunk);
-      return `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=${lang}&client=tw-ob`;
-    });
-    audioQueueRef.current = urls;
-    isPlayingGoogleTTSRef.current = true;
-    playNextGoogleChunk();
   };
 
   const speakText = (text: string, langName?: string) => {
     // Toggle Play/Pause if clicking on the currently active text
     if (activeSpeakingText === text) {
-      if (isPlayingGoogleTTSRef.current && audioRef.current) {
-        // Google TTS pause/resume
+      if (isPlayingAudioRef.current && audioRef.current) {
+        // Audio element pause/resume (Hindi/Hinglish)
         if (isSpeakingPaused) {
           audioRef.current.play();
           setIsSpeakingPaused(false);
@@ -493,7 +479,7 @@ export default function WorkspaceSection({
           setIsSpeakingPaused(true);
         }
       } else if (window.speechSynthesis) {
-        // Browser TTS pause/resume
+        // Browser TTS pause/resume (English)
         if (isSpeakingPaused) {
           window.speechSynthesis.resume();
           setIsSpeakingPaused(false);
@@ -508,47 +494,45 @@ export default function WorkspaceSection({
     // Stop any current playback
     stopSpeaking();
 
-    // Clean up markdown syntax so it reads naturally
-    const cleanedText = text
-      .replace(/^(#+\s+)/gm, '')
-      .replace(/\*\*([^*]+)\*\*/g, '$1')
-      .replace(/###?\s+/g, '')
-      .replace(/`([^`]+)`/g, '$1')
-      .replace(/[#*`]/g, '');
-
-    // Determine if we need Hindi TTS
-    const hasDevanagari = /[\u0900-\u097F]/.test(cleanedText);
-    let useGoogleTTS = false;
-    let googleLang = 'en';
+    // Determine if we need Hindi/Hinglish TTS
+    const hasDevanagari = /[\u0900-\u097F]/.test(text);
+    let useBackendTTS = false;
+    let ttsLang = 'en';
 
     if (hasDevanagari) {
-      useGoogleTTS = true;
-      googleLang = 'hi';
+      useBackendTTS = true;
+      ttsLang = 'hi';
     } else if (langName) {
       const lower = langName.toLowerCase();
       if (lower === 'hindi') {
-        useGoogleTTS = true;
-        googleLang = 'hi';
+        useBackendTTS = true;
+        ttsLang = 'hi';
       } else if (lower === 'hinglish') {
-        useGoogleTTS = true;
-        googleLang = 'hi'; // Google handles romanized Hindi well
+        useBackendTTS = true;
+        ttsLang = 'hi';
       }
     } else if (globalLanguage === 'hi') {
-      useGoogleTTS = true;
-      googleLang = 'hi';
+      useBackendTTS = true;
+      ttsLang = 'hi';
     }
 
     setActiveSpeakingText(text);
     setIsSpeakingPaused(false);
 
-    if (useGoogleTTS) {
-      console.log(`TTS: Using Google Translate TTS, lang=${googleLang}, textLen=${cleanedText.length}`);
-      speakWithGoogleTTS(cleanedText, googleLang);
+    if (useBackendTTS) {
+      console.log(`TTS: Using backend gTTS, lang=${ttsLang}`);
+      speakWithBackendTTS(text, ttsLang);
     } else {
       // English: use browser SpeechSynthesis (works fine)
       console.log(`TTS: Using browser SpeechSynthesis, lang=en-US`);
       window.speechSynthesis?.cancel();
       setTimeout(() => {
+        const cleanedText = text
+          .replace(/^(#+\s+)/gm, '')
+          .replace(/\*\*([^*]+)\*\*/g, '$1')
+          .replace(/###?\s+/g, '')
+          .replace(/`([^`]+)`/g, '$1')
+          .replace(/[#*`]/g, '');
         const utterance = new SpeechSynthesisUtterance(cleanedText);
         utterance.lang = 'en-US';
         utterance.onend = () => {
@@ -565,15 +549,14 @@ export default function WorkspaceSection({
   };
 
   const stopSpeaking = () => {
-    // Stop Google TTS
+    // Stop audio element (Hindi/Hinglish)
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       audioRef.current = null;
     }
-    audioQueueRef.current = [];
-    isPlayingGoogleTTSRef.current = false;
-    // Stop browser TTS
+    isPlayingAudioRef.current = false;
+    // Stop browser TTS (English)
     window.speechSynthesis?.cancel();
     setActiveSpeakingText(null);
     setIsSpeakingPaused(false);
