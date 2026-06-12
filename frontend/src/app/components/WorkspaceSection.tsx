@@ -3,7 +3,7 @@ import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
   CheckCircle2, XCircle, Scale, Diff, Mic, Volume2, Clock, LayoutDashboard,
-  Swords, Fingerprint, Languages, Code, Maximize2, Minimize2
+  Swords, Binary, Languages, Code, Maximize2, Minimize2
 } from 'lucide-react';
 
 const workspaceTranslations = {
@@ -227,7 +227,7 @@ export default function WorkspaceSection({
     { id: 'timeline', label: t.timelineTab, icon: Clock },
     { id: 'portfolioDashboard', label: t.portfolioTab, icon: LayoutDashboard },
     { id: 'shadow', label: t.shadowTab, icon: Swords },
-    { id: 'residue', label: t.residueTab, icon: Fingerprint },
+    { id: 'residue', label: t.residueTab, icon: Binary },
     { id: 'echo', label: t.echoTab, icon: Languages },
     { id: 'alchemy', label: t.alchemyTab, icon: Code },
   ];
@@ -1874,7 +1874,7 @@ export default function WorkspaceSection({
 
         {successDocs.length === 0 ? (
           <div className="text-center py-16 text-neutral-400">
-            <Fingerprint className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <Binary className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
             <p className="text-sm">Upload documents first to run document forensics.</p>
           </div>
         ) : (
@@ -1897,7 +1897,7 @@ export default function WorkspaceSection({
                 disabled={isInspecting}
                 className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
-                {isInspecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Fingerprint className="w-4 h-4" />}
+                {isInspecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Binary className="w-4 h-4" />}
                 {isInspecting ? "Inspecting..." : "Extract & Analyze"}
               </button>
             </div>

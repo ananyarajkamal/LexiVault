@@ -1,4 +1,4 @@
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Mic, Play, Swords, Fingerprint, Languages, Code } from 'lucide-react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Mic, Play, Swords, Binary, Languages, Code } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -298,7 +298,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               <div className="absolute right-[0px] top-[260px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 shrink-0">
-                    <Fingerprint className="w-2.5 h-2.5" />
+                    <Binary className="w-2.5 h-2.5" />
                   </div>
                   <span className="font-bold text-[10px]">{language === 'hi' ? 'द रेजिड्यू' : 'The Residue'}</span>
                 </div>
