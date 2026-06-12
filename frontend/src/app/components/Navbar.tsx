@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Globe, Menu, X, LogOut } from 'lucide-react';
 import type { Language } from '../App';
 
-const LogoIcon = ({ className }: { className?: string }) => (
+export const LogoIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 100 100" className={className} fill="none" stroke="url(#logo-gradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <defs>
       <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">

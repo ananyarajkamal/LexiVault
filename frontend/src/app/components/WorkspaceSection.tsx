@@ -5,6 +5,7 @@ import {
   CheckCircle2, XCircle, Scale, Diff, Mic, Clock, LayoutDashboard,
   Swords, Binary, Languages, Code, Maximize2, Minimize2
 } from 'lucide-react';
+import { LogoIcon } from './Navbar';
 
 const workspaceTranslations = {
   en: {
@@ -2222,8 +2223,18 @@ export default function WorkspaceSection({
         }>
           {/* Tab bar */}
           <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
-            <div className="flex-1 overflow-x-auto min-w-0">
-              <div className="flex min-w-max">
+            <div className="flex items-center min-w-0 flex-1">
+              {/* Brand Logo & Name */}
+              <div className="flex items-center gap-2 px-4 py-3.5 border-r border-[#222026] select-none shrink-0 group">
+                <LogoIcon className="w-5 h-5 text-white transition-transform duration-300 group-hover:rotate-6" />
+                <span className="font-serif font-black text-[11px] tracking-wider text-white uppercase bg-gradient-to-r from-[#D92662] to-[#F472B6] bg-clip-text text-transparent">
+                  LexiVault
+                </span>
+              </div>
+
+              {/* Tabs */}
+              <div className="flex-1 overflow-x-auto min-w-0">
+                <div className="flex min-w-max">
                 {tabs.map(t => (
                   <button key={t.id} onClick={() => setActiveTab(t.id)}
                     className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
@@ -2236,6 +2247,7 @@ export default function WorkspaceSection({
                   </button>
                 ))}
               </div>
+            </div>
             </div>
             {/* Maximize Toggle Button */}
             <button
