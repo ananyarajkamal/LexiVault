@@ -19,7 +19,6 @@ Furthermore, LexiVault features advanced contract intelligence tools:
 * Semantic Diff Analyzer: Compute similarity changes between two clauses using local sentence vector embeddings and generate a structured audit explaining the legal shifts in rights or obligations.
 * Hinglish Code-Switching explaining engine: Translate complex legal legalese directly into conversational Hinglish (Hindi written in the Latin alphabet) for simple and intuitive understanding.
 * Contract Lifecycle Timeline Predictor: Estimate negotiation duration, renewal risks, and expiration cascades using LLM temporal graph analysis on contract metadata.
-* Voice-Powered Contract Briefing: Interact with your document repository hands-free using browser-native SpeechRecognition and SpeechSynthesis read-aloud features.
 * Cross-Document Portfolio Risk Dashboard: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
 * The Shadow (AI vs. AI Contract Battle): Select a document to watch adversarial Attacker and Defender AI counsel debate clause liabilities and deliver a final legal risk assessment.
 * The Residue (Invisible Document Forensics): Run binary inspections of PDF bytes to extract hidden metadata (author, tools, creation dates) using PyMuPDF and perform text checks for altered boilerplates.

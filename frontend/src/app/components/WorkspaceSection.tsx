@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
-  CheckCircle2, XCircle, Scale, Diff, Mic, Volume2, Clock, LayoutDashboard,
-  Swords, Binary, Languages, Code, Maximize2, Minimize2, Pause, Square
+  CheckCircle2, XCircle, Scale, Diff, Mic, Clock, LayoutDashboard,
+  Swords, Binary, Languages, Code, Maximize2, Minimize2
 } from 'lucide-react';
 
 const workspaceTranslations = {
@@ -417,154 +417,6 @@ export default function WorkspaceSection({
     recognition.start();
   };
 
-  const [activeSpeakingText, setActiveSpeakingText] = useState<string | null>(null);
-  const [isSpeakingPaused, setIsSpeakingPaused] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const isPlayingAudioRef = useRef(false);
-
-  // Backend TTS - calls /api/tts which uses gTTS (Google Text-to-Speech Python library)
-  // Works for Hindi, Hinglish, English - no browser voice packs needed
-  const speakWithBackendTTS = async (text: string, lang: string) => {
-    try {
-      const response = await fetch('http://localhost:8000/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language: lang }),
-      });
-      if (!response.ok) {
-        console.error('TTS API error:', response.status);
-        setActiveSpeakingText(null);
-        setIsSpeakingPaused(false);
-        return;
-      }
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const audio = new Audio(url);
-      audioRef.current = audio;
-      isPlayingAudioRef.current = true;
-
-      audio.onended = () => {
-        URL.revokeObjectURL(url);
-        isPlayingAudioRef.current = false;
-        audioRef.current = null;
-        setActiveSpeakingText(null);
-        setIsSpeakingPaused(false);
-      };
-      audio.onerror = (e) => {
-        console.error('TTS audio playback error:', e);
-        URL.revokeObjectURL(url);
-        isPlayingAudioRef.current = false;
-        audioRef.current = null;
-        setActiveSpeakingText(null);
-        setIsSpeakingPaused(false);
-      };
-      audio.play();
-    } catch (e) {
-      console.error('TTS fetch error:', e);
-      setActiveSpeakingText(null);
-      setIsSpeakingPaused(false);
-    }
-  };
-
-  const speakText = (text: string, langName?: string) => {
-    // Toggle Play/Pause if clicking on the currently active text
-    if (activeSpeakingText === text) {
-      if (isPlayingAudioRef.current && audioRef.current) {
-        // Audio element pause/resume (Hindi/Hinglish)
-        if (isSpeakingPaused) {
-          audioRef.current.play();
-          setIsSpeakingPaused(false);
-        } else {
-          audioRef.current.pause();
-          setIsSpeakingPaused(true);
-        }
-      } else if (window.speechSynthesis) {
-        // Browser TTS pause/resume (English)
-        if (isSpeakingPaused) {
-          window.speechSynthesis.resume();
-          setIsSpeakingPaused(false);
-        } else {
-          window.speechSynthesis.pause();
-          setIsSpeakingPaused(true);
-        }
-      }
-      return;
-    }
-
-    // Stop any current playback
-    stopSpeaking();
-
-    // Determine if we need Hindi/Hinglish TTS
-    const hasDevanagari = /[\u0900-\u097F]/.test(text);
-    let useBackendTTS = false;
-    let ttsLang = 'en';
-
-    if (hasDevanagari) {
-      useBackendTTS = true;
-      ttsLang = 'hi';
-    } else if (langName) {
-      const lower = langName.toLowerCase();
-      if (lower === 'hindi') {
-        useBackendTTS = true;
-        ttsLang = 'hi';
-      } else if (lower === 'hinglish') {
-        useBackendTTS = true;
-        ttsLang = 'hi';
-      }
-    } else if (globalLanguage === 'hi') {
-      useBackendTTS = true;
-      ttsLang = 'hi';
-    }
-
-    setActiveSpeakingText(text);
-    setIsSpeakingPaused(false);
-
-    if (useBackendTTS) {
-      console.log(`TTS: Using backend gTTS, lang=${ttsLang}`);
-      speakWithBackendTTS(text, ttsLang);
-    } else {
-      // English: use browser SpeechSynthesis (works fine)
-      console.log(`TTS: Using browser SpeechSynthesis, lang=en-US`);
-      window.speechSynthesis?.cancel();
-      setTimeout(() => {
-        const cleanedText = text
-          .replace(/^(#+\s+)/gm, '')
-          .replace(/\*\*([^*]+)\*\*/g, '$1')
-          .replace(/###?\s+/g, '')
-          .replace(/`([^`]+)`/g, '$1')
-          .replace(/[#*`]/g, '');
-        const utterance = new SpeechSynthesisUtterance(cleanedText);
-        utterance.lang = 'en-US';
-        utterance.onend = () => {
-          setActiveSpeakingText(null);
-          setIsSpeakingPaused(false);
-        };
-        utterance.onerror = () => {
-          setActiveSpeakingText(null);
-          setIsSpeakingPaused(false);
-        };
-        window.speechSynthesis?.speak(utterance);
-      }, 100);
-    }
-  };
-
-  const stopSpeaking = () => {
-    // Stop audio element (Hindi/Hinglish)
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
-    isPlayingAudioRef.current = false;
-    // Stop browser TTS (English)
-    window.speechSynthesis?.cancel();
-    setActiveSpeakingText(null);
-    setIsSpeakingPaused(false);
-  };
-
-  useEffect(() => {
-    stopSpeaking();
-  }, [activeTab]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatHistory]);
 
@@ -1104,16 +956,7 @@ export default function WorkspaceSection({
                   Sources: {msg.sources.length} chunks referenced
                 </div>
               )}
-              {msg.role === 'assistant' && (
-                <button 
-                  type="button"
-                  onClick={() => speakText(msg.content)} 
-                  className="mt-2 text-neutral-400 hover:text-[#092E26] transition-colors p-1 rounded hover:bg-neutral-200/20 cursor-pointer flex items-center gap-1 text-[10px] font-semibold"
-                  title="Read aloud"
-                >
-                  <Volume2 className="w-3.5 h-3.5" /> Read Aloud
-                </button>
-              )}
+              
             </div>
           </div>
         ))}
@@ -1242,41 +1085,7 @@ export default function WorkspaceSection({
               <Sparkles className="w-4 h-4 text-[#092E26]" />
               <span className="font-bold text-sm text-[#092E26]">{t.plainResultHeader}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => speakText(plainResult, plainLang)}
-                className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
-                  activeSpeakingText === plainResult
-                    ? isSpeakingPaused
-                      ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                      : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                    : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                }`}
-              >
-                {activeSpeakingText === plainResult && !isSpeakingPaused ? (
-                  <>
-                    <Pause className="w-3.5 h-3.5" />
-                    Pause
-                  </>
-                ) : (
-                  <>
-                    <Volume2 className="w-3.5 h-3.5" />
-                    {activeSpeakingText === plainResult ? 'Resume' : 'Listen'}
-                  </>
-                )}
-              </button>
-              {activeSpeakingText === plainResult && (
-                <button
-                  type="button"
-                  onClick={stopSpeaking}
-                  className="flex items-center justify-center p-1 rounded-md border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                  title="Stop"
-                >
-                  <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                </button>
-              )}
-            </div>
+            
           </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(plainResult)}</div>
         </div>
@@ -1305,41 +1114,7 @@ export default function WorkspaceSection({
         <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
           <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Brief Output</span>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => speakText(briefResult, briefLang)}
-                className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-                  activeSpeakingText === briefResult
-                    ? isSpeakingPaused
-                      ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                      : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                    : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                }`}
-              >
-                {activeSpeakingText === briefResult && !isSpeakingPaused ? (
-                  <>
-                    <Pause className="w-3.5 h-3.5 animate-pulse" />
-                    Pause
-                  </>
-                ) : (
-                  <>
-                    <Volume2 className="w-3.5 h-3.5" />
-                    {activeSpeakingText === briefResult ? 'Resume' : 'Listen to Brief'}
-                  </>
-                )}
-              </button>
-              {activeSpeakingText === briefResult && (
-                <button
-                  type="button"
-                  onClick={stopSpeaking}
-                  className="flex items-center justify-center p-1.5 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                  title="Stop"
-                >
-                  <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                </button>
-              )}
-            </div>
+            
           </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(briefResult)}</div>
         </div>
@@ -1387,41 +1162,7 @@ export default function WorkspaceSection({
         <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
           <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Redline Audit</span>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => speakText(redlineResult, redlineLang)}
-                className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-                  activeSpeakingText === redlineResult
-                    ? isSpeakingPaused
-                      ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                      : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                    : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                }`}
-              >
-                {activeSpeakingText === redlineResult && !isSpeakingPaused ? (
-                  <>
-                    <Pause className="w-3.5 h-3.5 animate-pulse" />
-                    Pause
-                  </>
-                ) : (
-                  <>
-                    <Volume2 className="w-3.5 h-3.5" />
-                    {activeSpeakingText === redlineResult ? 'Resume' : 'Listen'}
-                  </>
-                )}
-              </button>
-              {activeSpeakingText === redlineResult && (
-                <button
-                  type="button"
-                  onClick={stopSpeaking}
-                  className="flex items-center justify-center p-1.5 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                  title="Stop"
-                >
-                  <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                </button>
-              )}
-            </div>
+            
           </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(redlineResult)}</div>
         </div>
@@ -1450,41 +1191,7 @@ export default function WorkspaceSection({
         <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
           <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Contradictions Audit</span>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => speakText(contraResult, contraLang)}
-                className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-                  activeSpeakingText === contraResult
-                    ? isSpeakingPaused
-                      ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                      : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                    : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                }`}
-              >
-                {activeSpeakingText === contraResult && !isSpeakingPaused ? (
-                  <>
-                    <Pause className="w-3.5 h-3.5 animate-pulse" />
-                    Pause
-                  </>
-                ) : (
-                  <>
-                    <Volume2 className="w-3.5 h-3.5" />
-                    {activeSpeakingText === contraResult ? 'Resume' : 'Listen'}
-                  </>
-                )}
-              </button>
-              {activeSpeakingText === contraResult && (
-                <button
-                  type="button"
-                  onClick={stopSpeaking}
-                  className="flex items-center justify-center p-1.5 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                  title="Stop"
-                >
-                  <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                </button>
-              )}
-            </div>
+            
           </div>
           <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(contraResult)}</div>
         </div>
@@ -1624,31 +1331,7 @@ export default function WorkspaceSection({
                 <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
                     <h4 className="font-bold text-sm text-[#092E26]">{t.compromiseResultHeader}</h4>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => speakText(negotiationCompromise, negotiationLang)}
-                        className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                          activeSpeakingText === negotiationCompromise
-                            ? isSpeakingPaused
-                              ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                              : 'bg-amber-500 border-amber-500 text-white'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {activeSpeakingText === negotiationCompromise && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                        {activeSpeakingText === negotiationCompromise ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                      </button>
-                      {activeSpeakingText === negotiationCompromise && (
-                        <button
-                          type="button"
-                          onClick={stopSpeaking}
-                          className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                        >
-                          <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                   <div className="text-xs text-neutral-800 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                     {renderFormattedText(negotiationCompromise)}
@@ -1659,31 +1342,7 @@ export default function WorkspaceSection({
                 <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-200">
                     <h4 className="font-bold text-sm text-neutral-700">{t.explanationHeader}</h4>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => speakText(negotiationExplanation, negotiationLang)}
-                        className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                          activeSpeakingText === negotiationExplanation
-                            ? isSpeakingPaused
-                              ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                              : 'bg-amber-500 border-amber-500 text-white'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {activeSpeakingText === negotiationExplanation && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                        {activeSpeakingText === negotiationExplanation ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                      </button>
-                      {activeSpeakingText === negotiationExplanation && (
-                        <button
-                          type="button"
-                          onClick={stopSpeaking}
-                          className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                        >
-                          <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                   <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
                     {renderFormattedText(negotiationExplanation)}
@@ -1740,31 +1399,7 @@ export default function WorkspaceSection({
                 <div className="bg-red-50/30 border border-red-150 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-100/30">
                     <h4 className="font-bold text-sm text-red-800">Opposing Counsel Objections & Arguments</h4>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => speakText(counterSimResult.counter_arguments, negotiationLang)}
-                        className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                          activeSpeakingText === counterSimResult.counter_arguments
-                            ? isSpeakingPaused
-                              ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                              : 'bg-amber-500 border-amber-500 text-white'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {activeSpeakingText === counterSimResult.counter_arguments && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                        {activeSpeakingText === counterSimResult.counter_arguments ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                      </button>
-                      {activeSpeakingText === counterSimResult.counter_arguments && (
-                        <button
-                          type="button"
-                          onClick={stopSpeaking}
-                          className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                        >
-                          <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                   <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.counter_arguments)}
@@ -1773,31 +1408,7 @@ export default function WorkspaceSection({
                 <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
                     <h4 className="font-bold text-sm text-[#092E26]">Opposing Counter-Proposals</h4>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => speakText(counterSimResult.pushback_clauses, negotiationLang)}
-                        className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                          activeSpeakingText === counterSimResult.pushback_clauses
-                            ? isSpeakingPaused
-                              ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                              : 'bg-amber-500 border-amber-500 text-white'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {activeSpeakingText === counterSimResult.pushback_clauses && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                        {activeSpeakingText === counterSimResult.pushback_clauses ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                      </button>
-                      {activeSpeakingText === counterSimResult.pushback_clauses && (
-                        <button
-                          type="button"
-                          onClick={stopSpeaking}
-                          className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                        >
-                          <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                   <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.pushback_clauses)}
@@ -1808,31 +1419,7 @@ export default function WorkspaceSection({
               <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
                 <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-200">
                   <h4 className="font-bold text-sm text-neutral-800">Negotiation Strategy Recommendation</h4>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => speakText(counterSimResult.recommendation, negotiationLang)}
-                      className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                        activeSpeakingText === counterSimResult.recommendation
-                          ? isSpeakingPaused
-                            ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                            : 'bg-amber-500 border-amber-500 text-white'
-                          : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                      }`}
-                    >
-                      {activeSpeakingText === counterSimResult.recommendation && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                      {activeSpeakingText === counterSimResult.recommendation ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                    </button>
-                    {activeSpeakingText === counterSimResult.recommendation && (
-                      <button
-                        type="button"
-                        onClick={stopSpeaking}
-                        className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                      >
-                        <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                      </button>
-                    )}
-                  </div>
+                  
                 </div>
                 <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
                   {renderFormattedText(counterSimResult.recommendation)}
@@ -1888,31 +1475,7 @@ export default function WorkspaceSection({
                 <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
                     <h4 className="font-bold text-sm text-[#092E26] font-sans">Accept with Modification</h4>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => speakText(ghostResult.accept_with_modification, negotiationLang)}
-                        className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                          activeSpeakingText === ghostResult.accept_with_modification
-                            ? isSpeakingPaused
-                              ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                              : 'bg-amber-500 border-amber-500 text-white'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {activeSpeakingText === ghostResult.accept_with_modification && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                        {activeSpeakingText === ghostResult.accept_with_modification ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                      </button>
-                      {activeSpeakingText === ghostResult.accept_with_modification && (
-                        <button
-                          type="button"
-                          onClick={stopSpeaking}
-                          className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                        >
-                          <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                   <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.accept_with_modification)}
@@ -1921,31 +1484,7 @@ export default function WorkspaceSection({
                 <div className="bg-red-50/30 border border-red-150 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-150">
                     <h4 className="font-bold text-sm text-red-800 font-sans">Reject with Rationale & Precedent</h4>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => speakText(ghostResult.reject_with_rationale, negotiationLang)}
-                        className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                          activeSpeakingText === ghostResult.reject_with_rationale
-                            ? isSpeakingPaused
-                              ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                              : 'bg-amber-500 border-amber-500 text-white'
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {activeSpeakingText === ghostResult.reject_with_rationale && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                        {activeSpeakingText === ghostResult.reject_with_rationale ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                      </button>
-                      {activeSpeakingText === ghostResult.reject_with_rationale && (
-                        <button
-                          type="button"
-                          onClick={stopSpeaking}
-                          className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                        >
-                          <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                   <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.reject_with_rationale)}
@@ -2018,41 +1557,7 @@ export default function WorkspaceSection({
             <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
               <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
                 <h4 className="font-bold text-sm text-[#092E26]">{t.shiftExplanationHeader}</h4>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => speakText(diffExplanation, diffLang)}
-                    className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
-                      activeSpeakingText === diffExplanation
-                        ? isSpeakingPaused
-                          ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                          : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                        : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                    }`}
-                  >
-                    {activeSpeakingText === diffExplanation && !isSpeakingPaused ? (
-                      <>
-                        <Pause className="w-3.5 h-3.5" />
-                        Pause
-                      </>
-                    ) : (
-                      <>
-                        <Volume2 className="w-3.5 h-3.5" />
-                        {activeSpeakingText === diffExplanation ? 'Resume' : 'Listen'}
-                      </>
-                    )}
-                  </button>
-                  {activeSpeakingText === diffExplanation && (
-                    <button
-                      type="button"
-                      onClick={stopSpeaking}
-                      className="flex items-center justify-center p-1 rounded-md border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                      title="Stop"
-                    >
-                      <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                    </button>
-                  )}
-                </div>
+                
               </div>
               <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                 {renderFormattedText(diffExplanation)}
@@ -2195,41 +1700,7 @@ export default function WorkspaceSection({
               <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
                 <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
                   <h4 className="font-bold text-sm text-[#092E26]">Cascade Gaps & Dependency Warnings</h4>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => speakText(timelineResult.cascade_effects)}
-                      className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
-                        activeSpeakingText === timelineResult.cascade_effects
-                          ? isSpeakingPaused
-                            ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                            : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                          : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                      }`}
-                    >
-                      {activeSpeakingText === timelineResult.cascade_effects && !isSpeakingPaused ? (
-                        <>
-                          <Pause className="w-3.5 h-3.5 animate-pulse" />
-                          Pause
-                        </>
-                      ) : (
-                        <>
-                          <Volume2 className="w-3.5 h-3.5" />
-                          {activeSpeakingText === timelineResult.cascade_effects ? 'Resume' : 'Listen'}
-                        </>
-                      )}
-                    </button>
-                    {activeSpeakingText === timelineResult.cascade_effects && (
-                      <button
-                        type="button"
-                        onClick={stopSpeaking}
-                        className="flex items-center justify-center p-1.5 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                        title="Stop"
-                      >
-                        <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                      </button>
-                    )}
-                  </div>
+                  
                 </div>
                 <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                   {renderFormattedText(timelineResult.cascade_effects)}
@@ -2432,31 +1903,7 @@ export default function WorkspaceSection({
                     <Swords className="w-4 h-4 text-red-600" />
                     <span className="font-bold text-sm text-red-800">Attacker Counsel</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => speakText(shadowResult.attacker_turn)}
-                      className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                        activeSpeakingText === shadowResult.attacker_turn
-                          ? isSpeakingPaused
-                            ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                            : 'bg-amber-500 border-amber-500 text-white'
-                          : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                      }`}
-                    >
-                      {activeSpeakingText === shadowResult.attacker_turn && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                      {activeSpeakingText === shadowResult.attacker_turn ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                    </button>
-                    {activeSpeakingText === shadowResult.attacker_turn && (
-                      <button
-                        type="button"
-                        onClick={stopSpeaking}
-                        className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                      >
-                        <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                      </button>
-                    )}
-                  </div>
+                  
                 </div>
                 <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/30 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.attacker_turn)}
@@ -2470,31 +1917,7 @@ export default function WorkspaceSection({
                     <ShieldAlert className="w-4 h-4 text-blue-600" />
                     <span className="font-bold text-sm text-blue-800">Defender Counsel</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => speakText(shadowResult.defender_turn)}
-                      className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                        activeSpeakingText === shadowResult.defender_turn
-                          ? isSpeakingPaused
-                            ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                            : 'bg-amber-500 border-amber-500 text-white'
-                          : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                      }`}
-                    >
-                      {activeSpeakingText === shadowResult.defender_turn && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                      {activeSpeakingText === shadowResult.defender_turn ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                    </button>
-                    {activeSpeakingText === shadowResult.defender_turn && (
-                      <button
-                        type="button"
-                        onClick={stopSpeaking}
-                        className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                      >
-                        <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                      </button>
-                    )}
-                  </div>
+                  
                 </div>
                 <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-blue-100/30 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.defender_turn)}
@@ -2506,31 +1929,7 @@ export default function WorkspaceSection({
             <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
               <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
                 <h4 className="font-bold text-sm text-[#092E26]">Legal Risk Assessment & Verdict</h4>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => speakText(shadowResult.assessment)}
-                    className={`flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded border transition-colors cursor-pointer ${
-                      activeSpeakingText === shadowResult.assessment
-                        ? isSpeakingPaused
-                          ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                          : 'bg-amber-500 border-amber-500 text-white'
-                        : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                    }`}
-                  >
-                    {activeSpeakingText === shadowResult.assessment && !isSpeakingPaused ? <Pause className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                    {activeSpeakingText === shadowResult.assessment ? (isSpeakingPaused ? 'Resume' : 'Pause') : 'Listen'}
-                  </button>
-                  {activeSpeakingText === shadowResult.assessment && (
-                    <button
-                      type="button"
-                      onClick={stopSpeaking}
-                      className="p-0.5 rounded border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                    >
-                      <Square className="w-2.5 h-2.5 text-red-500 fill-red-500" />
-                    </button>
-                  )}
-                </div>
+                
               </div>
               <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                 {renderFormattedText(shadowResult.assessment)}
@@ -2642,41 +2041,7 @@ export default function WorkspaceSection({
                   <ShieldAlert className="w-4 h-4 text-[#092E26]" />
                   <h4 className="font-bold text-sm text-[#092E26]">Forensic Text Alteration Audit</h4>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => speakText(residueResult.forensics_report)}
-                    className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
-                      activeSpeakingText === residueResult.forensics_report
-                        ? isSpeakingPaused
-                          ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                          : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                        : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                    }`}
-                  >
-                    {activeSpeakingText === residueResult.forensics_report && !isSpeakingPaused ? (
-                      <>
-                        <Pause className="w-3.5 h-3.5 animate-pulse" />
-                        Pause
-                      </>
-                    ) : (
-                      <>
-                        <Volume2 className="w-3.5 h-3.5" />
-                        {activeSpeakingText === residueResult.forensics_report ? 'Resume' : 'Listen'}
-                      </>
-                    )}
-                  </button>
-                  {activeSpeakingText === residueResult.forensics_report && (
-                    <button
-                      type="button"
-                      onClick={stopSpeaking}
-                      className="flex items-center justify-center p-1.5 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                      title="Stop"
-                    >
-                      <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                    </button>
-                  )}
-                </div>
+                
               </div>
               <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                 {renderFormattedText(residueResult.forensics_report)}
@@ -2752,41 +2117,7 @@ export default function WorkspaceSection({
                 <Sparkles className="w-4 h-4 text-[#092E26]" />
                 <h4 className="font-bold text-sm text-[#092E26]">Cross-Language Translation Trap Audit</h4>
               </div>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => speakText(echoResult, echoLang)}
-                  className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer ${
-                    activeSpeakingText === echoResult
-                      ? isSpeakingPaused
-                        ? 'bg-amber-500/20 border-amber-500 text-amber-700'
-                        : 'bg-amber-500 border-amber-500 text-white animate-pulse'
-                      : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-                  }`}
-                >
-                  {activeSpeakingText === echoResult && !isSpeakingPaused ? (
-                    <>
-                      <Pause className="w-3.5 h-3.5 animate-pulse" />
-                      Pause
-                    </>
-                  ) : (
-                    <>
-                      <Volume2 className="w-3.5 h-3.5" />
-                      {activeSpeakingText === echoResult ? 'Resume' : 'Listen'}
-                    </>
-                  )}
-                </button>
-                {activeSpeakingText === echoResult && (
-                  <button
-                    type="button"
-                    onClick={stopSpeaking}
-                    className="flex items-center justify-center p-1.5 rounded-lg border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                    title="Stop"
-                  >
-                    <Square className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-                  </button>
-                )}
-              </div>
+              
             </div>
             <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
               {renderFormattedText(echoResult)}
