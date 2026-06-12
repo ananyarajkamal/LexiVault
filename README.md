@@ -22,7 +22,7 @@ Furthermore, LexiVault features advanced contract intelligence tools:
 * Voice-Powered Contract Briefing: Interact with your document repository hands-free using browser-native SpeechRecognition and SpeechSynthesis read-aloud features.
 * Cross-Document Portfolio Risk Dashboard: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
 * The Shadow (AI vs. AI Contract Battle): Select a document to watch adversarial Attacker and Defender AI counsel debate clause liabilities and deliver a final legal risk assessment.
-* The Residue (Invisible Document Forensics): Extract hidden PDF document metadata (author, tools, dates, sizes) using PyMuPDF and perform text forensics checks for altered boilerplates.
+* The Residue (Invisible Document Forensics): Run binary inspections of PDF bytes to extract hidden metadata (author, tools, creation dates) using PyMuPDF and perform text checks for altered boilerplates.
 * The Echo (Cross-Language Legal Harmonics): Compare semantic legal weight and translation traps (e.g. "best efforts" vs "reasonable efforts") across English, Hindi, and Hinglish.
 * The Alchemy (Contract to Executable Code): Parse SLA performance bounds (uptime, latency, resolution times) and compile them into Prometheus Alert YAML rules.
 
