@@ -1,4 +1,4 @@
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Mic, Play, Swords, Binary, Languages, Code } from 'lucide-react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Swords, Binary, Languages, Code, FileText } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -107,7 +107,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 <path d="M 430 65 C 410 65, 395 70, 380 70" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
                 {/* Curve 3: Counterparty Pushback (Left Card 2) -> Points directly to clause number '12.1' */}
                 <path d="M 150 170 C 170 170, 185 180, 195 180" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 4: Voice Briefing (Right Card 2) -> Points directly to the highlighted financial value '₹50,000' */}
+                {/* Curve 4: Negotiation Ghostwriter (Right Card 2) -> Points directly to the highlighted financial value '₹50,000' */}
                 <path d="M 430 180 C 410 180, 350 198, 330 198" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
                 {/* Curve 5: The Shadow (Left Card 3) -> Points to skeleton lines below highlighted block */}
                 <path d="M 150 290 C 170 290, 195 245, 210 245" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
@@ -286,21 +286,19 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 </div>
               </div>
 
-              {/* Right Callout 2: Voice Briefing */}
+              {/* Right Callout 2: Negotiation Ghostwriter */}
               <div className="absolute right-[0px] top-[145px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0">
-                    <Mic className="w-2.5 h-2.5" />
+                    <FileText className="w-2.5 h-2.5" />
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'वॉइस ब्रीफिंग' : 'Voice Briefing'}</span>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'नेगोशिएशन घोस्टराइटर' : 'Negotiation Ghostwriter'}</span>
                 </div>
-                <div className="mt-2 flex items-center gap-1.5">
-                  <div className="w-5 h-5 rounded-full bg-amber-500 hover:bg-amber-600 flex items-center justify-center text-white cursor-pointer shrink-0">
-                    <Play className="w-2 h-2 fill-current" />
-                  </div>
-                  <span className="text-neutral-600 font-semibold text-[10px]">
-                    {language === 'hi' ? 'सुनने के लिए तैयार' : 'Listen to summary'}
-                  </span>
+                <div className="mt-2">
+                  <span className="inline-block text-[8px] font-bold bg-amber-50 text-amber-600 border border-amber-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'समझौता मसौदा' : 'Compromise Draft'}</span>
+                </div>
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                  {language === 'hi' ? 'वैकल्पिक मसौदा तैयार करें' : 'Generate fallback options'}
                 </div>
               </div>
 

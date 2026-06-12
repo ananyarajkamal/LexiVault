@@ -1,4 +1,4 @@
-import { FileText, Sparkles, GitCompareArrows, Search, LayoutDashboard, Clock, Scale, Mic } from 'lucide-react';
+import { FileText, Sparkles, GitCompareArrows, Search, LayoutDashboard, Clock, Scale, PenTool } from 'lucide-react';
 
 interface FeaturesSectionProps {
   t: any;
@@ -56,7 +56,7 @@ export default function FeaturesSection({ t }: FeaturesSectionProps) {
       bg: 'bg-[#092E26]/10',
     },
     {
-      icon: Mic,
+      icon: PenTool,
       title: t.feat8Title,
       desc: t.feat8Desc,
       color: 'text-[#092E26]',
