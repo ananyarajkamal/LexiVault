@@ -1,4 +1,4 @@
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Mic, Play } from 'lucide-react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Mic, Play, Swords, Fingerprint, Languages, Code } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -101,26 +101,42 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               
               {/* SVG Connectors overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
-                {/* Curve 1: Risk Alert */}
-                <path d="M 150 160 C 165 160, 165 230, 180 230" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 2: AI Rec */}
-                <path d="M 150 310 C 165 310, 165 250, 180 250" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 3: Decision Summary */}
-                <path d="M 430 180 C 415 180, 415 230, 400 230" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 4: Clause Reference */}
-                <path d="M 430 320 C 415 320, 415 250, 400 250" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 1: Portfolio Risk (Left Card 1) */}
+                <path d="M 150 50 C 165 50, 165 150, 180 150" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 2: Lifecycle Timeline (Right Card 1) */}
+                <path d="M 430 65 C 415 65, 415 180, 400 180" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 3: Counterparty Pushback (Left Card 2) */}
+                <path d="M 150 170 C 165 170, 165 210, 180 210" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 4: Voice Briefing (Right Card 2) */}
+                <path d="M 430 180 C 415 180, 415 240, 400 240" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 5: The Shadow (Left Card 3) */}
+                <path d="M 150 290 C 165 290, 165 310, 180 310" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 6: The Residue (Right Card 3) */}
+                <path d="M 430 295 C 415 295, 415 350, 400 350" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 7: The Echo (Left Card 4) */}
+                <path d="M 150 410 C 165 410, 165 390, 180 390" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 8: The Alchemy (Right Card 4) */}
+                <path d="M 430 410 C 415 410, 415 430, 400 430" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
 
                 {/* Dots at callout edges */}
-                <circle cx="150" cy="160" r="3" fill="#0B7A63" />
-                <circle cx="150" cy="310" r="3" fill="#0B7A63" />
+                <circle cx="150" cy="50" r="3" fill="#0B7A63" />
+                <circle cx="150" cy="170" r="3" fill="#0B7A63" />
+                <circle cx="150" cy="290" r="3" fill="#0B7A63" />
+                <circle cx="150" cy="410" r="3" fill="#0B7A63" />
+                <circle cx="430" cy="65" r="3" fill="#0B7A63" />
                 <circle cx="430" cy="180" r="3" fill="#0B7A63" />
-                <circle cx="430" cy="320" r="3" fill="#0B7A63" />
+                <circle cx="430" cy="295" r="3" fill="#0B7A63" />
+                <circle cx="430" cy="410" r="3" fill="#0B7A63" />
 
                 {/* Dots at document highlights */}
-                <circle cx="180" cy="230" r="3" fill="#0B7A63" />
-                <circle cx="180" cy="250" r="3" fill="#0B7A63" />
-                <circle cx="400" cy="230" r="3" fill="#0B7A63" />
-                <circle cx="400" cy="250" r="3" fill="#0B7A63" />
+                <circle cx="180" cy="150" r="3" fill="#0B7A63" />
+                <circle cx="180" cy="210" r="3" fill="#0B7A63" />
+                <circle cx="180" cy="310" r="3" fill="#0B7A63" />
+                <circle cx="180" cy="390" r="3" fill="#0B7A63" />
+                <circle cx="400" cy="180" r="3" fill="#0B7A63" />
+                <circle cx="400" cy="240" r="3" fill="#0B7A63" />
+                <circle cx="400" cy="350" r="3" fill="#0B7A63" />
+                <circle cx="400" cy="430" r="3" fill="#0B7A63" />
               </svg>
 
               {/* CENTER: Document Viewer Card */}
@@ -181,55 +197,87 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Left Callout 1: Portfolio Risk */}
-              <div className="absolute left-[0px] top-[100px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
+              <div className="absolute left-[0px] top-[15px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
                     <AlertTriangle className="w-2.5 h-2.5" />
                   </div>
                   <span className="font-bold text-[10px]">{language === 'hi' ? 'पोर्टफोलियो जोखिम' : 'Portfolio Risk'}</span>
                 </div>
-                <div className="mt-2.5">
+                <div className="mt-2">
                   <span className="inline-block text-[8px] font-bold bg-red-50 text-red-600 border border-red-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'उच्च देयता' : 'High Liability'}</span>
                 </div>
-                <div className="mt-1.5 text-neutral-800 font-semibold text-[10.5px]">
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
                   {language === 'hi' ? 'कुल देयता: ₹50,000' : 'Total: ₹50,000 limit'}
                 </div>
               </div>
 
               {/* Left Callout 2: Counterparty Simulation */}
-              <div className="absolute left-[0px] top-[260px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
+              <div className="absolute left-[0px] top-[135px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-[#0B7A63] shrink-0">
                     <Sparkles className="w-2.5 h-2.5" />
                   </div>
                   <span className="font-bold text-[10px]">{language === 'hi' ? 'विरोधी पक्ष पुशबैक' : 'Counterparty Pushback'}</span>
                 </div>
-                <div className="mt-2.5">
+                <div className="mt-2">
                   <span className="inline-block text-[8px] font-bold bg-[#EAF5F2] text-[#0B7A63] border border-[#D1ECE5] rounded px-1.5 py-0.5">{language === 'hi' ? 'आक्रामक रवैया' : 'Aggressive Stance'}</span>
                 </div>
-                <div className="mt-1.5 text-neutral-800 font-semibold text-[10.5px]">
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
                   {language === 'hi' ? 'धारा 12.1 पर आपत्ति' : 'Objection to Clause 12.1'}
                 </div>
               </div>
 
+              {/* Left Callout 3: The Shadow */}
+              <div className="absolute left-[0px] top-[255px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
+                <div className="flex items-center gap-1.5 text-neutral-700">
+                  <div className="w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                    <Swords className="w-2.5 h-2.5" />
+                  </div>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द शैडो' : 'The Shadow'}</span>
+                </div>
+                <div className="mt-2">
+                  <span className="inline-block text-[8px] font-bold bg-slate-50 text-slate-600 border border-slate-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'एआई मुकाबला' : 'AI vs. AI Battle'}</span>
+                </div>
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                  {language === 'hi' ? 'वास्तविक समय देयता बहस' : 'Real-time liability debate'}
+                </div>
+              </div>
+
+              {/* Left Callout 4: The Echo */}
+              <div className="absolute left-[0px] top-[375px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
+                <div className="flex items-center gap-1.5 text-neutral-700">
+                  <div className="w-4 h-4 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                    <Languages className="w-2.5 h-2.5" />
+                  </div>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द इको' : 'The Echo'}</span>
+                </div>
+                <div className="mt-2">
+                  <span className="inline-block text-[8px] font-bold bg-[#EEF2FF] text-[#4F46E5] border border-[#E0E7FF] rounded px-1.5 py-0.5">{language === 'hi' ? 'कानूनी सामंजस्य' : 'Legal Harmonics'}</span>
+                </div>
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                  {language === 'hi' ? 'अनुवाद अंतर विश्लेषण' : 'Translation gap audit'}
+                </div>
+              </div>
+
               {/* Right Callout 1: Timeline Predictor */}
-              <div className="absolute right-[0px] top-[110px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl flex flex-col">
+              <div className="absolute right-[0px] top-[30px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl flex flex-col">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 shrink-0">
                     <Clock className="w-2.5 h-2.5" />
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'जीवनचक्र टाइमलाइन' : 'Lifecycle Timeline'}</span>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'समयसीमा भविष्यवक्ता' : 'Lifecycle Timeline'}</span>
                 </div>
-                <div className="mt-2.5">
+                <div className="mt-2">
                   <span className="inline-block text-[8px] font-bold bg-purple-50 text-purple-600 border border-purple-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'नवीनीकरण: 12 महीने' : 'Renewal: 12 Months'}</span>
                 </div>
-                <div className="mt-1.5 text-neutral-800 font-semibold text-[10.5px]">
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
                   {language === 'hi' ? 'अगला क्लिफ: नवंबर 2026' : 'Next Cliff: Nov 2026'}
                 </div>
               </div>
 
               {/* Right Callout 2: Voice Briefing */}
-              <div className="absolute right-[0px] top-[290px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
+              <div className="absolute right-[0px] top-[145px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
                 <div className="flex items-center gap-1.5 text-neutral-700">
                   <div className="w-4 h-4 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0">
                     <Mic className="w-2.5 h-2.5" />
@@ -243,6 +291,38 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                   <span className="text-neutral-600 font-semibold text-[10px]">
                     {language === 'hi' ? 'सुनने के लिए तैयार' : 'Listen to summary'}
                   </span>
+                </div>
+              </div>
+
+              {/* Right Callout 3: The Residue */}
+              <div className="absolute right-[0px] top-[260px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
+                <div className="flex items-center gap-1.5 text-neutral-700">
+                  <div className="w-4 h-4 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 shrink-0">
+                    <Fingerprint className="w-2.5 h-2.5" />
+                  </div>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द रेजिड्यू' : 'The Residue'}</span>
+                </div>
+                <div className="mt-2">
+                  <span className="inline-block text-[8px] font-bold bg-rose-50 text-rose-600 border border-rose-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'फोरेंसिक रिपोर्ट' : 'Forensics Report'}</span>
+                </div>
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px] truncate" title="Metadata & boilerplates">
+                  {language === 'hi' ? 'छिपा हुआ मेटाडेटा ऑडिट' : 'Metadata & altered boilerplate'}
+                </div>
+              </div>
+
+              {/* Right Callout 4: The Alchemy */}
+              <div className="absolute right-[0px] top-[375px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
+                <div className="flex items-center gap-1.5 text-neutral-700">
+                  <div className="w-4 h-4 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 shrink-0">
+                    <Code className="w-2.5 h-2.5" />
+                  </div>
+                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द अल्केमी' : 'The Alchemy'}</span>
+                </div>
+                <div className="mt-2">
+                  <span className="inline-block text-[8px] font-bold bg-[#E6F4F1] text-[#0D9488] border border-[#CCFBF1] rounded px-1.5 py-0.5">{language === 'hi' ? 'SLA कंपाइलर' : 'SLA Compiler'}</span>
+                </div>
+                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                  {language === 'hi' ? 'SLA को प्रोमेथियस में बदलें' : 'Compile SLA to Prometheus'}
                 </div>
               </div>
 
