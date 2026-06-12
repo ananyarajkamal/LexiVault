@@ -429,7 +429,12 @@ export default function WorkspaceSection({
       setActiveSpeakingText(null);
     } else {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
+      // Clean up markdown syntax (hashtags, bold asterisks) so it reads naturally
+      const cleanedText = text
+        .replace(/^(#+\s+)/gm, '') // Remove start-of-line hashes (e.g. #, ##)
+        .replace(/\*\*([^*]+)\*\*/g, '$1'); // Remove bold asterisks
+
+      const utterance = new SpeechSynthesisUtterance(cleanedText);
       utterance.lang = globalLanguage === 'hi' ? 'hi-IN' : 'en-US';
       utterance.onend = () => setActiveSpeakingText(null);
       utterance.onerror = () => setActiveSpeakingText(null);
