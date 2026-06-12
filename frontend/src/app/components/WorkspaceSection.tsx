@@ -661,6 +661,19 @@ export default function WorkspaceSection({
     finally { setIsUploading(false); if (fileInputRef.current) fileInputRef.current.value = ''; }
   };
 
+  const handleDeleteDocument = async (namespace: string) => {
+    if (!confirm("Are you sure you want to remove this document?")) return;
+    try {
+      const res = await fetch(`${API_BASE}/documents/${namespace}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Delete failed');
+      setDocuments(prev => prev.filter(doc => doc.namespace !== namespace));
+      alert('Document removed successfully.');
+    } catch (err: any) {
+      alert('Delete error: ' + err.message);
+    }
+  };
+
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim() || isAsking) return;
@@ -827,15 +840,40 @@ export default function WorkspaceSection({
     </select>
   );
 
-  // ---- Helper to format text (remove raw ** and render bold) ----
+  // ---- Helper to format text (remove raw ** and render bold, parse headers) ----
   const renderFormattedText = (text: string) => {
     if (!text) return null;
     const lines = text.split('\n');
     return lines.map((line, idx) => {
-      const parts = line.split(/\*\*([^*]+)\*\*/g);
+      let headerLevel = 0;
+      let headerText = line;
+      if (line.startsWith('### ')) {
+        headerLevel = 3;
+        headerText = line.substring(4);
+      } else if (line.startsWith('## ')) {
+        headerLevel = 2;
+        headerText = line.substring(3);
+      } else if (line.startsWith('# ')) {
+        headerLevel = 1;
+        headerText = line.substring(2);
+      }
+
+      const parts = headerText.split(/\*\*([^*]+)\*\*/g);
+      const content = parts.map((part, i) => 
+        i % 2 === 1 ? <strong key={i} className="font-bold text-[#092E26]">{part}</strong> : part
+      );
+
+      if (headerLevel === 1) {
+        return <h1 key={idx} className="text-xl font-bold text-neutral-900 mt-4 mb-2">{content}</h1>;
+      } else if (headerLevel === 2) {
+        return <h2 key={idx} className="text-lg font-bold text-neutral-900 mt-3 mb-1.5">{content}</h2>;
+      } else if (headerLevel === 3) {
+        return <h3 key={idx} className="text-base font-bold text-neutral-900 mt-2.5 mb-1">{content}</h3>;
+      }
+
       return (
         <React.Fragment key={idx}>
-          {parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="font-bold text-[#092E26]">{part}</strong> : part)}
+          {content}
           {idx < lines.length - 1 && <br />}
         </React.Fragment>
       );
@@ -881,6 +919,15 @@ export default function WorkspaceSection({
                 <div className="text-sm font-medium text-neutral-800 truncate">{doc.name}</div>
                 <div className="text-xs text-neutral-400">{doc.message}</div>
               </div>
+              {doc.status === 'success' && (
+                <button
+                  onClick={() => handleDeleteDocument(doc.namespace)}
+                  className="text-neutral-400 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-50 transition-colors cursor-pointer shrink-0"
+                  title="Remove document"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
             </div>
           ))}
         </div>

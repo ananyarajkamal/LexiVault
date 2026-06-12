@@ -81,7 +81,12 @@ session_state = {
 }
 
 def _lang_code(lang_display: str) -> str:
-    return "hindi" if lang_display == "Hindi" else "english"
+    if lang_display == "Hindi":
+        return "hindi"
+    elif lang_display == "Hinglish":
+        return "hinglish"
+    else:
+        return "english"
 
 # ---------------------------------------------------------------------------
 # API Models
@@ -199,6 +204,38 @@ async def upload_documents(files: List[UploadFile] = File(...)):
             results.append({"file": file.filename, "status": "error", "message": str(e)})
 
     return {"results": results, "total_indexed": len(session_state["namespaces"])}
+
+@app.delete("/api/documents/{namespace}")
+def delete_document(namespace: str):
+    if namespace not in session_state["namespaces"]:
+        raise HTTPException(status_code=404, detail="Document not found.")
+        
+    try:
+        session_state["namespaces"].remove(namespace)
+        
+        # Remove uploaded file
+        file_path = session_state["uploaded_files"].pop(namespace, None)
+        if file_path and os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting temp file for {namespace}: {e}")
+                
+        # Remove from caches
+        session_state["extracted_texts"].pop(namespace, None)
+        session_state["analyzed_risks"].pop(namespace, None)
+        
+        # Re-initialize main risks list by removing any risk items belonging to the deleted namespace
+        if "risks" in session_state:
+            session_state["risks"] = [r for r in session_state["risks"] if r.get("document") != namespace]
+            
+        # Clean up FAISS store files
+        store = FAISSStore(namespace)
+        store.delete_index()
+        
+        return {"status": "success", "remaining_documents": session_state["namespaces"]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/ask")
 def ask_lexivault(req: AskRequest):

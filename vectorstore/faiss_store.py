@@ -107,6 +107,18 @@ class FAISSStore:
             print(f"Error loading FAISS index for '{self.namespace}': {str(e)}")
             return False
 
+    def delete_index(self) -> None:
+        """Delete the persisted index and chunks files from disk."""
+        try:
+            index_path = self._index_path()
+            chunks_path = self._chunks_path()
+            if os.path.exists(index_path):
+                os.remove(index_path)
+            if os.path.exists(chunks_path):
+                os.remove(chunks_path)
+        except Exception as e:
+            print(f"Error deleting FAISS index files for '{self.namespace}': {str(e)}")
+
     def search(self, query_vector: np.ndarray, k: int) -> list:
         """Search the FAISS index for the top-k most similar chunks.
 
