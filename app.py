@@ -73,9 +73,11 @@ app.add_middleware(
 session_state = {
     "namespaces": [],
     "uploaded_files": {},
+    "extracted_texts": {},
     "qa_chain": QAChain(),
     "brief": "",
-    "risks": []
+    "risks": [],
+    "analyzed_risks": {}
 }
 
 def _lang_code(lang_display: str) -> str:
@@ -182,6 +184,8 @@ async def upload_documents(files: List[UploadFile] = File(...)):
             if namespace not in session_state["namespaces"]:
                 session_state["namespaces"].append(namespace)
             session_state["uploaded_files"][namespace] = temp_path
+            session_state["extracted_texts"][namespace] = text
+            session_state["analyzed_risks"].pop(namespace, None)
             
             # Extract and cache portfolio metadata for dashboard analytics
             try:
@@ -225,30 +229,54 @@ def analyze_risks():
     all_risks = []
     wolfram_context = []
     
+    # Initialize cache fields if not present
+    if "analyzed_risks" not in session_state:
+        session_state["analyzed_risks"] = {}
+        
     for ns in session_state["namespaces"]:
         try:
-            file_path = session_state["uploaded_files"].get(ns, "")
-            if not file_path or not os.path.exists(file_path):
+            # Check namespace cache
+            if ns in session_state["analyzed_risks"]:
+                cached_risks, cached_wolfram = session_state["analyzed_risks"][ns]
+                all_risks.extend(cached_risks)
+                wolfram_context.extend(cached_wolfram)
                 continue
                 
-            text = extract_text_from_file(file_path)
-            if not text: continue
+            # If not cached, analyze it
+            text = session_state.get("extracted_texts", {}).get(ns)
+            if not text:
+                file_path = session_state["uploaded_files"].get(ns, "")
+                if not file_path or not os.path.exists(file_path):
+                    continue
+                text = extract_text_from_file(file_path)
+                if not text: continue
+                session_state["extracted_texts"][ns] = text
             
             clauses = extract_clauses(text)
             risks = score_risk(clauses)
             
+            ns_risks = []
+            ns_wolfram = []
+            
             for risk_item in risks:
                 risk_item["document"] = ns
-                all_risks.append(risk_item)
+                ns_risks.append(risk_item)
                 
                 if risk_item["risk_level"] == "High":
                     wolfram_result = get_legal_context(risk_item["clause_name"], risk_item["risk_level"])
                     if wolfram_result:
-                        wolfram_context.append({
+                        ns_wolfram.append({
                             "clause": risk_item['clause_name'],
                             "document": ns,
                             "context": wolfram_result
                         })
+            
+            # Save to cache
+            session_state["analyzed_risks"][ns] = (ns_risks, ns_wolfram)
+            
+            all_risks.extend(ns_risks)
+            wolfram_context.extend(ns_wolfram)
+            
         except Exception as e:
             print(f"Error in analyze_risks for {ns}: {e}")
             all_risks.append({"clause_name": "Error", "risk_level": "High", "value": f"Analysis failed: {str(e)}", "document": ns})
