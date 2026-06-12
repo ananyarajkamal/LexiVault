@@ -161,4 +161,49 @@ NEGOTIATION_GHOSTWRITER_PROMPT = (
 )
 """Prompt template for negotiation ghostwriter. Placeholders: {clause_text}, {redlined_text}, {language}."""
 
+SHADOW_BATTLE_PROMPT = (
+    "You are an adversarial legal battle simulator. Analyze the contract text: '{contract_text}'.\n"
+    "1. Find the single most controversial, high-liability, or risky clause in the contract.\n"
+    "2. Simulate a sharp, realistic 3-turn debate in character:\n"
+    "   - ATTACKER COUNSEL (representing an aggressive counterparty attacking the term's flaws)\n"
+    "   - DEFENDER COUNSEL (representing your protective interests defending the term)\n"
+    "   - BATTLE ASSESSMENT (a summary highlighting who won and what the final recommended compromise is)\n"
+    "Respond in {language}. Format the response exactly as:\n"
+    "CLAUSE_FOCUS:\n[The clause that is the focus of the battle]\n\n"
+    "ATTACKER_TURN:\n[Attacker's arguments]\n\n"
+    "DEFENDER_TURN:\n[Defender's counterarguments]\n\n"
+    "ASSESSMENT:\n[Summary and recommendation]"
+)
+"""Prompt template for shadow battle. Placeholders: {contract_text}, {language}."""
+
+RESIDUE_FORENSICS_PROMPT = (
+    "You are a document forensics expert. Analyze the contract text: '{contract_text}'.\n"
+    "Examine the phrasing for non-standard boilerplate terms, suspicious formatting anomalies, "
+    "hidden traps, or unusual deviations from industry standards.\n"
+    "Output a list of forensic findings. For each finding state: the clause/term involved, the "
+    "suspicion level (High, Medium, Low), the nature of the anomaly, and a remediation advice.\n"
+    "Respond in {language}."
+)
+"""Prompt template for residue forensics. Placeholders: {contract_text}, {language}."""
+
+ECHO_HARMONICS_PROMPT = (
+    "You are a cross-language legal semantics expert. Analyze the legal phrase or clause: '{clause_text}'.\n"
+    "Evaluate its semantic legal weight and compare it across English, Hindi, and Hinglish.\n"
+    "Explain standard semantic gaps and traps (for example, why 'best efforts' is legally heavier "
+    "than 'reasonable efforts' and how those differences map to Hindi translations like 'भरसक प्रयास' "
+    "vs 'उचित प्रयास'). Provide clear recommendations on how to draft it safely.\n"
+    "Respond in {language}."
+)
+"""Prompt template for echo harmonics. Placeholders: {clause_text}, {language}."""
+
+ALCHEMY_EXPORTER_PROMPT = (
+    "You are a DevOps SLA-to-Code compiler. Parse the following contract text for service level "
+    "agreements (SLAs), uptime guarantees, latency limits, support resolution times, or performance targets: '{contract_text}'.\n"
+    "Extract the parameters and output a copyable, valid YAML block containing Prometheus alert rules "
+    "representing these SLA boundaries.\n"
+    "For example, if latency is 500ms, generate a rule with `http_request_duration_seconds > 0.5`.\n"
+    "Ensure the YAML block is well-formatted and valid. Respond in {language}."
+)
+"""Prompt template for alchemy compiler. Placeholders: {contract_text}, {language}."""
+
 

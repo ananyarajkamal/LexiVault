@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
-  CheckCircle2, XCircle, Scale, Diff, Mic, Volume2, Clock, LayoutDashboard
+  CheckCircle2, XCircle, Scale, Diff, Mic, Volume2, Clock, LayoutDashboard,
+  Swords, Fingerprint, Languages, Code
 } from 'lucide-react';
 
 const workspaceTranslations = {
@@ -87,7 +88,19 @@ const workspaceTranslations = {
     timelineHeader: "Lifecycle Timeline Predictor",
     timelineSub: "Analyze estimated negotiation duration, amendment frequency, renewal risks, and expiration cascades",
     portfolioHeader: "Portfolio Risk Dashboard",
-    portfolioSub: "Cross-document dashboard of liabilities, concentration risk, and renewal cliffs"
+    portfolioSub: "Cross-document dashboard of liabilities, concentration risk, and renewal cliffs",
+    shadowTab: "The Shadow",
+    shadowHeader: "AI vs. AI Contract Battle",
+    shadowSub: "Watch opposing AI counsel debate the high-risk clauses in your contract in real-time.",
+    residueTab: "The Residue",
+    residueHeader: "Invisible Document Forensics",
+    residueSub: "Extract hidden PDF metadata and check for suspect modifications to standard boilerplate text.",
+    echoTab: "The Echo",
+    echoHeader: "Cross-Language Legal Harmonics",
+    echoSub: "Analyze cross-language semantic gaps and translation traps across English, Hindi, and Hinglish.",
+    alchemyTab: "The Alchemy",
+    alchemyHeader: "Contract to Code Compiler",
+    alchemySub: "Extract SLA constraints (uptime, latency, resolution times) and compile them into Prometheus Alert Rules."
   },
   hi: {
     title: "लेक्सीवॉल्ट का अभी प्रयास करें",
@@ -170,13 +183,25 @@ const workspaceTranslations = {
     timelineHeader: "जीवनचक्र समयरेखा भविष्यवक्ता",
     timelineSub: "बातचीत की अवधि, संशोधन आवृत्ति, नवीनीकरण जोखिमों और समाप्ति प्रभावों का अनुमान लगाएं",
     portfolioHeader: "पोर्टफोलियो जोखिम डैशबोर्ड",
-    portfolioSub: "वित्तीय दायित्वों, विक्रेता संकेंद्रण जोखिम और आगामी नवीनीकरण का क्रॉस-दस्तावेज़ डैशबोर्ड"
+    portfolioSub: "वित्तीय दायित्वों, विक्रेता संकेंद्रण जोखिम और आगामी नवीनीकरण का क्रॉस-दस्तावेज़ डैशबोर्ड",
+    shadowTab: "द शैडो",
+    shadowHeader: "द शैडो: AI बनाम AI मुकाबला",
+    shadowSub: "अपने अनुबंध में उच्च-जोखिम वाले खंडों पर विरोधी एआई वकीलों की बहस देखें।",
+    residueTab: "द रेजिड्यू",
+    residueHeader: "द रेजिड्यू: दस्तावेज़ फोरेंसिक",
+    residueSub: "छिपे हुए पीडीएफ मेटाडेटा को निकालें और मानक बॉयलरप्लेट टेक्स्ट में संदिग्ध संशोधनों की जांच करें।",
+    echoTab: "द इको",
+    echoHeader: "द इको: कानूनी सामंजस्य",
+    echoSub: "अंग्रेजी, हिंदी और हिंग्लिश में क्रॉस-लैंग्वेज अर्थगत अंतराल और अनुवाद जाल का विश्लेषण करें।",
+    alchemyTab: "द अल्केमी",
+    alchemyHeader: "द अल्केमी: SLA कंपाइलर",
+    alchemySub: "SLA सीमाओं (अपटाइम, विलंबता, रिज़ॉल्यूशन समय) को निकालें और उन्हें प्रोमेथियस अलर्ट नियमों में संकलित करें।"
   }
 };
 
 const API_BASE = `http://${window.location.hostname}:8000/api`;
 
-type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard';
+type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow' | 'residue' | 'echo' | 'alchemy';
 
 export default function WorkspaceSection({ globalLanguage }: { globalLanguage: 'en' | 'hi' }) {
   const t = workspaceTranslations[globalLanguage];
@@ -193,6 +218,10 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     { id: 'semanticDiff', label: t.semanticDiffTab, icon: Diff },
     { id: 'timeline', label: t.timelineTab, icon: Clock },
     { id: 'portfolioDashboard', label: t.portfolioTab, icon: LayoutDashboard },
+    { id: 'shadow', label: t.shadowTab, icon: Swords },
+    { id: 'residue', label: t.residueTab, icon: Fingerprint },
+    { id: 'echo', label: t.echoTab, icon: Languages },
+    { id: 'alchemy', label: t.alchemyTab, icon: Code },
   ];
 
   const [activeTab, setActiveTab] = useState<Tab>('upload');
@@ -292,6 +321,59 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
   } | null>(null);
   const [isFetchingPortfolio, setIsFetchingPortfolio] = useState(false);
 
+  // Alchemy copy state
+  const [copiedAlchemy, setCopiedAlchemy] = useState(false);
+
+  // Shadow state
+  const [selectedShadowDoc, setSelectedShadowDoc] = useState('');
+  const [shadowResult, setShadowResult] = useState<{
+    clause_focus: string;
+    attacker_turn: string;
+    defender_turn: string;
+    assessment: string;
+  } | null>(null);
+  const [isBattling, setIsBattling] = useState(false);
+
+  // Residue state
+  const [selectedResidueDoc, setSelectedResidueDoc] = useState('');
+  const [residueResult, setResidueResult] = useState<{
+    metadata: {
+      author: string;
+      creator: string;
+      producer: string;
+      creation_date: string;
+      mod_date: string;
+      page_count: number;
+      file_size_bytes: number;
+    };
+    forensics_report: string;
+  } | null>(null);
+  const [isInspecting, setIsInspecting] = useState(false);
+
+  // Echo state
+  const [echoInput, setEchoInput] = useState('');
+  const [echoLang, setEchoLang] = useState('English');
+  const [echoResult, setEchoResult] = useState('');
+  const [isEchoing, setIsEchoing] = useState(false);
+
+  // Alchemy state
+  const [selectedAlchemyDoc, setSelectedAlchemyDoc] = useState('');
+  const [alchemyResult, setAlchemyResult] = useState<{
+    parameters: {
+      uptime_target: string;
+      latency_target: string;
+      resolution_target: string;
+    };
+    code_block: string;
+  } | null>(null);
+  const [isCompiling, setIsCompiling] = useState(false);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedAlchemy(true);
+    setTimeout(() => setCopiedAlchemy(false), 2000);
+  };
+
   // Voice State & Helpers
   const [isListening, setIsListening] = useState(false);
 
@@ -348,14 +430,18 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     setContraLang(l);
     setNegotiationLang(l);
     setDiffLang(l);
+    setEchoLang(l);
   }, [globalLanguage]);
 
   useEffect(() => {
     const successDocs = documents.filter(d => d.status === 'success');
-    if (successDocs.length > 0 && !selectedTimelineDoc) {
-      setSelectedTimelineDoc(successDocs[0].namespace);
+    if (successDocs.length > 0) {
+      if (!selectedTimelineDoc) setSelectedTimelineDoc(successDocs[0].namespace);
+      if (!selectedShadowDoc) setSelectedShadowDoc(successDocs[0].namespace);
+      if (!selectedResidueDoc) setSelectedResidueDoc(successDocs[0].namespace);
+      if (!selectedAlchemyDoc) setSelectedAlchemyDoc(successDocs[0].namespace);
     }
-  }, [documents, selectedTimelineDoc]);
+  }, [documents, selectedTimelineDoc, selectedShadowDoc, selectedResidueDoc, selectedAlchemyDoc]);
 
   useEffect(() => {
     if (activeTab === 'portfolioDashboard') {
@@ -398,6 +484,102 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
       alert(err.message);
     } finally {
       setIsPredictingTimeline(false);
+    }
+  };
+
+  const handleShadowBattle = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedShadowDoc) return;
+    setIsBattling(true);
+    setShadowResult(null);
+    try {
+      const res = await fetch(`${API_BASE}/features/shadow`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          namespace: selectedShadowDoc,
+          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Shadow battle failed');
+      setShadowResult(data);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsBattling(false);
+    }
+  };
+
+  const handleResidueForensics = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedResidueDoc) return;
+    setIsInspecting(true);
+    setResidueResult(null);
+    try {
+      const res = await fetch(`${API_BASE}/features/residue`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          namespace: selectedResidueDoc,
+          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Residue forensics failed');
+      setResidueResult(data);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsInspecting(false);
+    }
+  };
+
+  const handleEchoHarmonics = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!echoInput.trim()) return;
+    setIsEchoing(true);
+    setEchoResult('');
+    try {
+      const res = await fetch(`${API_BASE}/features/echo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clause_text: echoInput,
+          language: echoLang,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Echo harmonics analysis failed');
+      setEchoResult(data.harmonics_report || '');
+    } catch (err: any) {
+      setEchoResult('❌ ' + err.message);
+    } finally {
+      setIsEchoing(false);
+    }
+  };
+
+  const handleAlchemyCompile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedAlchemyDoc) return;
+    setIsCompiling(true);
+    setAlchemyResult(null);
+    try {
+      const res = await fetch(`${API_BASE}/features/alchemy`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          namespace: selectedAlchemyDoc,
+          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Alchemy compilation failed');
+      setAlchemyResult(data);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsCompiling(false);
     }
   };
 
@@ -1580,12 +1762,378 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
     );
   };
 
+  const renderShadow = () => {
+    const successDocs = documents.filter(d => d.status === 'success');
+
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900">{t.shadowHeader}</h3>
+          <p className="text-xs text-neutral-500">{t.shadowSub}</p>
+        </div>
+
+        {successDocs.length === 0 ? (
+          <div className="text-center py-16 text-neutral-400">
+            <Swords className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <p className="text-sm">Upload documents first to start a Shadow Battle.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleShadowBattle} className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+              <div className="flex-1">
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <select
+                  value={selectedShadowDoc}
+                  onChange={e => setSelectedShadowDoc(e.target.value)}
+                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                >
+                  {successDocs.map((doc, i) => (
+                    <option key={i} value={doc.namespace}>{doc.name}</option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="submit"
+                disabled={isBattling}
+                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+              >
+                {isBattling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Swords className="w-4 h-4" />}
+                {isBattling ? "Conducting Battle..." : "Conduct Battle"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {shadowResult && (
+          <div className="space-y-6 border-t border-neutral-150 pt-6">
+            {/* Clause under debate */}
+            <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-5">
+              <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2">Clause Under Debate</h4>
+              <p className="text-xs text-neutral-800 leading-relaxed font-mono whitespace-pre-wrap bg-white border border-amber-100 p-3 rounded-lg">
+                {shadowResult.clause_focus}
+              </p>
+            </div>
+
+            {/* Battle Dialogue */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-neutral-800">Counsel Debate Rounds</h4>
+              
+              {/* Attacker turn */}
+              <div className="bg-red-50/30 border border-red-200/50 rounded-xl p-5 relative">
+                <div className="flex items-center gap-2 mb-2">
+                  <Swords className="w-4 h-4 text-red-600" />
+                  <span className="font-bold text-sm text-red-800">Attacker Counsel</span>
+                </div>
+                <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/30 p-3 rounded-lg">
+                  {renderFormattedText(shadowResult.attacker_turn)}
+                </div>
+              </div>
+
+              {/* Defender turn */}
+              <div className="bg-blue-50/30 border border-blue-200/50 rounded-xl p-5 relative">
+                <div className="flex items-center gap-2 mb-2">
+                  <ShieldAlert className="w-4 h-4 text-blue-600" />
+                  <span className="font-bold text-sm text-blue-800">Defender Counsel</span>
+                </div>
+                <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-blue-100/30 p-3 rounded-lg">
+                  {renderFormattedText(shadowResult.defender_turn)}
+                </div>
+              </div>
+            </div>
+
+            {/* Assessment */}
+            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+              <h4 className="font-bold text-sm text-[#092E26] mb-2">Legal Risk Assessment & Verdict</h4>
+              <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                {renderFormattedText(shadowResult.assessment)}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderResidue = () => {
+    const successDocs = documents.filter(d => d.status === 'success');
+
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900">{t.residueHeader}</h3>
+          <p className="text-xs text-neutral-500">{t.residueSub}</p>
+        </div>
+
+        {successDocs.length === 0 ? (
+          <div className="text-center py-16 text-neutral-400">
+            <Fingerprint className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <p className="text-sm">Upload documents first to run document forensics.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleResidueForensics} className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+              <div className="flex-1">
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <select
+                  value={selectedResidueDoc}
+                  onChange={e => setSelectedResidueDoc(e.target.value)}
+                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                >
+                  {successDocs.map((doc, i) => (
+                    <option key={i} value={doc.namespace}>{doc.name}</option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="submit"
+                disabled={isInspecting}
+                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+              >
+                {isInspecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Fingerprint className="w-4 h-4" />}
+                {isInspecting ? "Inspecting..." : "Extract & Analyze"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {residueResult && (
+          <div className="space-y-6 border-t border-neutral-150 pt-6">
+            {/* Metadata Table */}
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-3">
+              <h4 className="font-bold text-sm text-neutral-800">Extracted PDF File Metadata</h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-neutral-200 text-xs">
+                  <thead>
+                    <tr className="text-left text-neutral-500 uppercase tracking-wider font-bold">
+                      <th className="py-2 px-3">Metadata Field</th>
+                      <th className="py-2 px-3">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-200 text-neutral-700 bg-white">
+                    <tr>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Author</td>
+                      <td className="py-2.5 px-3">{residueResult.metadata.author || 'Unknown'}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Creator / Application</td>
+                      <td className="py-2.5 px-3">{residueResult.metadata.creator || 'Unknown'}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-600">PDF Producer</td>
+                      <td className="py-2.5 px-3">{residueResult.metadata.producer || 'Unknown'}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Creation Date</td>
+                      <td className="py-2.5 px-3">{residueResult.metadata.creation_date || 'Unknown'}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Modification Date</td>
+                      <td className="py-2.5 px-3">{residueResult.metadata.mod_date || 'Unknown'}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Page Count</td>
+                      <td className="py-2.5 px-3">{residueResult.metadata.page_count || 0}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-600">File Size</td>
+                      <td className="py-2.5 px-3">
+                        {residueResult.metadata.file_size_bytes 
+                          ? `${(residueResult.metadata.file_size_bytes / 1024).toFixed(1)} KB` 
+                          : 'Unknown'}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Forensic AI Audits */}
+            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <ShieldAlert className="w-4 h-4 text-[#092E26]" />
+                <h4 className="font-bold text-sm text-[#092E26]">Forensic Text Alteration Audit</h4>
+              </div>
+              <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                {renderFormattedText(residueResult.forensics_report)}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderEcho = () => {
+    const templates = [
+      { label: "Best vs. Reasonable Efforts", text: "Party A shall use best efforts to deliver the services, while Party B shall use reasonable efforts to support integration." },
+      { label: "Sole Discretion vs. Consent", text: "Seller may approve modifications in its sole discretion, and Buyer shall not withhold consent unreasonably." },
+      { label: "Indemnity vs. Hold Harmless", text: "The Contractor agrees to indemnify, defend, and hold harmless the Client from and against any third-party claims." },
+    ];
+
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900">{t.echoHeader}</h3>
+          <p className="text-xs text-neutral-500">{t.echoSub}</p>
+        </div>
+
+        <form onSubmit={handleEchoHarmonics} className="space-y-4">
+          <div className="flex items-center gap-3">
+            <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+            <LangSelect value={echoLang} onChange={setEchoLang} />
+          </div>
+
+          <div>
+            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Legal Phrase or Clause to Analyze</label>
+            <textarea
+              value={echoInput}
+              onChange={e => setEchoInput(e.target.value)}
+              placeholder="Paste a clause (or enter a term like 'best efforts') to audit cross-language semantic trapping..."
+              className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]"
+            />
+          </div>
+
+          {/* Quick templates */}
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Quick Templates</span>
+            <div className="flex flex-wrap gap-2">
+              {templates.map((tpl, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setEchoInput(tpl.text)}
+                  className="px-2.5 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-md text-xs font-medium cursor-pointer transition-colors border border-neutral-200/50"
+                >
+                  {tpl.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={!echoInput.trim() || isEchoing}
+            className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+          >
+            {isEchoing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
+            {isEchoing ? "Analyzing Harmonics..." : "Evaluate Harmonics"}
+          </button>
+        </form>
+
+        {echoResult && (
+          <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="w-4 h-4 text-[#092E26]" />
+              <h4 className="font-bold text-sm text-[#092E26]">Cross-Language Translation Trap Audit</h4>
+            </div>
+            <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+              {renderFormattedText(echoResult)}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderAlchemy = () => {
+    const successDocs = documents.filter(d => d.status === 'success');
+
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-bold text-neutral-900">{t.alchemyHeader}</h3>
+          <p className="text-xs text-neutral-500">{t.alchemySub}</p>
+        </div>
+
+        {successDocs.length === 0 ? (
+          <div className="text-center py-16 text-neutral-400">
+            <Code className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <p className="text-sm">Upload documents first to compile SLA metrics.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleAlchemyCompile} className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+              <div className="flex-1">
+                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <select
+                  value={selectedAlchemyDoc}
+                  onChange={e => setSelectedAlchemyDoc(e.target.value)}
+                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                >
+                  {successDocs.map((doc, i) => (
+                    <option key={i} value={doc.namespace}>{doc.name}</option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="submit"
+                disabled={isCompiling}
+                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+              >
+                {isCompiling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Code className="w-4 h-4" />}
+                {isCompiling ? "Compiling..." : "Compile to Prometheus YAML"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {alchemyResult && (
+          <div className="space-y-6 border-t border-neutral-150 pt-6">
+            {/* Metric Targets Cards */}
+            <div className="space-y-3">
+              <h4 className="font-bold text-sm text-neutral-800">Extracted SLA Targets</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Uptime Target</span>
+                  <span className="text-base font-bold text-[#092E26] mt-1">
+                    {alchemyResult.parameters.uptime_target || 'N/A'}
+                  </span>
+                </div>
+                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Latency Target</span>
+                  <span className="text-base font-bold text-[#092E26] mt-1">
+                    {alchemyResult.parameters.latency_target || 'N/A'}
+                  </span>
+                </div>
+                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 flex flex-col justify-between">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Resolution Target</span>
+                  <span className="text-base font-bold text-[#092E26] mt-1">
+                    {alchemyResult.parameters.resolution_target || 'N/A'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Generated Prometheus Rule */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="font-bold text-sm text-neutral-800">Compiled Prometheus Alert Rules (.yml)</h4>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(alchemyResult.code_block)}
+                  className="px-3 py-1 bg-[#092E26]/10 hover:bg-[#092E26]/20 text-[#092E26] rounded-md text-xs font-semibold cursor-pointer transition-colors"
+                >
+                  {copiedAlchemy ? "Copied!" : "Copy Code"}
+                </button>
+              </div>
+              <pre className="bg-neutral-900 text-neutral-200 p-5 rounded-xl text-xs font-mono overflow-x-auto max-h-[400px] border border-neutral-850 leading-relaxed">
+                <code>{alchemyResult.code_block}</code>
+              </pre>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderers = {
     upload: renderUpload, chat: renderChat, risks: renderRisks,
     plain: renderPlainLanguage, brief: renderBrief,
     redline: renderRedline, contradictions: renderContradictions,
     negotiation: renderNegotiation, semanticDiff: renderSemanticDiff,
     timeline: renderTimeline, portfolioDashboard: renderPortfolioDashboard,
+    shadow: renderShadow, residue: renderResidue,
+    echo: renderEcho, alchemy: renderAlchemy,
   };
 
   return (
