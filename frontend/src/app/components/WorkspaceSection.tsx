@@ -645,7 +645,6 @@ export default function WorkspaceSection({
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    if (!isFullscreen) setIsFullscreen(true);
     setIsUploading(true);
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) formData.append('files', e.target.files[i]);
@@ -2146,22 +2145,9 @@ export default function WorkspaceSection({
   };
 
   return (
-    <section 
-      id="workspace" 
-      onClick={() => {
-        if (!isFullscreen) {
-          setIsFullscreen(true);
-        }
-      }}
-      onFocusCapture={() => {
-        if (!isFullscreen) {
-          setIsFullscreen(true);
-        }
-      }}
-      className={`bg-[#F6F4F0] overflow-hidden flex flex-col ${
-        isFullscreen ? 'h-[calc(100vh-64px)] w-full' : 'py-16 sm:py-24'
-      }`}
-    >
+    <section id="workspace" className={`bg-[#F6F4F0] overflow-hidden flex flex-col ${
+      isFullscreen ? 'h-[calc(100vh-64px)] w-full' : 'py-16 sm:py-24'
+    }`}>
       <div className={`transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 ${
         isFullscreen ? 'max-w-full w-full p-0' : 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full'
       }`}>
@@ -2183,10 +2169,7 @@ export default function WorkspaceSection({
             <div className="flex-1 overflow-x-auto min-w-0">
               <div className="flex min-w-max">
                 {tabs.map(t => (
-                  <button key={t.id} onClick={() => {
-                    setActiveTab(t.id);
-                    if (!isFullscreen) setIsFullscreen(true);
-                  }}
+                  <button key={t.id} onClick={() => setActiveTab(t.id)}
                     className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
                       activeTab === t.id
                         ? 'border-[#092E26] text-[#092E26] bg-[#092E26]/5'
