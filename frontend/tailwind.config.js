@@ -11,6 +11,9 @@ export default {
         'brand-dark': '#051C17',
         'brand-light': '#F6F4F0',
         'brand-accent': '#0B7A63',
+        'neutral-150': '#ececf0',
+        'neutral-450': '#909098',
+        'neutral-850': '#222026',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

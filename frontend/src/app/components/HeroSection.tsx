@@ -1,4 +1,4 @@
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Swords, Binary, Languages, Code, FileText } from 'lucide-react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Swords, Languages, Scale, Feather, Fingerprint } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -107,51 +107,52 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               
               {/* SVG Connectors overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
-                {/* Curve 1: Portfolio Risk (Left Card 1) -> Points to top skeleton text lines */}
-                <path d="M 150 50 C 170 50, 195 135, 210 135" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
-                {/* Curve 2: Lifecycle Timeline (Right Card 1) -> Points to toolbar page number */}
-                <path d="M 430 65 C 410 65, 395 70, 380 70" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
-                {/* Curve 3: Counterparty Pushback (Left Card 2) -> Points directly to clause number '12.1' */}
-                <path d="M 150 170 C 170 170, 185 180, 195 180" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
-                {/* Curve 4: Negotiation Ghostwriter (Right Card 2) -> Points directly to the highlighted financial value '₹50,000' */}
-                <path d="M 430 180 C 410 180, 350 198, 330 198" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
-                {/* Curve 5: The Shadow (Left Card 3) -> Points to skeleton lines below highlighted block */}
-                <path d="M 150 290 C 170 290, 195 245, 210 245" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
-                {/* Curve 6: The Residue (Right Card 3) -> Points to Clause 12.2 marker */}
-                <path d="M 430 295 C 410 295, 395 305, 380 305" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
-                {/* Curve 7: The Echo (Left Card 4) -> Points to bottom skeleton lines */}
-                <path d="M 150 410 C 170 410, 195 355, 210 355" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
-                {/* Curve 8: The Alchemy (Right Card 4) -> Points to lowest skeleton lines */}
-                <path d="M 430 410 C 410 410, 395 390, 380 390" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.5" strokeDasharray="3 3" fill="none" />
+                {/* Curve 1: Portfolio Risk (Left Card 1) */}
+                <path d="M 160 60 C 170 60, 170 135, 180 135" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                {/* Curve 2: Counterparty Pushback (Left Card 2) */}
+                <path d="M 160 180 C 170 180, 170 180, 180 180" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                {/* Curve 3: The Shadow (Left Card 3) */}
+                <path d="M 160 300 C 170 300, 170 245, 180 245" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                {/* Curve 4: The Echo (Left Card 4) */}
+                <path d="M 160 420 C 170 420, 170 355, 180 355" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                
+                {/* Curve 5: Lifecycle Timeline (Right Card 1) */}
+                <path d="M 420 60 C 410 60, 410 70, 400 70" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                {/* Curve 6: Negotiation Ghostwriter (Right Card 2) */}
+                <path d="M 420 180 C 410 180, 410 198, 400 198" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                {/* Curve 7: The Residue (Right Card 3) */}
+                <path d="M 420 300 C 410 300, 410 305, 400 305" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                {/* Curve 8: The Alchemy (Right Card 4) */}
+                <path d="M 420 420 C 410 420, 410 390, 400 390" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
 
-                {/* Dots at callout edges */}
-                <circle cx="150" cy="50" r="3" fill="#D92662" />
-                <circle cx="150" cy="170" r="3" fill="#D92662" />
-                <circle cx="150" cy="290" r="3" fill="#D92662" />
-                <circle cx="150" cy="410" r="3" fill="#D92662" />
-                <circle cx="430" cy="65" r="3" fill="#D92662" />
-                <circle cx="430" cy="180" r="3" fill="#D92662" />
-                <circle cx="430" cy="295" r="3" fill="#D92662" />
-                <circle cx="430" cy="410" r="3" fill="#D92662" />
+                {/* Dots at card edges (start of curves) */}
+                <circle cx="160" cy="60" r="3" fill="#D92662" />
+                <circle cx="160" cy="180" r="3" fill="#D92662" />
+                <circle cx="160" cy="300" r="3" fill="#D92662" />
+                <circle cx="160" cy="420" r="3" fill="#D92662" />
+                <circle cx="420" cy="60" r="3" fill="#D92662" />
+                <circle cx="420" cy="180" r="3" fill="#D92662" />
+                <circle cx="420" cy="300" r="3" fill="#D92662" />
+                <circle cx="420" cy="420" r="3" fill="#D92662" />
 
-                {/* Dots at document highlights (mapping precisely to target elements) */}
-                <circle cx="210" cy="135" r="3" fill="#D92662" />
-                <circle cx="195" cy="180" r="3" fill="#D92662" />
-                <circle cx="210" cy="245" r="3" fill="#D92662" />
-                <circle cx="210" cy="355" r="3" fill="#D92662" />
-                <circle cx="380" cy="70" r="3" fill="#D92662" />
-                <circle cx="330" cy="198" r="3" fill="#D92662" />
-                <circle cx="380" cy="305" r="3" fill="#D92662" />
-                <circle cx="380" cy="390" r="3" fill="#D92662" />
+                {/* Dots at mockup edges (end of curves) */}
+                <circle cx="180" cy="135" r="3" fill="#D92662" />
+                <circle cx="180" cy="180" r="3" fill="#D92662" />
+                <circle cx="180" cy="245" r="3" fill="#D92662" />
+                <circle cx="180" cy="355" r="3" fill="#D92662" />
+                <circle cx="400" cy="70" r="3" fill="#D92662" />
+                <circle cx="400" cy="198" r="3" fill="#D92662" />
+                <circle cx="400" cy="305" r="3" fill="#D92662" />
+                <circle cx="400" cy="390" r="3" fill="#D92662" />
               </svg>
 
               {/* CENTER: Document Viewer Card */}
-              <div className="absolute left-[180px] top-[40px] w-[220px] h-[440px] bg-white rounded-2xl border border-neutral-200/80 shadow-2xl flex flex-col overflow-hidden">
+              <div className="absolute left-[180px] top-[40px] w-[220px] h-[440px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
                 {/* Document Format Tabs */}
-                <div className="flex border-b border-neutral-150 bg-[#F4F4F4] select-none text-[10px]">
+                <div className="flex border-b border-neutral-200 bg-[#F4F4F5] select-none text-[10px]">
                   {/* PDF Tab (Active) */}
-                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 bg-white border-r border-neutral-200/50 font-semibold text-neutral-800">
-                    <div className="w-5 h-3.5 bg-red-500 rounded-[3px] flex items-center justify-center text-white font-sans font-black text-[6px] tracking-tighter shrink-0">
+                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 bg-white border-r border-neutral-200 font-semibold text-neutral-800">
+                    <div className="w-5 h-3.5 bg-red-600 rounded-[3px] flex items-center justify-center text-white font-sans font-black text-[6px] tracking-tighter shrink-0">
                       PDF
                     </div>
                     <span className="truncate max-w-[70px]">Vendor.pdf</span>
@@ -166,176 +167,171 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 </div>
 
                 {/* PDF Toolbar */}
-                <div className="flex items-center justify-between px-2 py-1.5 bg-[#FBFBFB] border-b border-neutral-100 text-[9px] text-neutral-500">
-                  <div className="flex items-center gap-1">
-                    <span className="cursor-pointer hover:text-neutral-800">‹</span>
-                    <span className="w-5 py-0.5 border border-neutral-200 rounded text-center text-[8px] bg-white">31</span>
+                <div className="flex items-center justify-between px-3 py-2 bg-[#FBFBFB] border-b border-neutral-200 text-[9px] text-neutral-500 font-sans">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-6 py-0.5 border border-neutral-200 rounded text-center text-[8px] bg-white font-medium text-neutral-700">31</span>
                     <span className="text-[8px] text-neutral-400">/ 47</span>
-                    <span className="cursor-pointer hover:text-neutral-800">›</span>
+                    <span className="cursor-pointer hover:text-neutral-800 font-bold text-[9px] ml-0.5">›</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <span className="cursor-pointer hover:text-neutral-800">-</span>
-                    <span className="w-8 py-0.5 border border-neutral-200 rounded text-center text-[8px] bg-white">125%</span>
-                    <span className="cursor-pointer hover:text-neutral-800">+</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="cursor-pointer hover:text-neutral-800 font-semibold text-[10px]">-</span>
+                    <span className="w-10 py-0.5 border border-neutral-200 rounded text-center text-[8px] bg-white font-medium text-neutral-700">125%</span>
+                    <span className="cursor-pointer hover:text-neutral-800 font-semibold text-[10px]">+</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Download className="w-2.5 h-2.5 cursor-pointer hover:text-neutral-800" />
-                    <MoreVertical className="w-2.5 h-2.5 cursor-pointer hover:text-neutral-800" />
+                  <div className="flex items-center gap-2">
+                    <Download className="w-2.8 h-2.8 cursor-pointer hover:text-neutral-800 text-neutral-500" />
+                    <MoreVertical className="w-2.8 h-2.8 cursor-pointer hover:text-neutral-800 text-neutral-500" />
                   </div>
                 </div>
 
                 {/* Document Content Body */}
                 <div className="flex-1 p-3.5 space-y-3 font-mono">
                   {/* Gray Skeleton Lines */}
-                  <div className="space-y-1.5">
-                    <div className="h-1 bg-neutral-200/70 rounded w-[90%]"></div>
-                    <div className="h-1 bg-neutral-200/70 rounded w-[85%]"></div>
-                    <div className="h-1 bg-neutral-200/70 rounded w-[95%]"></div>
-                    <div className="h-1 bg-neutral-200/70 rounded w-[60%]"></div>
+                  <div className="space-y-2">
+                    <div className="h-[3px] bg-neutral-200/80 rounded w-[90%]"></div>
+                    <div className="h-[3px] bg-neutral-200/80 rounded w-[70%]"></div>
                   </div>
 
                   {/* Highlighted Clause Box */}
-                  <div className="bg-[#2A171D] border-l-[3px] border-[#D92662] rounded-r p-2 py-2.5 text-neutral-200 text-[9.5px] leading-relaxed font-sans shadow-sm font-medium">
-                    <span className="font-bold">12.1</span> {language === 'hi' ? 'विक्रेता की देयता ₹50,000 तक सीमित होगी।' : 'Vendor liability shall be limited to '} 
-                    {language === 'en' && <span className="bg-[#D92662]/30 text-white px-0.5 rounded font-semibold">₹50,000</span>}.
+                  <div className="bg-[#FFF0F3] border-l-[3px] border-[#D92662] rounded-r p-2.5 py-3 text-neutral-900 text-[9.5px] leading-relaxed font-sans font-semibold shadow-sm">
+                    <span className="font-bold">12.1</span> {language === 'hi' ? 'विक्रेता की देयता ₹50,000 तक सीमित होगी।' : 'Vendor liability shall be limited to ₹50,000.'}
                   </div>
 
                   {/* Gray Skeleton Lines below */}
-                  <div className="space-y-1.5 pt-1">
-                    <div className="h-1 bg-neutral-200/70 rounded w-[95%]"></div>
-                    <div className="h-1 bg-neutral-200/70 rounded w-[90%]"></div>
-                    <div className="h-1 bg-neutral-200/70 rounded w-[80%]"></div>
-                    <span className="text-[8px] text-neutral-300 font-sans block mt-2">12.2</span>
-                    <div className="h-1 bg-neutral-200/70 rounded w-[85%]"></div>
-                    <div className="h-1 bg-neutral-200/70 rounded w-[70%]"></div>
+                  <div className="space-y-2 pt-3">
+                    <div className="h-[3px] bg-neutral-200/80 rounded w-[95%]"></div>
+                    <div className="h-[3px] bg-neutral-200/80 rounded w-[85%]"></div>
+                    <div className="h-[3px] bg-neutral-200/80 rounded w-[90%]"></div>
+                    <span className="text-[9px] text-neutral-350 font-sans block mt-1.5 font-semibold">12.2</span>
+                    <div className="h-[3px] bg-neutral-200/80 rounded w-[80%]"></div>
                   </div>
                 </div>
               </div>
 
               {/* Left Callout 1: Portfolio Risk */}
-              <div className="absolute left-[0px] top-[15px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
-                    <AlertTriangle className="w-2.5 h-2.5" />
+              <div className="absolute left-[0px] top-[15px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'पोर्टफोलियो जोखिम' : 'Portfolio Risk'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'पोर्टफोलियो जोखिम' : 'Portfolio Risk'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'उच्च देयता' : 'High Liability'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'उच्च देयता' : 'High Liability'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
-                  {language === 'hi' ? 'कुल देयता: ₹50,000' : 'Total: ₹50,000 limit'}
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
+                  {language === 'hi' ? 'कुल देयता: ₹50,000 limit' : 'Total: ₹50,000 limit'}
                 </div>
               </div>
 
               {/* Left Callout 2: Counterparty Simulation */}
-              <div className="absolute left-[0px] top-[135px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-[#0B7A63] shrink-0">
-                    <Sparkles className="w-2.5 h-2.5" />
+              <div className="absolute left-[0px] top-[135px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Scale className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'विरोधी पक्ष पुशबैक' : 'Counterparty Pushback'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'विरोधी पक्ष पुशबैक' : 'Counterparty Pushback'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'आक्रामक रवैया' : 'Aggressive Stance'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'आक्रामक रवैया' : 'Aggressive Stance'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'धारा 12.1 पर आपत्ति' : 'Objection to Clause 12.1'}
                 </div>
               </div>
 
               {/* Left Callout 3: The Shadow */}
-              <div className="absolute left-[0px] top-[255px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
-                    <Swords className="w-2.5 h-2.5" />
+              <div className="absolute left-[0px] top-[255px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Swords className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द शैडो' : 'The Shadow'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द शैडो' : 'The Shadow'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'एआई मुकाबला' : 'AI vs. AI Battle'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'एआई मुकाबला' : 'AI vs. AI Battle'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'वास्तविक समय देयता बहस' : 'Real-time liability debate'}
                 </div>
               </div>
 
               {/* Left Callout 4: The Echo */}
-              <div className="absolute left-[0px] top-[375px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
-                    <Languages className="w-2.5 h-2.5" />
+              <div className="absolute left-[0px] top-[375px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Languages className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द इको' : 'The Echo'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द इको' : 'The Echo'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'कानूनी सामंजस्य' : 'Legal Harmonics'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'कानूनी सामंजस्य' : 'Legal Harmonics'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'अनुवाद अंतर विश्लेषण' : 'Translation gap audit'}
                 </div>
               </div>
 
-              {/* Right Callout 1: Timeline Predictor */}
-              <div className="absolute right-[0px] top-[30px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl flex flex-col">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 shrink-0">
-                    <Clock className="w-2.5 h-2.5" />
+              {/* Right Callout 1: Lifecycle Timeline */}
+              <div className="absolute right-[0px] top-[15px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'समयसीमा भविष्यवक्ता' : 'Lifecycle Timeline'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'समयसीमा भविष्यवक्ता' : 'Lifecycle Timeline'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'नवीनीकरण: 12 महीने' : 'Renewal: 12 Months'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'नवीनीकरण: 12 महीने' : 'Renewal: 12 Months'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'अगला क्लिफ: नवंबर 2026' : 'Next Cliff: Nov 2026'}
                 </div>
               </div>
 
               {/* Right Callout 2: Negotiation Ghostwriter */}
-              <div className="absolute right-[0px] top-[145px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0">
-                    <FileText className="w-2.5 h-2.5" />
+              <div className="absolute right-[0px] top-[135px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Feather className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'नेगोशिएशन घोस्टराइटर' : 'Negotiation Ghostwriter'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'नेगोशिएशन घोस्टराइटर' : 'Negotiation Ghostwriter'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'समझौता मसौदा' : 'Compromise Draft'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'समझौता मसौदा' : 'Compromise Draft'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'वैकल्पिक मसौदा तैयार करें' : 'Generate fallback options'}
                 </div>
               </div>
 
               {/* Right Callout 3: The Residue */}
-              <div className="absolute right-[0px] top-[260px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 shrink-0">
-                    <Binary className="w-2.5 h-2.5" />
+              <div className="absolute right-[0px] top-[255px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Fingerprint className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द रेजिड्यू' : 'The Residue'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द रेजिड्यू' : 'The Residue'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'फोरेंसिक रिपोर्ट' : 'Forensics Report'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'फोरेंसिक रिपोर्ट' : 'Forensics Report'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px] truncate" title="Metadata & boilerplates">
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans truncate" title="Metadata & boilerplates">
                   {language === 'hi' ? 'छिपा हुआ मेटाडेटा ऑडिट' : 'Metadata & altered boilerplate'}
                 </div>
               </div>
 
               {/* Right Callout 4: The Alchemy */}
-              <div className="absolute right-[0px] top-[375px] w-[150px] bg-white rounded-2xl border border-neutral-200/80 p-3 shadow-xl">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <div className="w-4 h-4 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 shrink-0">
-                    <Code className="w-2.5 h-2.5" />
+              <div className="absolute right-[0px] top-[375px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#D92662] shrink-0" />
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द अल्केमी' : 'The Alchemy'}</span>
                   </div>
-                  <span className="font-bold text-[10px]">{language === 'hi' ? 'द अल्केमी' : 'The Alchemy'}</span>
+                  <div className="mt-2">
+                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'SLA कंपाइलर' : 'SLA Compiler'}</span>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <span className="inline-block text-[8px] font-bold bg-pink-50 text-pink-600 border border-pink-100 rounded px-1.5 py-0.5">{language === 'hi' ? 'SLA कंपाइलर' : 'SLA Compiler'}</span>
-                </div>
-                <div className="mt-1 text-neutral-850 font-semibold text-[10px]">
+                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'SLA को प्रोमेथियस में बदलें' : 'Compile SLA to Prometheus'}
                 </div>
               </div>

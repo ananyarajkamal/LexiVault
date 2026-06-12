@@ -984,7 +984,7 @@ export default function WorkspaceSection({
           <Mic className="w-4 h-4" />
         </button>
         <button type="submit" disabled={!chatInput.trim() || isAsking || documents.length === 0}
-          className="w-11 h-11 bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-200 text-white rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
+          className="w-11 h-11 bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
           <Send className="w-4 h-4" />
         </button>
       </form>
@@ -999,7 +999,7 @@ export default function WorkspaceSection({
           <p className="text-xs text-neutral-450">{t.risksSub}</p>
         </div>
         <button onClick={handleRisks} disabled={isAnalyzing || documents.length === 0}
-          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-200 text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldAlert className="w-4 h-4" />}
           {isAnalyzing ? t.analyzingBtn : t.analyzeBtn}
         </button>
@@ -1014,9 +1014,9 @@ export default function WorkspaceSection({
           {(['High', 'Medium', 'Low'] as const).map(level => {
             const items = risks.filter(r => r.risk_level === level);
             if (items.length === 0) return null;
-            const colors = { High: 'border-red-200 bg-red-50', Medium: 'border-amber-200 bg-amber-50', Low: 'border-[#D92662]/30 bg-[#1C1115]' };
-            const textColors = { High: 'text-red-600', Medium: 'text-amber-600', Low: 'text-[#D92662]' };
-            const badgeColors = { High: 'bg-red-100 text-red-700', Medium: 'bg-amber-100 text-amber-700', Low: 'bg-[#D92662]/10 text-[#F472B6]' };
+            const colors = { High: 'border-red-900/30 bg-red-950/20', Medium: 'border-amber-900/30 bg-amber-950/20', Low: 'border-[#D92662]/30 bg-[#1C1115]/30' };
+            const textColors = { High: 'text-red-400', Medium: 'text-amber-400', Low: 'text-[#F472B6]' };
+            const badgeColors = { High: 'bg-red-950/40 text-red-400 border border-red-900/40', Medium: 'bg-amber-950/40 text-amber-400 border border-amber-900/40', Low: 'bg-[#D92662]/10 text-[#F472B6] border border-[#D92662]/20' };
             const levelLabel = level === 'High' ? t.highRisk : level === 'Medium' ? t.medRisk : t.lowRisk;
             return (
               <div key={level} className={`rounded-xl border p-4 ${colors[level]}`}>
@@ -1071,9 +1071,9 @@ export default function WorkspaceSection({
         </div>
         <textarea value={clauseInput} onChange={e => setClauseInput(e.target.value)}
           placeholder={t.placeholderPlain}
-          className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" />
+          className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" />
         <button type="submit" disabled={!clauseInput.trim() || isExplaining}
-          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isExplaining ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
           {isExplaining ? t.explainingBtn : t.explainBtn}
         </button>
@@ -1085,7 +1085,6 @@ export default function WorkspaceSection({
               <Sparkles className="w-4 h-4 text-[#D92662]" />
               <span className="font-bold text-sm text-[#D92662]">{t.plainResultHeader}</span>
             </div>
-            
           </div>
           <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(plainResult)}</div>
         </div>
@@ -1105,16 +1104,15 @@ export default function WorkspaceSection({
           <LangSelect value={briefLang} onChange={setBriefLang} />
         </div>
         <button onClick={handleBrief} disabled={isBriefing || documents.length === 0}
-          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isBriefing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
           {isBriefing ? t.generatingBriefBtn : t.generateBriefBtn}
         </button>
       </div>
       {briefResult ? (
-        <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-6">
+        <div className="bg-[#131118] border border-neutral-850 rounded-xl p-6">
           <div className="flex justify-between items-center mb-4 border-b border-neutral-850 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Brief Output</span>
-            
           </div>
           <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(briefResult)}</div>
         </div>
@@ -1138,12 +1136,12 @@ export default function WorkspaceSection({
           <div>
             <label className="text-sm font-medium text-neutral-300 mb-1.5 block">{t.ver1Label}</label>
             <input type="file" accept=".pdf,.docx,.doc" onChange={e => e.target.files?.[0] && setRedlineV1(e.target.files[0])}
-              className="w-full text-sm border border-neutral-850 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#D92662]/10 file:text-[#D92662] file:font-semibold file:text-xs file:cursor-pointer" />
+              className="w-full text-neutral-300 text-sm border border-neutral-850 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#D92662]/10 file:text-[#D92662] file:font-semibold file:text-xs file:cursor-pointer" />
           </div>
           <div>
             <label className="text-sm font-medium text-neutral-300 mb-1.5 block">{t.ver2Label}</label>
             <input type="file" accept=".pdf,.docx,.doc" onChange={e => e.target.files?.[0] && setRedlineV2(e.target.files[0])}
-              className="w-full text-sm border border-neutral-850 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#D92662]/10 file:text-[#D92662] file:font-semibold file:text-xs file:cursor-pointer" />
+              className="w-full text-neutral-300 text-sm border border-neutral-850 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#D92662]/10 file:text-[#D92662] file:font-semibold file:text-xs file:cursor-pointer" />
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -1152,17 +1150,16 @@ export default function WorkspaceSection({
             <LangSelect value={redlineLang} onChange={setRedlineLang} />
           </div>
           <button type="submit" disabled={!redlineV1 || !redlineV2 || isRedlining}
-            className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+            className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
             {isRedlining ? <Loader2 className="w-4 h-4 animate-spin" /> : <GitCompareArrows className="w-4 h-4" />}
             {isRedlining ? t.comparingBtn : t.compareBtn}
           </button>
         </div>
       </form>
       {redlineResult && (
-        <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-6">
+        <div className="bg-[#131118] border border-neutral-850 rounded-xl p-6">
           <div className="flex justify-between items-center mb-4 border-b border-neutral-850 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Redline Audit</span>
-            
           </div>
           <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(redlineResult)}</div>
         </div>
@@ -1182,16 +1179,15 @@ export default function WorkspaceSection({
           <LangSelect value={contraLang} onChange={setContraLang} />
         </div>
         <button onClick={handleContradictions} disabled={isDetecting || documents.filter(d => d.status === 'success').length < 2}
-          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isDetecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           {isDetecting ? t.detectingBtn : t.detectBtn}
         </button>
       </div>
       {contraResult ? (
-        <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-6">
+        <div className="bg-[#131118] border border-neutral-850 rounded-xl p-6">
           <div className="flex justify-between items-center mb-4 border-b border-neutral-850 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Contradictions Audit</span>
-            
           </div>
           <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(contraResult)}</div>
         </div>
@@ -1297,25 +1293,25 @@ export default function WorkspaceSection({
               <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Paste Clause to Negotiate</label>
               <textarea value={negotiationText} onChange={e => setNegotiationText(e.target.value)}
                 placeholder="Paste the original contract clause here..."
-                className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" />
+                className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" />
             </div>
 
             <button type="submit" disabled={!negotiationText.trim() || isNegotiating}
-              className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
               {isNegotiating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isNegotiating ? t.simulatingBtn : t.simulateBtn}
             </button>
           </form>
 
           {negotiationTranscript.length > 0 && (
-            <div className="space-y-4 border-t border-neutral-100 pt-6">
+            <div className="space-y-4 border-t border-neutral-850 pt-6">
               <h4 className="text-sm font-bold text-neutral-300">Negotiation Dialogue Transcript</h4>
-              <div className="space-y-3 bg-[#1A1821] rounded-xl p-4 border border-neutral-150 max-h-[300px] overflow-y-auto">
+              <div className="space-y-3 bg-[#131118] rounded-xl p-4 border border-neutral-850 max-h-[300px] overflow-y-auto">
                 {negotiationTranscript.map((turn, i) => (
                   <div key={i} className={`p-3 rounded-lg border text-xs leading-relaxed ${
                     turn.role.includes("Buyer") 
-                      ? "bg-blue-50/50 border-blue-100 text-blue-900 ml-4 rounded-br-none" 
-                      : "bg-amber-50/50 border-amber-100 text-amber-900 mr-4 rounded-bl-none"
+                      ? "bg-blue-955/20 border-blue-900/30 text-blue-300 ml-4 rounded-br-none" 
+                      : "bg-amber-955/20 border-amber-900/30 text-amber-300 mr-4 rounded-bl-none"
                   }`}>
                     <span className="font-bold block mb-1">{turn.role}:</span>
                     <div className="whitespace-pre-wrap">{turn.message}</div>
@@ -1326,23 +1322,21 @@ export default function WorkspaceSection({
           )}
 
           {(negotiationCompromise || negotiationExplanation) && (
-            <div className="grid md:grid-cols-2 gap-4 border-t border-neutral-100 pt-6">
+            <div className="grid md:grid-cols-2 gap-4 border-t border-neutral-850 pt-6">
               {negotiationCompromise && (
                 <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
                     <h4 className="font-bold text-sm text-[#D92662]">{t.compromiseResultHeader}</h4>
-                    
                   </div>
-                  <div className="text-xs text-neutral-200 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-200 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-neutral-850 p-3 rounded-lg">
                     {renderFormattedText(negotiationCompromise)}
                   </div>
                 </div>
               )}
               {negotiationExplanation && (
-                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5">
+                <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-850">
                     <h4 className="font-bold text-sm text-neutral-300">{t.explanationHeader}</h4>
-                    
                   </div>
                   <div className="text-xs text-neutral-400 leading-relaxed whitespace-pre-wrap">
                     {renderFormattedText(negotiationExplanation)}
@@ -1369,7 +1363,7 @@ export default function WorkspaceSection({
                   value={counterOriginal} 
                   onChange={e => setCounterOriginal(e.target.value)}
                   placeholder="Paste the original contract clause here..."
-                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
+                  className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
               <div>
@@ -1378,7 +1372,7 @@ export default function WorkspaceSection({
                   value={counterProposed} 
                   onChange={e => setCounterProposed(e.target.value)}
                   placeholder="Paste or describe your proposed amendment or edit here..."
-                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
+                  className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
             </div>
@@ -1386,7 +1380,7 @@ export default function WorkspaceSection({
             <button 
               type="submit" 
               disabled={!counterOriginal.trim() || !counterProposed.trim() || isCounterSimulating}
-              className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               {isCounterSimulating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isCounterSimulating ? "Simulating Counsel..." : "Predict Opposition"}
@@ -1394,32 +1388,29 @@ export default function WorkspaceSection({
           </form>
 
           {counterSimResult && (
-            <div className="space-y-6 border-t border-neutral-100 pt-6">
+            <div className="space-y-6 border-t border-neutral-850 pt-6">
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-red-50/30 border border-red-150 rounded-xl p-5">
-                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-100/30">
-                    <h4 className="font-bold text-sm text-red-800">Opposing Counsel Objections & Arguments</h4>
-                    
+                <div className="bg-red-950/20 border border-red-900/30 rounded-xl p-5">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-900/20">
+                    <h4 className="font-bold text-sm text-red-400">Opposing Counsel Objections & Arguments</h4>
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-[#D92662]/20 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-[#D92662]/20 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.counter_arguments)}
                   </div>
                 </div>
                 <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
                     <h4 className="font-bold text-sm text-[#D92662]">Opposing Counter-Proposals</h4>
-                    
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-neutral-850 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.pushback_clauses)}
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5">
+              <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5">
                 <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-850">
                   <h4 className="font-bold text-sm text-neutral-200">Negotiation Strategy Recommendation</h4>
-                  
                 </div>
                 <div className="text-xs text-neutral-400 leading-relaxed whitespace-pre-wrap">
                   {renderFormattedText(counterSimResult.recommendation)}
@@ -1445,7 +1436,7 @@ export default function WorkspaceSection({
                   value={ghostOriginal} 
                   onChange={e => setGhostOriginal(e.target.value)}
                   placeholder="Paste the original contract clause here..."
-                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
+                  className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
               <div>
@@ -1454,7 +1445,7 @@ export default function WorkspaceSection({
                   value={ghostCounter} 
                   onChange={e => setGhostCounter(e.target.value)}
                   placeholder="Paste the counterparty's proposed edit or redline here..."
-                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
+                  className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
             </div>
@@ -1462,7 +1453,7 @@ export default function WorkspaceSection({
             <button 
               type="submit" 
               disabled={!ghostOriginal.trim() || !ghostCounter.trim() || isGhostwriting}
-              className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               {isGhostwriting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isGhostwriting ? "Drafting..." : "Ghostwrite Response"}
@@ -1470,23 +1461,21 @@ export default function WorkspaceSection({
           </form>
 
           {ghostResult && (
-            <div className="space-y-6 border-t border-neutral-100 pt-6">
+            <div className="space-y-6 border-t border-neutral-850 pt-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
                   <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
                     <h4 className="font-bold text-sm text-[#D92662] font-sans">Accept with Modification</h4>
-                    
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-neutral-850 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.accept_with_modification)}
                   </div>
                 </div>
-                <div className="bg-red-50/30 border border-red-150 rounded-xl p-5">
-                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-150">
-                    <h4 className="font-bold text-sm text-red-800 font-sans">Reject with Rationale & Precedent</h4>
-                    
+                <div className="bg-red-950/20 border border-red-900/30 rounded-xl p-5">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-900/20">
+                    <h4 className="font-bold text-sm text-red-400 font-sans">Reject with Rationale & Precedent</h4>
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-[#D92662]/20 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-[#D92662]/20 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.reject_with_rationale)}
                   </div>
                 </div>
@@ -1515,28 +1504,27 @@ export default function WorkspaceSection({
             <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Version 1 (Original Text)</label>
             <textarea value={diffTextV1} onChange={e => setDiffTextV1(e.target.value)}
               placeholder="Paste original clause or wording..."
-              className="w-full border border-neutral-850 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#D92662]" />
+              className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#D92662]" />
           </div>
           <div>
             <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Version 2 (Revised Text)</label>
             <textarea value={diffTextV2} onChange={e => setDiffTextV2(e.target.value)}
               placeholder="Paste revised clause or wording..."
-              className="w-full border border-neutral-850 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#D92662]" />
+              className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#D92662]" />
           </div>
         </div>
 
         <button type="submit" disabled={!diffTextV1.trim() || !diffTextV2.trim() || isDiffing}
-          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isDiffing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Diff className="w-4 h-4" />}
           {isDiffing ? t.runningDiffBtn : t.runDiffBtn}
         </button>
       </form>
 
-      {/* Similarity score & Explanation */}
       {(diffSimilarity !== null || diffExplanation) && (
-        <div className="space-y-4 border-t border-neutral-100 pt-6">
+        <div className="space-y-4 border-t border-neutral-850 pt-6">
           {diffSimilarity !== null && (
-            <div className="flex items-center gap-4 bg-[#1A1821] rounded-xl p-4 border border-neutral-150">
+            <div className="flex items-center gap-4 bg-[#131118] rounded-xl p-4 border border-neutral-850">
               <div className="shrink-0 flex items-center justify-center w-16 h-16 rounded-full border-4 border-[#D92662] bg-[#D92662]/5">
                 <span className="font-bold text-base text-[#D92662]">{diffSimilarity}%</span>
               </div>
@@ -1557,9 +1545,8 @@ export default function WorkspaceSection({
             <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
               <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
                 <h4 className="font-bold text-sm text-[#D92662]">{t.shiftExplanationHeader}</h4>
-                
               </div>
-              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-neutral-850 p-3 rounded-lg">
                 {renderFormattedText(diffExplanation)}
               </div>
             </div>
@@ -1602,7 +1589,7 @@ export default function WorkspaceSection({
               <button 
                 type="submit" 
                 disabled={isPredictingTimeline}
-                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isPredictingTimeline ? <Loader2 className="w-4 h-4 animate-spin" /> : <Clock className="w-4 h-4" />}
                 {isPredictingTimeline ? "Predicting..." : "Predict Timeline"}
@@ -1612,13 +1599,11 @@ export default function WorkspaceSection({
         )}
 
         {timelineResult && (
-          <div className="grid md:grid-cols-2 gap-6 border-t border-neutral-150 pt-6">
-            {/* Visual Timeline Column */}
-            <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-4">
+          <div className="grid md:grid-cols-2 gap-6 border-t border-neutral-850 pt-6">
+            <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 space-y-4">
               <h4 className="font-bold text-sm text-neutral-200">Visual Contract Lifecycle Timeline</h4>
               
               <div className="relative pl-6 border-l-2 border-[#D92662]/20 space-y-6 py-2">
-                {/* Node 1 */}
                 <div className="relative">
                   <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
@@ -1629,7 +1614,6 @@ export default function WorkspaceSection({
                   </p>
                 </div>
                 
-                {/* Node 2 */}
                 <div className="relative">
                   <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
@@ -1640,7 +1624,6 @@ export default function WorkspaceSection({
                   </p>
                 </div>
                 
-                {/* Node 3 */}
                 <div className="relative">
                   <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
@@ -1651,7 +1634,6 @@ export default function WorkspaceSection({
                   </p>
                 </div>
                 
-                {/* Node 4 */}
                 <div className="relative">
                   <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
@@ -1664,28 +1646,25 @@ export default function WorkspaceSection({
               </div>
             </div>
 
-            {/* Metrics & Cascade Warnings Column */}
             <div className="space-y-6">
-              {/* Renewal Risk Score */}
-              <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5">
+              <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5">
                 <h4 className="font-bold text-sm text-neutral-200 mb-3">Renewal Risk Audit</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-medium text-neutral-400">Renewal Risk Score:</span>
                     <span className={`font-bold ${
-                      timelineResult.renewal_risk_score > 70 ? 'text-red-600' : timelineResult.renewal_risk_score > 30 ? 'text-amber-600' : 'text-[#D92662]'
+                      timelineResult.renewal_risk_score > 70 ? 'text-red-400' : timelineResult.renewal_risk_score > 30 ? 'text-amber-400' : 'text-[#D92662]'
                     }`}>{timelineResult.renewal_risk_score} / 100</span>
                   </div>
                   
-                  {/* Gauge Bar */}
-                  <div className="h-3 w-full bg-neutral-200 rounded-full overflow-hidden relative">
+                  <div className="h-3 w-full bg-neutral-800 rounded-full overflow-hidden relative">
                     <div 
                       className={`h-full rounded-full ${
                         timelineResult.renewal_risk_score > 70 
                           ? 'bg-red-500' 
                           : timelineResult.renewal_risk_score > 30 
                           ? 'bg-amber-500' 
-                          : 'bg-[#1C1115]0'
+                          : 'bg-[#D92662]'
                       }`}
                       style={{ width: `${timelineResult.renewal_risk_score}%` }}
                     />
@@ -1696,13 +1675,11 @@ export default function WorkspaceSection({
                 </div>
               </div>
 
-              {/* Cascade effects / Coverage gaps */}
               <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
                 <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
                   <h4 className="font-bold text-sm text-[#D92662]">Cascade Gaps & Dependency Warnings</h4>
-                  
                 </div>
-                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-neutral-850 p-3 rounded-lg">
                   {renderFormattedText(timelineResult.cascade_effects)}
                 </div>
               </div>
@@ -1763,13 +1740,12 @@ export default function WorkspaceSection({
           </button>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 flex flex-col justify-between">
+          <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 flex flex-col justify-between">
             <span className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Total Active Contracts</span>
             <span className="text-3xl font-serif font-black text-[#D92662] mt-2">{portfolioStats.total_contracts}</span>
           </div>
-          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 flex flex-col justify-between">
+          <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 flex flex-col justify-between">
             <span className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Total Portfolio Liability Cap</span>
             <span className="text-3xl font-serif font-black text-[#D92662] mt-2">
               ${portfolioStats.total_liability.toLocaleString()}
@@ -1778,8 +1754,7 @@ export default function WorkspaceSection({
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Concentration Risk */}
-          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-4">
+          <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 space-y-4">
             <h4 className="font-bold text-sm text-neutral-200">Vendor Concentration Risk</h4>
             {portfolioStats.concentration_risk.length === 0 ? (
               <p className="text-xs text-neutral-400">No concentration risk metrics calculated.</p>
@@ -1793,7 +1768,7 @@ export default function WorkspaceSection({
                         ${item.value.toLocaleString()} ({item.share}%)
                       </span>
                     </div>
-                    <div className="h-2.5 w-full bg-neutral-200 rounded-full overflow-hidden">
+                    <div className="h-2.5 w-full bg-neutral-800 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-[#D92662] rounded-full transition-all duration-500" 
                         style={{ width: `${item.share}%` }} 
@@ -1805,8 +1780,7 @@ export default function WorkspaceSection({
             )}
           </div>
 
-          {/* Upcoming Renewal Cliffs */}
-          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-4">
+          <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 space-y-4">
             <h4 className="font-bold text-sm text-neutral-200">Upcoming Renewal Timeline Cliffs</h4>
             {portfolioStats.upcoming_renewals.length === 0 ? (
               <p className="text-xs text-neutral-400">No upcoming renewals found.</p>
@@ -1815,13 +1789,13 @@ export default function WorkspaceSection({
                 {portfolioStats.upcoming_renewals.map((renewal, idx) => {
                   let badgeClass = "bg-[#1C1115] text-[#F472B6] border-[#D92662]/20";
                   if (renewal.days_remaining < 30) {
-                    badgeClass = "bg-red-50 text-red-700 border-red-150 animate-pulse";
+                    badgeClass = "bg-red-950/40 text-red-400 border-red-900/40 animate-pulse";
                   } else if (renewal.days_remaining < 90) {
-                    badgeClass = "bg-amber-50 text-amber-700 border-amber-150";
+                    badgeClass = "bg-amber-955/40 text-amber-400 border-amber-900/40";
                   }
                   
                   return (
-                    <div key={idx} className="bg-[#131118] border border-neutral-150 rounded-lg p-3 flex justify-between items-center gap-3">
+                    <div key={idx} className="bg-[#1A1821] border border-neutral-850 rounded-lg p-3 flex justify-between items-center gap-3">
                       <div className="min-w-0">
                         <div className="text-xs font-bold text-neutral-200 truncate">{renewal.vendor}</div>
                         <div className="text-[10px] text-neutral-400 mt-0.5">Expires: {renewal.expiration_date}</div>
@@ -1873,65 +1847,57 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isBattling}
-                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isBattling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Swords className="w-4 h-4" />}
-                {isBattling ? "Conducting Battle..." : "Conduct Battle"}
+                {isBattling ? "Conducting Battle..." : "Start Battle"}
               </button>
             </div>
           </form>
         )}
 
         {shadowResult && (
-          <div className="space-y-6 border-t border-neutral-150 pt-6">
-            {/* Clause under debate */}
-            <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-5">
-              <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2">Clause Under Debate</h4>
-              <p className="text-xs text-neutral-200 leading-relaxed font-mono whitespace-pre-wrap bg-[#1A1821] border border-amber-900/40 p-3 rounded-lg">
+          <div className="space-y-6 border-t border-neutral-850 pt-6">
+            <div className="bg-amber-955/20 border border-amber-900/30 rounded-xl p-5">
+              <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">Clause Under Debate</h4>
+              <p className="text-xs text-neutral-200 leading-relaxed font-mono whitespace-pre-wrap bg-[#131118] border border-amber-900/40 p-3 rounded-lg">
                 {shadowResult.clause_focus}
               </p>
             </div>
 
-            {/* Battle Dialogue */}
             <div className="space-y-4">
               <h4 className="text-sm font-bold text-neutral-200">Counsel Debate Rounds</h4>
               
-              {/* Attacker turn */}
-              <div className="bg-red-50/30 border border-red-200/50 rounded-xl p-5 relative">
-                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-200/30">
+              <div className="bg-red-955/20 border border-red-900/30 rounded-xl p-5 relative">
+                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-red-900/20">
                   <div className="flex items-center gap-2">
-                    <Swords className="w-4 h-4 text-red-600" />
-                    <span className="font-bold text-sm text-red-800">Attacker Counsel</span>
+                    <Swords className="w-4 h-4 text-red-500" />
+                    <span className="font-bold text-sm text-red-400">Attacker Counsel</span>
                   </div>
-                  
                 </div>
-                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-[#D92662]/20 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-[#D92662]/20 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.attacker_turn)}
                 </div>
               </div>
 
-              {/* Defender turn */}
-              <div className="bg-blue-50/30 border border-blue-200/50 rounded-xl p-5 relative">
-                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-blue-200/30">
+              <div className="bg-blue-955/20 border border-blue-900/30 rounded-xl p-5 relative">
+                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-blue-900/20">
                   <div className="flex items-center gap-2">
-                    <ShieldAlert className="w-4 h-4 text-blue-600" />
-                    <span className="font-bold text-sm text-blue-800">Defender Counsel</span>
+                    <ShieldAlert className="w-4 h-4 text-blue-400" />
+                    <span className="font-bold text-sm text-blue-400">Defender Counsel</span>
                   </div>
-                  
                 </div>
-                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-blue-900/30 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-blue-900/30 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.defender_turn)}
                 </div>
               </div>
             </div>
 
-            {/* Assessment */}
             <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
               <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
                 <h4 className="font-bold text-sm text-[#D92662]">Legal Risk Assessment & Verdict</h4>
-                
               </div>
-              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#131118] border border-neutral-850 p-3 rounded-lg">
                 {renderFormattedText(shadowResult.assessment)}
               </div>
             </div>
@@ -1974,7 +1940,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isInspecting}
-                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isInspecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Binary className="w-4 h-4" />}
                 {isInspecting ? "Inspecting..." : "Extract & Analyze"}
@@ -1984,19 +1950,18 @@ export default function WorkspaceSection({
         )}
 
         {residueResult && (
-          <div className="space-y-6 border-t border-neutral-150 pt-6">
-            {/* Metadata Table */}
-            <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-3">
+          <div className="space-y-6 border-t border-neutral-850 pt-6">
+            <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 space-y-3">
               <h4 className="font-bold text-sm text-neutral-200">Extracted PDF File Metadata</h4>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-neutral-200 text-xs">
+                <table className="min-w-full divide-y divide-neutral-850 text-xs">
                   <thead>
                     <tr className="text-left text-neutral-450 uppercase tracking-wider font-bold">
                       <th className="py-2 px-3">Metadata Field</th>
                       <th className="py-2 px-3">Value</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-200 text-neutral-300 bg-[#131118]">
+                  <tbody className="divide-y divide-neutral-850 text-neutral-300 bg-[#131118]">
                     <tr>
                       <td className="py-2.5 px-3 font-semibold text-neutral-400">Author</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.author || 'Unknown'}</td>
@@ -2103,7 +2068,7 @@ export default function WorkspaceSection({
           <button
             type="submit"
             disabled={!echoInput.trim() || isEchoing}
-            className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+            className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             {isEchoing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
             {isEchoing ? "Analyzing Harmonics..." : "Evaluate Harmonics"}
@@ -2161,7 +2126,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isCompiling}
-                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isCompiling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Code className="w-4 h-4" />}
                 {isCompiling ? "Compiling..." : "Compile to Prometheus YAML"}
@@ -2230,12 +2195,16 @@ export default function WorkspaceSection({
   };
 
   return (
-    <section id="workspace" className={`bg-[#080709] overflow-hidden flex flex-col ${
-      isFullscreen ? 'h-[calc(100vh-64px)] w-full' : 'py-16 sm:py-24'
-    }`}>
-      <div className={`transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 ${
-        isFullscreen ? 'max-w-full w-full p-0' : 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full'
-      }`}>
+    <section id="workspace" className={
+      isFullscreen 
+        ? "bg-[#080709] overflow-hidden flex flex-col h-[calc(100vh-64px)] w-full" 
+        : "bg-[#080709] overflow-hidden flex flex-col py-16 sm:py-24"
+    }>
+      <div className={
+        isFullscreen 
+          ? "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-full w-full p-0" 
+          : "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+      }>
         {!isFullscreen && (
           <div className="text-center max-w-2xl mx-auto mb-10">
             <p className="text-[#D92662] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.uploadTab}</p>
@@ -2246,9 +2215,11 @@ export default function WorkspaceSection({
           </div>
         )}
 
-        <div className={`bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 ${
-          isFullscreen ? 'rounded-none border-0' : 'rounded-2xl shadow-xl'
-        }`}>
+        <div className={
+          isFullscreen 
+            ? "bg-[#131118] overflow-hidden flex flex-col flex-1 min-h-0 rounded-none border-0" 
+            : "bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-2xl shadow-xl"
+        }>
           {/* Tab bar */}
           <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
             <div className="flex-1 overflow-x-auto min-w-0">
@@ -2282,7 +2253,7 @@ export default function WorkspaceSection({
           </div>
 
           {/* Tab content */}
-          <div className={`p-5 sm:p-8 overflow-y-auto flex-1 min-h-0`}>
+          <div className="p-5 sm:p-8 overflow-y-auto flex-1 min-h-0 bg-[#131118]">
             {renderers[activeTab]()}
           </div>
         </div>

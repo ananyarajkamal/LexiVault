@@ -384,62 +384,82 @@ export default function App() {
 
               <div className="grid md:grid-cols-4 gap-6">
                 {/* ChatGPT */}
-                <div className="bg-[#131118] border border-neutral-850 rounded-2xl p-6 relative flex flex-col justify-between text-neutral-250">
+                <div className="bg-gradient-to-b from-[#110F15] to-[#08070A] border border-white/[0.06] hover:border-white/[0.15] transition-all duration-300 rounded-2xl p-6 relative flex flex-col justify-between text-neutral-300 shadow-sm">
                   <div>
-                    <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 border border-red-100 flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-red-950/40 border border-red-900/30 text-red-400 flex items-center justify-center mb-4">
                       <AlertCircle className="w-5 h-5" />
                     </div>
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.chatgpt}</h3>
                     <p className="text-xs text-neutral-400 leading-relaxed font-sans">{t.chatgptDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-neutral-850/60 flex justify-between items-center text-[11px] font-bold text-red-600">
-                    <span>Fast & Leaky</span>
-                    <span>Security Risk</span>
+                  <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-2 text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-1.5 bg-red-500/10 text-red-400 px-2.5 py-0.5 rounded-full border border-red-500/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                      Fast & Leaky
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 bg-red-500/10 text-red-400 px-2.5 py-0.5 rounded-full border border-red-500/20">
+                      Security Risk
+                    </span>
                   </div>
                 </div>
 
                 {/* Manual Review */}
-                <div className="bg-[#131118] border border-neutral-850 rounded-2xl p-6 relative flex flex-col justify-between text-neutral-250">
+                <div className="bg-gradient-to-b from-[#110F15] to-[#08070A] border border-white/[0.06] hover:border-white/[0.15] transition-all duration-300 rounded-2xl p-6 relative flex flex-col justify-between text-neutral-300 shadow-sm">
                   <div>
-                    <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-100 flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-amber-950/40 border border-amber-900/30 text-amber-400 flex items-center justify-center mb-4">
                       <Clock className="w-5 h-5" />
                     </div>
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.manual}</h3>
                     <p className="text-xs text-neutral-400 leading-relaxed font-sans">{t.manualDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-neutral-850/60 flex justify-between items-center text-[11px] font-bold text-amber-700">
-                    <span>Slow & Private</span>
-                    <span>Human Error Risk</span>
+                  <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-2 text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-450 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      Slow & Private
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-450 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                      Human Error
+                    </span>
                   </div>
                 </div>
 
                 {/* Traditional Lawyer */}
-                <div className="bg-[#131118] border border-neutral-850 rounded-2xl p-6 relative flex flex-col justify-between text-neutral-250">
+                <div className="bg-gradient-to-b from-[#110F15] to-[#08070A] border border-white/[0.06] hover:border-white/[0.15] transition-all duration-300 rounded-2xl p-6 relative flex flex-col justify-between text-neutral-300 shadow-sm">
                   <div>
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-blue-950/40 border border-blue-900/30 text-blue-450 flex items-center justify-center mb-4">
                       <Coins className="w-5 h-5" />
                     </div>
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.lawyer}</h3>
                     <p className="text-xs text-neutral-400 leading-relaxed font-sans">{t.lawyerDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-neutral-850/60 flex justify-between items-center text-[11px] font-bold text-blue-700">
-                    <span>Accurate & Private</span>
-                    <span>₹18,000 / Hr Cost</span>
+                  <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-2 text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-1.5 bg-blue-500/10 text-blue-400 px-2.5 py-0.5 rounded-full border border-blue-500/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-450"></span>
+                      Accurate & Private
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 bg-blue-500/10 text-blue-400 px-2.5 py-0.5 rounded-full border border-blue-500/20">
+                      ₹18,000 / Hr
+                    </span>
                   </div>
                 </div>
 
                 {/* LexiVault */}
-                <div className="bg-[#1D1016] border border-[#D92662]/30 rounded-2xl p-6 relative flex flex-col justify-between shadow-lg ring-2 ring-[#D92662]/20 text-neutral-100">
+                <div className="bg-gradient-to-b from-[#200F15] to-[#0A0709] border border-[#D92662]/40 rounded-2xl p-6 relative flex flex-col justify-between shadow-[0_0_35px_rgba(217,38,98,0.15)] ring-1 ring-[#D92662]/20 text-neutral-100">
                   <div>
-                    <div className="w-10 h-10 rounded-xl bg-[#D92662] text-white flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D92662] to-[#F472B6] text-white flex items-center justify-center mb-4 shadow-md shadow-[#D92662]/25">
                       <ShieldCheck className="w-5 h-5" />
                     </div>
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.lexiSolution}</h3>
                     <p className="text-xs text-neutral-200/85 leading-relaxed font-sans">{t.lexiSolutionDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-[#D92662]/20 flex justify-between items-center text-[11px] font-bold text-[#D92662]">
-                    <span>Fast, Private & Accurate</span>
-                    <span>100% Private Analytics</span>
+                  <div className="mt-6 pt-4 border-t border-[#D92662]/20 flex flex-wrap gap-2 text-[10px] font-bold">
+                    <span className="inline-flex items-center gap-1.5 bg-[#D92662]/15 text-[#F472B6] px-2.5 py-0.5 rounded-full border border-[#D92662]/35 shadow-[0_0_10px_rgba(217,38,98,0.1)]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F472B6] animate-pulse"></span>
+                      Fast & Secure
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 bg-[#D92662]/15 text-[#F472B6] px-2.5 py-0.5 rounded-full border border-[#D92662]/35 shadow-[0_0_10px_rgba(217,38,98,0.1)]">
+                      100% Private
+                    </span>
                   </div>
                 </div>
               </div>
@@ -518,26 +538,26 @@ export default function App() {
 
       {/* Auth Modal (Sign In / Sign Up) */}
       {showLoginModal && (
-        <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-          <div className="bg-[#FDFBF7] border border-neutral-200/60 rounded-2xl w-full max-w-[340px] p-6 shadow-2xl relative">
+        <div className="fixed inset-0 bg-[#080709]/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+          <div className="bg-[#131118] border border-neutral-800 rounded-2xl w-full max-w-[340px] p-6 shadow-2xl relative text-neutral-100">
             <button 
               onClick={() => {
                 setShowLoginModal(false);
                 resetAuthFields();
               }}
-              className="absolute right-4 top-4 text-neutral-400 hover:text-neutral-600 font-bold text-lg cursor-pointer"
+              className="absolute right-4 top-4 text-neutral-400 hover:text-white font-bold text-lg cursor-pointer transition-colors"
             >
               ×
             </button>
-            <h3 className="font-serif text-[22px] font-black text-[#092E26] mb-1 leading-none uppercase">
+            <h3 className="font-serif text-[22px] font-black text-white mb-1 leading-none uppercase">
               {isSignUpMode ? t.signUp : t.signIn}
             </h3>
-            <p className="text-xs text-neutral-500 mb-4">
+            <p className="text-xs text-neutral-400 mb-4">
               {isSignUpMode ? t.createSub : t.accessSub}
             </p>
             
             {authError && (
-              <div className="bg-red-50 border border-red-200 text-red-600 rounded-lg p-2.5 text-xs font-semibold leading-relaxed mb-4 font-sans">
+              <div className="bg-red-950/20 border border-red-900/30 text-red-400 rounded-lg p-2.5 text-xs font-semibold leading-relaxed mb-4 font-sans">
                 {authError}
               </div>
             )}
@@ -545,52 +565,52 @@ export default function App() {
             <form onSubmit={handleAuthSubmit} className="space-y-3">
               {isSignUpMode && (
                 <div>
-                  <label className="text-[10px] font-bold text-[#092E26]/80 uppercase block mb-1">{t.fullName}</label>
+                  <label className="text-[10px] font-bold text-neutral-400 uppercase block mb-1">{t.fullName}</label>
                   <input 
                     type="text" 
                     value={fullName}
                     onChange={e => setFullName(e.target.value)}
                     placeholder="e.g. John Doe"
                     required
-                    className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#092E26]"
+                    className="w-full border border-neutral-800 rounded-lg px-3 py-2 text-xs bg-[#1A1821] text-white placeholder-neutral-600 focus:outline-none focus:border-[#D92662] focus:ring-1 focus:ring-[#D92662]/30"
                   />
                 </div>
               )}
               
               <div>
-                <label className="text-[10px] font-bold text-[#092E26]/80 uppercase block mb-1">{t.username}</label>
+                <label className="text-[10px] font-bold text-neutral-400 uppercase block mb-1">{t.username}</label>
                 <input 
                   type="text" 
                   value={loginUser}
                   onChange={e => setLoginUser(e.target.value)}
                   placeholder="e.g. johndoe@gmail.com"
                   required
-                  className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#092E26]"
+                  className="w-full border border-neutral-800 rounded-lg px-3 py-2 text-xs bg-[#1A1821] text-white placeholder-neutral-600 focus:outline-none focus:border-[#D92662] focus:ring-1 focus:ring-[#D92662]/30"
                 />
               </div>
               
               <div>
-                <label className="text-[10px] font-bold text-[#092E26]/80 uppercase block mb-1">{t.password}</label>
+                <label className="text-[10px] font-bold text-neutral-400 uppercase block mb-1">{t.password}</label>
                 <input 
                   type="password" 
                   value={loginPass}
                   onChange={e => setLoginPass(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#092E26]"
+                  className="w-full border border-neutral-800 rounded-lg px-3 py-2 text-xs bg-[#1A1821] text-white placeholder-neutral-600 focus:outline-none focus:border-[#D92662] focus:ring-1 focus:ring-[#D92662]/30"
                 />
               </div>
 
               {isSignUpMode && (
                 <div>
-                  <label className="text-[10px] font-bold text-[#092E26]/80 uppercase block mb-1">{t.confirmPass}</label>
+                  <label className="text-[10px] font-bold text-neutral-400 uppercase block mb-1">{t.confirmPass}</label>
                   <input 
                     type="password" 
                     value={confirmPass}
                     onChange={e => setConfirmPass(e.target.value)}
                     placeholder="••••••••"
                     required
-                    className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-xs bg-white focus:outline-none focus:border-[#092E26]"
+                    className="w-full border border-neutral-800 rounded-lg px-3 py-2 text-xs bg-[#1A1821] text-white placeholder-neutral-600 focus:outline-none focus:border-[#D92662] focus:ring-1 focus:ring-[#D92662]/30"
                   />
                 </div>
               )}
@@ -609,7 +629,7 @@ export default function App() {
                   setIsSignUpMode(!isSignUpMode);
                   resetAuthFields();
                 }}
-                className="text-[11px] font-semibold text-[#0B7A63] hover:underline cursor-pointer"
+                className="text-[11px] font-semibold text-[#D92662] hover:text-[#B71C4F] hover:underline cursor-pointer transition-colors"
               >
                 {isSignUpMode ? t.alreadyHaveAcc : t.dontHaveAcc}
               </button>
