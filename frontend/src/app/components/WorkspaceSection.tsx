@@ -499,9 +499,17 @@ export default function WorkspaceSection({
 
     // Use cached voices (preloaded via voiceschanged event)
     const voices = cachedVoices.length > 0 ? cachedVoices : (window.speechSynthesis.getVoices() || []);
-    const selectedVoice = pickVoice(voices, voiceLang);
+    let selectedVoice = pickVoice(voices, voiceLang);
+    
+    // CRITICAL: If no voice found for hi-IN or en-IN, fall back to en-US
+    // Without this, the browser silently fails (no audio at all)
+    if (!selectedVoice && voiceLang !== 'en-US') {
+      console.warn(`TTS: No voice found for ${voiceLang}, falling back to en-US`);
+      selectedVoice = pickVoice(voices, 'en-US');
+      voiceLang = 'en-US'; // Update lang to match the fallback voice
+    }
 
-    console.log(`TTS: lang=${voiceLang}, voice=${selectedVoice?.name || 'default'}, devanagari=${hasDevanagari}, dropdown=${langName || 'auto'}, voices=${voices.length}`);
+    console.log(`TTS: lang=${voiceLang}, voice=${selectedVoice?.name || 'browser-default'}, devanagari=${hasDevanagari}, dropdown=${langName || 'auto'}, voices=${voices.length}`);
 
     // Chrome has a bug where speak() silently fails after cancel().
     // Workaround: use a small setTimeout to let the engine reset.
