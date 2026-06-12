@@ -419,6 +419,36 @@ export default function WorkspaceSection({
 
   const [activeSpeakingText, setActiveSpeakingText] = useState<string | null>(null);
   const [isSpeakingPaused, setIsSpeakingPaused] = useState(false);
+  const [cachedVoices, setCachedVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  // Preload voices — getVoices() returns [] on first call in Chrome/Edge.
+  // We must listen for the voiceschanged event to get the actual list.
+  useEffect(() => {
+    const loadVoices = () => {
+      const voices = window.speechSynthesis?.getVoices() || [];
+      if (voices.length > 0) {
+        setCachedVoices(voices);
+        console.log('TTS voices loaded:', voices.length, voices.map(v => `${v.name} (${v.lang})`).join(', '));
+      }
+    };
+    loadVoices(); // try immediately (works in Firefox)
+    window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
+    return () => window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
+  }, []);
+
+  const pickVoice = (voices: SpeechSynthesisVoice[], targetLang: string): SpeechSynthesisVoice | undefined => {
+    const target = targetLang.toLowerCase().replace('_', '-');
+    // 1. Exact match (e.g. hi-IN === hi-IN)
+    let v = voices.find(v => v.lang.toLowerCase().replace('_', '-') === target);
+    if (v) return v;
+    // 2. Region prefix (e.g. hi-IN starts with hi)
+    const prefix = target.split('-')[0];
+    v = voices.find(v => v.lang.toLowerCase().replace('_', '-').startsWith(prefix + '-'));
+    if (v) return v;
+    // 3. Language prefix only
+    v = voices.find(v => v.lang.toLowerCase().startsWith(prefix));
+    return v;
+  };
 
   const speakText = (text: string, langName?: string) => {
     if (!window.speechSynthesis) {
@@ -442,60 +472,57 @@ export default function WorkspaceSection({
     window.speechSynthesis.cancel();
     setIsSpeakingPaused(false);
 
-    // Clean up markdown syntax (hashtags, bold asterisks) so it reads naturally
+    // Clean up markdown syntax so it reads naturally
     const cleanedText = text
-      .replace(/^(#+\s+)/gm, '') // Remove start-of-line hashes (e.g. #, ##)
-      .replace(/\*\*([^*]+)\*\*/g, '$1') // Remove bold asterisks
-      .replace(/###?\s+/g, '') // Remove ### headers
-      .replace(/`([^`]+)`/g, '$1'); // Remove backticks
+      .replace(/^(#+\s+)/gm, '')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/###?\s+/g, '')
+      .replace(/`([^`]+)`/g, '$1');
 
     const utterance = new SpeechSynthesisUtterance(cleanedText);
     
-    // Determine language & select voice
-    let voiceLang = 'en-US';
+    // Determine target voice language based on script + user selection
     const hasDevanagari = /[\u0900-\u097F]/.test(cleanedText);
+    let voiceLang: string;
 
     if (hasDevanagari) {
+      // Text contains Devanagari characters — use native Hindi voice
       voiceLang = 'hi-IN';
-    } else {
-      // Latin script text
-      if (langName) {
-        const lowerLang = langName.toLowerCase();
-        if (lowerLang === 'hindi' || lowerLang === 'hinglish') {
-          // Since it's Hindi/Hinglish but written in English letters, use Indian English voice.
-          // This ensures Hindi words like "Arre", "achha" are read naturally as words instead of being spelled out letter-by-letter.
-          voiceLang = 'en-IN';
-        } else {
-          voiceLang = 'en-US';
-        }
+    } else if (langName) {
+      const lower = langName.toLowerCase();
+      if (lower === 'hindi' || lower === 'hinglish') {
+        // Latin-script Hindi/Hinglish — use Indian English voice for natural reading
+        voiceLang = 'en-IN';
       } else {
-        // Fallback for chat etc. If global language is Hindi but text is English letters, use Indian English accent.
-        voiceLang = globalLanguage === 'hi' ? 'en-IN' : 'en-US';
+        voiceLang = 'en-US';
       }
+    } else {
+      voiceLang = globalLanguage === 'hi' ? 'en-IN' : 'en-US';
     }
-    
+
     utterance.lang = voiceLang;
 
-    // Select matching voice for browser compatibility
-    if (window.speechSynthesis.getVoices) {
-      const voices = window.speechSynthesis.getVoices();
-      
-      // Find voice matching voiceLang, prioritizing exact match, region match, and then language match
-      const matchingVoice = voices.find(v => v.lang.toLowerCase() === voiceLang.toLowerCase()) || 
-                            voices.find(v => v.lang.toLowerCase().replace('_', '-').startsWith(voiceLang.toLowerCase())) ||
-                            voices.find(v => v.lang.toLowerCase().startsWith(voiceLang.toLowerCase().substring(0, 2)));
-      
-      if (matchingVoice) {
-        utterance.voice = matchingVoice;
-      }
-      console.log("Speech language chosen:", voiceLang, "Voice chosen:", matchingVoice?.name, "Script:", hasDevanagari ? "Devanagari" : "Latin");
+    // Use cached voices (preloaded via voiceschanged event)
+    const voices = cachedVoices.length > 0 ? cachedVoices : (window.speechSynthesis.getVoices() || []);
+    const selectedVoice = pickVoice(voices, voiceLang);
+    
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
     }
+
+    // For Hindi, slow down rate slightly for clarity
+    if (voiceLang === 'hi-IN') {
+      utterance.rate = 0.9;
+    }
+
+    console.log(`TTS: lang=${voiceLang}, voice=${selectedVoice?.name || 'default'}, devanagari=${hasDevanagari}, dropdown=${langName || 'auto'}, cachedVoices=${voices.length}`);
 
     utterance.onend = () => {
       setActiveSpeakingText(null);
       setIsSpeakingPaused(false);
     };
-    utterance.onerror = () => {
+    utterance.onerror = (e) => {
+      console.error('TTS error:', e);
       setActiveSpeakingText(null);
       setIsSpeakingPaused(false);
     };
