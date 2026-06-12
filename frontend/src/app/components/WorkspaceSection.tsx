@@ -984,7 +984,7 @@ export default function WorkspaceSection({
           <Mic className="w-4 h-4" />
         </button>
         <button type="submit" disabled={!chatInput.trim() || isAsking || documents.length === 0}
-          className="w-11 h-11 bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
+          className="w-11 h-11 bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] disabled:opacity-100 text-white rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
           <Send className="w-4 h-4" />
         </button>
       </form>
@@ -999,7 +999,7 @@ export default function WorkspaceSection({
           <p className="text-xs text-neutral-450">{t.risksSub}</p>
         </div>
         <button onClick={handleRisks} disabled={isAnalyzing || documents.length === 0}
-          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] disabled:opacity-100 text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldAlert className="w-4 h-4" />}
           {isAnalyzing ? t.analyzingBtn : t.analyzeBtn}
         </button>
@@ -1073,7 +1073,7 @@ export default function WorkspaceSection({
           placeholder={t.placeholderPlain}
           className="w-full bg-[#131118] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" />
         <button type="submit" disabled={!clauseInput.trim() || isExplaining}
-          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isExplaining ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
           {isExplaining ? t.explainingBtn : t.explainBtn}
         </button>
@@ -1104,7 +1104,7 @@ export default function WorkspaceSection({
           <LangSelect value={briefLang} onChange={setBriefLang} />
         </div>
         <button onClick={handleBrief} disabled={isBriefing || documents.length === 0}
-          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isBriefing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
           {isBriefing ? t.generatingBriefBtn : t.generateBriefBtn}
         </button>
@@ -1150,7 +1150,7 @@ export default function WorkspaceSection({
             <LangSelect value={redlineLang} onChange={setRedlineLang} />
           </div>
           <button type="submit" disabled={!redlineV1 || !redlineV2 || isRedlining}
-            className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+            className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] disabled:opacity-100 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
             {isRedlining ? <Loader2 className="w-4 h-4 animate-spin" /> : <GitCompareArrows className="w-4 h-4" />}
             {isRedlining ? t.comparingBtn : t.compareBtn}
           </button>
@@ -1179,7 +1179,7 @@ export default function WorkspaceSection({
           <LangSelect value={contraLang} onChange={setContraLang} />
         </div>
         <button onClick={handleContradictions} disabled={isDetecting || documents.filter(d => d.status === 'success').length < 2}
-          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isDetecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           {isDetecting ? t.detectingBtn : t.detectBtn}
         </button>
@@ -1297,7 +1297,7 @@ export default function WorkspaceSection({
             </div>
 
             <button type="submit" disabled={!negotiationText.trim() || isNegotiating}
-              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
               {isNegotiating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isNegotiating ? t.simulatingBtn : t.simulateBtn}
             </button>
@@ -1380,7 +1380,7 @@ export default function WorkspaceSection({
             <button 
               type="submit" 
               disabled={!counterOriginal.trim() || !counterProposed.trim() || isCounterSimulating}
-              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               {isCounterSimulating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isCounterSimulating ? "Simulating Counsel..." : "Predict Opposition"}
@@ -1453,7 +1453,7 @@ export default function WorkspaceSection({
             <button 
               type="submit" 
               disabled={!ghostOriginal.trim() || !ghostCounter.trim() || isGhostwriting}
-              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               {isGhostwriting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isGhostwriting ? "Drafting..." : "Ghostwrite Response"}
@@ -1515,7 +1515,7 @@ export default function WorkspaceSection({
         </div>
 
         <button type="submit" disabled={!diffTextV1.trim() || !diffTextV2.trim() || isDiffing}
-          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isDiffing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Diff className="w-4 h-4" />}
           {isDiffing ? t.runningDiffBtn : t.runDiffBtn}
         </button>
@@ -1589,7 +1589,7 @@ export default function WorkspaceSection({
               <button 
                 type="submit" 
                 disabled={isPredictingTimeline}
-                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isPredictingTimeline ? <Loader2 className="w-4 h-4 animate-spin" /> : <Clock className="w-4 h-4" />}
                 {isPredictingTimeline ? "Predicting..." : "Predict Timeline"}
@@ -1847,7 +1847,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isBattling}
-                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isBattling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Swords className="w-4 h-4" />}
                 {isBattling ? "Conducting Battle..." : "Start Battle"}
@@ -1940,7 +1940,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isInspecting}
-                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isInspecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Binary className="w-4 h-4" />}
                 {isInspecting ? "Inspecting..." : "Extract & Analyze"}
@@ -2068,7 +2068,7 @@ export default function WorkspaceSection({
           <button
             type="submit"
             disabled={!echoInput.trim() || isEchoing}
-            className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 disabled:opacity-100 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+            className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] disabled:opacity-100 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             {isEchoing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
             {isEchoing ? "Analyzing Harmonics..." : "Evaluate Harmonics"}
@@ -2126,7 +2126,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isCompiling}
-                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-850 disabled:text-neutral-500 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isCompiling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Code className="w-4 h-4" />}
                 {isCompiling ? "Compiling..." : "Compile to Prometheus YAML"}
