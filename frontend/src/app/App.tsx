@@ -392,12 +392,11 @@ export default function App() {
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.chatgpt}</h3>
                     <p className="text-xs text-neutral-400 leading-relaxed font-sans">{t.chatgptDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-2 text-[10px] font-bold">
-                    <span className="inline-flex items-center gap-1.5 bg-red-500/10 text-red-400 px-2.5 py-0.5 rounded-full border border-red-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                  <div className="mt-6 pt-4 border-t border-white/[0.04] flex flex-wrap gap-1.5 text-[10px]">
+                    <span className="bg-red-500/10 text-red-400/90 px-2 py-0.5 rounded font-medium tracking-wide">
                       Fast & Leaky
                     </span>
-                    <span className="inline-flex items-center gap-1.5 bg-red-500/10 text-red-400 px-2.5 py-0.5 rounded-full border border-red-500/20">
+                    <span className="bg-red-500/10 text-red-400/90 px-2 py-0.5 rounded font-medium tracking-wide">
                       Security Risk
                     </span>
                   </div>
@@ -412,12 +411,11 @@ export default function App() {
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.manual}</h3>
                     <p className="text-xs text-neutral-400 leading-relaxed font-sans">{t.manualDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-2 text-[10px] font-bold">
-                    <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-450 px-2.5 py-0.5 rounded-full border border-amber-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  <div className="mt-6 pt-4 border-t border-white/[0.04] flex flex-wrap gap-1.5 text-[10px]">
+                    <span className="bg-amber-500/10 text-amber-400/90 px-2 py-0.5 rounded font-medium tracking-wide">
                       Slow & Private
                     </span>
-                    <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-450 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                    <span className="bg-amber-500/10 text-amber-400/90 px-2 py-0.5 rounded font-medium tracking-wide">
                       Human Error
                     </span>
                   </div>
@@ -432,12 +430,11 @@ export default function App() {
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.lawyer}</h3>
                     <p className="text-xs text-neutral-400 leading-relaxed font-sans">{t.lawyerDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-2 text-[10px] font-bold">
-                    <span className="inline-flex items-center gap-1.5 bg-blue-500/10 text-blue-400 px-2.5 py-0.5 rounded-full border border-blue-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-450"></span>
+                  <div className="mt-6 pt-4 border-t border-white/[0.04] flex flex-wrap gap-1.5 text-[10px]">
+                    <span className="bg-blue-500/10 text-blue-400/90 px-2 py-0.5 rounded font-medium tracking-wide">
                       Accurate & Private
                     </span>
-                    <span className="inline-flex items-center gap-1.5 bg-blue-500/10 text-blue-400 px-2.5 py-0.5 rounded-full border border-blue-500/20">
+                    <span className="bg-blue-500/10 text-blue-400/90 px-2 py-0.5 rounded font-medium tracking-wide">
                       ₹18,000 / Hr
                     </span>
                   </div>
@@ -452,12 +449,11 @@ export default function App() {
                     <h3 className="font-bold text-neutral-100 text-base mb-2">{t.lexiSolution}</h3>
                     <p className="text-xs text-neutral-200/85 leading-relaxed font-sans">{t.lexiSolutionDesc}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-[#D92662]/20 flex flex-wrap gap-2 text-[10px] font-bold">
-                    <span className="inline-flex items-center gap-1.5 bg-[#D92662]/15 text-[#F472B6] px-2.5 py-0.5 rounded-full border border-[#D92662]/35 shadow-[0_0_10px_rgba(217,38,98,0.1)]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#F472B6] animate-pulse"></span>
+                  <div className="mt-6 pt-4 border-t border-[#D92662]/20 flex flex-wrap gap-1.5 text-[10px]">
+                    <span className="bg-[#D92662]/10 border border-[#D92662]/25 text-[#F472B6] px-2 py-0.5 rounded font-semibold tracking-wide">
                       Fast & Secure
                     </span>
-                    <span className="inline-flex items-center gap-1.5 bg-[#D92662]/15 text-[#F472B6] px-2.5 py-0.5 rounded-full border border-[#D92662]/35 shadow-[0_0_10px_rgba(217,38,98,0.1)]">
+                    <span className="bg-[#D92662]/10 border border-[#D92662]/25 text-[#F472B6] px-2 py-0.5 rounded font-semibold tracking-wide">
                       100% Private
                     </span>
                   </div>
