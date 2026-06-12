@@ -7,14 +7,15 @@
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #FDFBF7;
-    color: #092E26;
+    background-color: #080709;
+    color: #F3F1F5;
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
   }
 
   ::selection {
-    background-color: rgba(9, 46, 38, 0.15);
+    background-color: rgba(217, 38, 98, 0.2);
+    color: #fff;
   }
 }

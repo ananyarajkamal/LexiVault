@@ -823,7 +823,7 @@ export default function WorkspaceSection({
   // ---- Language selector helper (Updated with Hinglish) ----
   const LangSelect = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
     <select value={value} onChange={e => onChange(e.target.value)}
-      className="border border-neutral-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer font-medium text-neutral-800">
+      className="border border-neutral-850 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer font-medium text-neutral-200">
       <option value="English">English</option>
       <option value="Hindi">Hindi</option>
       <option value="Hinglish">Hinglish</option>
@@ -850,15 +850,15 @@ export default function WorkspaceSection({
 
       const parts = headerText.split(/\*\*([^*]+)\*\*/g);
       const content = parts.map((part, i) => 
-        i % 2 === 1 ? <strong key={i} className="font-bold text-[#092E26]">{part}</strong> : part
+        i % 2 === 1 ? <strong key={i} className="font-bold text-[#D92662]">{part}</strong> : part
       );
 
       if (headerLevel === 1) {
-        return <h1 key={idx} className="text-xl font-bold text-neutral-900 mt-4 mb-2">{content}</h1>;
+        return <h1 key={idx} className="text-xl font-bold text-neutral-100 mt-4 mb-2">{content}</h1>;
       } else if (headerLevel === 2) {
-        return <h2 key={idx} className="text-lg font-bold text-neutral-900 mt-3 mb-1.5">{content}</h2>;
+        return <h2 key={idx} className="text-lg font-bold text-neutral-100 mt-3 mb-1.5">{content}</h2>;
       } else if (headerLevel === 3) {
-        return <h3 key={idx} className="text-base font-bold text-neutral-900 mt-2.5 mb-1">{content}</h3>;
+        return <h3 key={idx} className="text-base font-bold text-neutral-100 mt-2.5 mb-1">{content}</h3>;
       }
 
       return (
@@ -875,22 +875,22 @@ export default function WorkspaceSection({
   const renderUpload = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-neutral-900 mb-1">{t.uploadHeader}</h3>
-        <p className="text-sm text-neutral-500">{t.uploadSub}</p>
+        <h3 className="text-lg font-bold text-neutral-100 mb-1">{t.uploadHeader}</h3>
+        <p className="text-sm text-neutral-450">{t.uploadSub}</p>
       </div>
       <input type="file" multiple accept=".pdf,.docx,.doc" className="hidden" ref={fileInputRef} onChange={handleUpload} />
       <div
         onClick={() => fileInputRef.current?.click()}
-        className="border-2 border-dashed border-neutral-300 hover:border-[#092E26] rounded-2xl p-10 text-center cursor-pointer transition-colors group bg-neutral-50 hover:bg-[#092E26]/5"
+        className="border-2 border-dashed border-neutral-300 hover:border-[#D92662] rounded-2xl p-10 text-center cursor-pointer transition-colors group bg-[#1A1821] hover:bg-[#D92662]/5"
       >
-        <Upload className="w-10 h-10 text-neutral-400 group-hover:text-[#092E26] mx-auto mb-3 transition-colors" />
+        <Upload className="w-10 h-10 text-neutral-400 group-hover:text-[#D92662] mx-auto mb-3 transition-colors" />
         {isUploading ? (
-          <div className="flex items-center justify-center gap-2 text-[#092E26] font-semibold">
+          <div className="flex items-center justify-center gap-2 text-[#D92662] font-semibold">
             <Loader2 className="w-4 h-4 animate-spin" /> {t.uploadingMsg}
           </div>
         ) : (
           <>
-            <p className="text-sm font-semibold text-neutral-700 group-hover:text-[#092E26] transition-colors">
+            <p className="text-sm font-semibold text-neutral-300 group-hover:text-[#D92662] transition-colors">
               {t.uploadClick}
             </p>
             <p className="text-xs text-neutral-400 mt-1">{t.pdfOnly}</p>
@@ -899,14 +899,14 @@ export default function WorkspaceSection({
       </div>
       {documents.length > 0 && (
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-neutral-700">{t.uploadedDocs} ({documents.length})</h4>
+          <h4 className="text-sm font-semibold text-neutral-300">{t.uploadedDocs} ({documents.length})</h4>
           {documents.map((doc, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-100">
+            <div key={i} className="flex items-center gap-3 p-3 bg-[#1A1821] rounded-xl border border-neutral-100">
               {doc.status === 'success'
-                ? <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                ? <CheckCircle2 className="w-5 h-5 text-[#D92662] shrink-0" />
                 : <XCircle className="w-5 h-5 text-red-500 shrink-0" />}
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium text-neutral-800 truncate">{doc.name}</div>
+                <div className="text-sm font-medium text-neutral-200 truncate">{doc.name}</div>
                 <div className="text-xs text-neutral-400">{doc.message}</div>
               </div>
               {doc.status === 'success' && (
@@ -929,17 +929,17 @@ export default function WorkspaceSection({
     <div className={`flex flex-col ${isFullscreen ? 'h-full flex-1' : 'h-[500px]'}`}>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.chatHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.chatSub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.chatHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.chatSub}</p>
         </div>
-        <button onClick={handleClearChat} className="text-xs text-neutral-500 hover:text-red-500 flex items-center gap-1 cursor-pointer">
+        <button onClick={handleClearChat} className="text-xs text-neutral-450 hover:text-red-500 flex items-center gap-1 cursor-pointer">
           <Trash2 className="w-3.5 h-3.5" /> {t.clearBtn}
         </button>
       </div>
       <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4">
         {chatHistory.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-neutral-400">
-            <MessageSquare className="w-10 h-10 mb-3 opacity-40 text-[#092E26]" />
+            <MessageSquare className="w-10 h-10 mb-3 opacity-40 text-[#D92662]" />
             <p className="text-sm">{t.noDocsChat}</p>
           </div>
         )}
@@ -947,12 +947,12 @@ export default function WorkspaceSection({
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
               msg.role === 'user'
-                ? 'bg-[#092E26] text-white rounded-br-md'
-                : 'bg-neutral-100 text-neutral-800 rounded-bl-md'
+                ? 'bg-[#38111D] text-neutral-100 border border-[#D92662]/20 rounded-br-md'
+                : 'bg-[#1A1821] text-neutral-200 rounded-bl-md'
             }`}>
               <div className="whitespace-pre-wrap">{renderFormattedText(msg.content)}</div>
               {msg.sources && msg.sources.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-neutral-200/50 text-[10px] text-neutral-400">
+                <div className="mt-2 pt-2 border-t border-neutral-850/50 text-[10px] text-neutral-400">
                   Sources: {msg.sources.length} chunks referenced
                 </div>
               )}
@@ -962,9 +962,9 @@ export default function WorkspaceSection({
         ))}
         {isAsking && (
           <div className="flex justify-start">
-            <div className="bg-neutral-100 rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin text-[#092E26]" />
-              <span className="text-sm text-neutral-500">{t.thinking}</span>
+            <div className="bg-[#1A1821] rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin text-[#D92662]" />
+              <span className="text-sm text-neutral-450">{t.thinking}</span>
             </div>
           </div>
         )}
@@ -974,17 +974,17 @@ export default function WorkspaceSection({
         <input type="text" value={chatInput} onChange={e => setChatInput(e.target.value)}
           placeholder={t.placeholderChat}
           disabled={documents.length === 0}
-          className="flex-1 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#092E26] disabled:opacity-50 disabled:cursor-not-allowed" />
+          className="flex-1 border border-neutral-850 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#D92662] disabled:opacity-50 disabled:cursor-not-allowed" />
         <button type="button" onClick={startSpeechRecognition} disabled={documents.length === 0}
-          className={`w-11 h-11 border text-neutral-500 rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0 ${
-            isListening ? 'bg-red-50 border-red-200 text-red-500 animate-pulse' : 'bg-white border-neutral-200 hover:bg-neutral-50 hover:text-[#092E26]'
+          className={`w-11 h-11 border text-neutral-450 rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0 ${
+            isListening ? 'bg-red-50 border-red-200 text-red-500 animate-pulse' : 'bg-white border-neutral-850 hover:bg-[#1A1821] hover:text-[#D92662]'
           }`}
           title="Voice Input"
         >
           <Mic className="w-4 h-4" />
         </button>
         <button type="submit" disabled={!chatInput.trim() || isAsking || documents.length === 0}
-          className="w-11 h-11 bg-[#092E26] hover:bg-[#051C17] disabled:bg-neutral-200 text-white rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
+          className="w-11 h-11 bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-200 text-white rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed shrink-0">
           <Send className="w-4 h-4" />
         </button>
       </form>
@@ -995,11 +995,11 @@ export default function WorkspaceSection({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.risksHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.risksSub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.risksHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.risksSub}</p>
         </div>
         <button onClick={handleRisks} disabled={isAnalyzing || documents.length === 0}
-          className="bg-[#092E26] hover:bg-[#051C17] disabled:bg-neutral-200 text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-neutral-200 text-white text-sm font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldAlert className="w-4 h-4" />}
           {isAnalyzing ? t.analyzingBtn : t.analyzeBtn}
         </button>
@@ -1014,9 +1014,9 @@ export default function WorkspaceSection({
           {(['High', 'Medium', 'Low'] as const).map(level => {
             const items = risks.filter(r => r.risk_level === level);
             if (items.length === 0) return null;
-            const colors = { High: 'border-red-200 bg-red-50', Medium: 'border-amber-200 bg-amber-50', Low: 'border-green-200 bg-green-50' };
-            const textColors = { High: 'text-red-600', Medium: 'text-amber-600', Low: 'text-green-600' };
-            const badgeColors = { High: 'bg-red-100 text-red-700', Medium: 'bg-amber-100 text-amber-700', Low: 'bg-green-100 text-green-700' };
+            const colors = { High: 'border-red-200 bg-red-50', Medium: 'border-amber-200 bg-amber-50', Low: 'border-[#D92662]/30 bg-[#1C1115]' };
+            const textColors = { High: 'text-red-600', Medium: 'text-amber-600', Low: 'text-[#D92662]' };
+            const badgeColors = { High: 'bg-red-100 text-red-700', Medium: 'bg-amber-100 text-amber-700', Low: 'bg-[#D92662]/10 text-[#F472B6]' };
             const levelLabel = level === 'High' ? t.highRisk : level === 'Medium' ? t.medRisk : t.lowRisk;
             return (
               <div key={level} className={`rounded-xl border p-4 ${colors[level]}`}>
@@ -1028,10 +1028,10 @@ export default function WorkspaceSection({
                   {items.map((r: any, i: number) => (
                     <div key={i} className="bg-white rounded-lg p-3 border border-neutral-100">
                       <div className="flex justify-between items-start gap-2 mb-1">
-                        <span className="text-sm font-semibold text-neutral-800">{r.clause_name}</span>
+                        <span className="text-sm font-semibold text-neutral-200">{r.clause_name}</span>
                         <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 shrink-0 ${badgeColors[level]}`}>{levelLabel}</span>
                       </div>
-                      <p className="text-xs text-neutral-600 leading-relaxed">{r.value}</p>
+                      <p className="text-xs text-neutral-400 leading-relaxed">{r.value}</p>
                       <p className="text-[10px] text-neutral-400 mt-1">Document: {r.document}</p>
                     </div>
                   ))}
@@ -1040,15 +1040,15 @@ export default function WorkspaceSection({
             );
           })}
           {wolframCtx.length > 0 && (
-            <div className="rounded-xl border border-[#092E26]/20 bg-[#092E26]/5 p-4">
+            <div className="rounded-xl border border-[#D92662]/20 bg-[#D92662]/5 p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-4 h-4 text-[#092E26]" />
-                <span className="font-bold text-sm text-[#092E26]">{t.wolframHeader}</span>
+                <Sparkles className="w-4 h-4 text-[#D92662]" />
+                <span className="font-bold text-sm text-[#D92662]">{t.wolframHeader}</span>
               </div>
               {wolframCtx.map((w: any, i: number) => (
                 <div key={i} className="bg-white rounded-lg p-3 border border-neutral-100 mb-2 last:mb-0">
-                  <div className="text-sm font-semibold text-neutral-800">{w.clause} ({w.document})</div>
-                  <p className="text-xs text-neutral-600 mt-1">{w.context}</p>
+                  <div className="text-sm font-semibold text-neutral-200">{w.clause} ({w.document})</div>
+                  <p className="text-xs text-neutral-400 mt-1">{w.context}</p>
                 </div>
               ))}
             </div>
@@ -1061,33 +1061,33 @@ export default function WorkspaceSection({
   const renderPlainLanguage = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-neutral-900">{t.plainHeader}</h3>
-        <p className="text-xs text-neutral-500">{t.plainSub}</p>
+        <h3 className="text-lg font-bold text-neutral-100">{t.plainHeader}</h3>
+        <p className="text-xs text-neutral-450">{t.plainSub}</p>
       </div>
       <form onSubmit={handlePlainLanguage} className="space-y-4">
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+          <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
           <LangSelect value={plainLang} onChange={setPlainLang} />
         </div>
         <textarea value={clauseInput} onChange={e => setClauseInput(e.target.value)}
           placeholder={t.placeholderPlain}
-          className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" />
+          className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" />
         <button type="submit" disabled={!clauseInput.trim() || isExplaining}
-          className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isExplaining ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
           {isExplaining ? t.explainingBtn : t.explainBtn}
         </button>
       </form>
       {plainResult && (
-        <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-          <div className="flex items-center justify-between mb-3 border-b border-[#092E26]/10 pb-2">
+        <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+          <div className="flex items-center justify-between mb-3 border-b border-[#D92662]/20 pb-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#092E26]" />
-              <span className="font-bold text-sm text-[#092E26]">{t.plainResultHeader}</span>
+              <Sparkles className="w-4 h-4 text-[#D92662]" />
+              <span className="font-bold text-sm text-[#D92662]">{t.plainResultHeader}</span>
             </div>
             
           </div>
-          <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(plainResult)}</div>
+          <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(plainResult)}</div>
         </div>
       )}
     </div>
@@ -1096,27 +1096,27 @@ export default function WorkspaceSection({
   const renderBrief = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-neutral-900">{t.briefHeader}</h3>
-        <p className="text-xs text-neutral-500">{t.briefSub}</p>
+        <h3 className="text-lg font-bold text-neutral-100">{t.briefHeader}</h3>
+        <p className="text-xs text-neutral-450">{t.briefSub}</p>
       </div>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+          <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
           <LangSelect value={briefLang} onChange={setBriefLang} />
         </div>
         <button onClick={handleBrief} disabled={isBriefing || documents.length === 0}
-          className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isBriefing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
           {isBriefing ? t.generatingBriefBtn : t.generateBriefBtn}
         </button>
       </div>
       {briefResult ? (
-        <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
-          <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
+        <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-6">
+          <div className="flex justify-between items-center mb-4 border-b border-neutral-850 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Brief Output</span>
             
           </div>
-          <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(briefResult)}</div>
+          <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(briefResult)}</div>
         </div>
       ) : (
         <div className="text-center py-16 text-neutral-400">
@@ -1130,41 +1130,41 @@ export default function WorkspaceSection({
   const renderRedline = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-neutral-900">{t.redlineHeader}</h3>
-        <p className="text-xs text-neutral-500">{t.redlineSub}</p>
+        <h3 className="text-lg font-bold text-neutral-100">{t.redlineHeader}</h3>
+        <p className="text-xs text-neutral-450">{t.redlineSub}</p>
       </div>
       <form onSubmit={handleRedline} className="space-y-4">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-sm font-medium text-neutral-700 mb-1.5 block">{t.ver1Label}</label>
+            <label className="text-sm font-medium text-neutral-300 mb-1.5 block">{t.ver1Label}</label>
             <input type="file" accept=".pdf,.docx,.doc" onChange={e => e.target.files?.[0] && setRedlineV1(e.target.files[0])}
-              className="w-full text-sm border border-neutral-200 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#092E26]/10 file:text-[#092E26] file:font-semibold file:text-xs file:cursor-pointer" />
+              className="w-full text-sm border border-neutral-850 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#D92662]/10 file:text-[#D92662] file:font-semibold file:text-xs file:cursor-pointer" />
           </div>
           <div>
-            <label className="text-sm font-medium text-neutral-700 mb-1.5 block">{t.ver2Label}</label>
+            <label className="text-sm font-medium text-neutral-300 mb-1.5 block">{t.ver2Label}</label>
             <input type="file" accept=".pdf,.docx,.doc" onChange={e => e.target.files?.[0] && setRedlineV2(e.target.files[0])}
-              className="w-full text-sm border border-neutral-200 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#092E26]/10 file:text-[#092E26] file:font-semibold file:text-xs file:cursor-pointer" />
+              className="w-full text-sm border border-neutral-850 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-[#D92662]/10 file:text-[#D92662] file:font-semibold file:text-xs file:cursor-pointer" />
           </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+            <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
             <LangSelect value={redlineLang} onChange={setRedlineLang} />
           </div>
           <button type="submit" disabled={!redlineV1 || !redlineV2 || isRedlining}
-            className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+            className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
             {isRedlining ? <Loader2 className="w-4 h-4 animate-spin" /> : <GitCompareArrows className="w-4 h-4" />}
             {isRedlining ? t.comparingBtn : t.compareBtn}
           </button>
         </div>
       </form>
       {redlineResult && (
-        <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
-          <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
+        <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-6">
+          <div className="flex justify-between items-center mb-4 border-b border-neutral-850 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Redline Audit</span>
             
           </div>
-          <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(redlineResult)}</div>
+          <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(redlineResult)}</div>
         </div>
       )}
     </div>
@@ -1173,27 +1173,27 @@ export default function WorkspaceSection({
   const renderContradictions = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-neutral-900">{t.contraHeader}</h3>
-        <p className="text-xs text-neutral-500">{t.contraSub}</p>
+        <h3 className="text-lg font-bold text-neutral-100">{t.contraHeader}</h3>
+        <p className="text-xs text-neutral-450">{t.contraSub}</p>
       </div>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+          <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
           <LangSelect value={contraLang} onChange={setContraLang} />
         </div>
         <button onClick={handleContradictions} disabled={isDetecting || documents.filter(d => d.status === 'success').length < 2}
-          className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isDetecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           {isDetecting ? t.detectingBtn : t.detectBtn}
         </button>
       </div>
       {contraResult ? (
-        <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-6">
-          <div className="flex justify-between items-center mb-4 border-b border-neutral-200 pb-2.5">
+        <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-6">
+          <div className="flex justify-between items-center mb-4 border-b border-neutral-850 pb-2.5">
             <span className="text-xs font-bold uppercase text-neutral-400">Contradictions Audit</span>
             
           </div>
-          <div className="text-sm text-neutral-700 leading-relaxed whitespace-pre-wrap">{renderFormattedText(contraResult)}</div>
+          <div className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">{renderFormattedText(contraResult)}</div>
         </div>
       ) : (
         <div className="text-center py-16 text-neutral-400">
@@ -1212,19 +1212,19 @@ export default function WorkspaceSection({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.negotiationHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.negotiationSub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.negotiationHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.negotiationSub}</p>
         </div>
       </div>
 
-      <div className="flex gap-2 p-1 bg-neutral-100 rounded-lg max-w-lg mb-4">
+      <div className="flex gap-2 p-1 bg-[#1A1821] rounded-lg max-w-lg mb-4">
         <button
           type="button"
           onClick={() => setNegMode('selfPlay')}
           className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
             negMode === 'selfPlay'
-              ? 'bg-[#092E26] text-white shadow'
-              : 'text-neutral-600 hover:text-neutral-800'
+              ? 'bg-[#D92662] text-white shadow'
+              : 'text-neutral-400 hover:text-neutral-200'
           }`}
         >
           {t.negModeSelfPlay}
@@ -1234,8 +1234,8 @@ export default function WorkspaceSection({
           onClick={() => setNegMode('counterparty')}
           className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
             negMode === 'counterparty'
-              ? 'bg-[#092E26] text-white shadow'
-              : 'text-neutral-600 hover:text-neutral-800'
+              ? 'bg-[#D92662] text-white shadow'
+              : 'text-neutral-400 hover:text-neutral-200'
           }`}
         >
           {t.negModePushback}
@@ -1245,8 +1245,8 @@ export default function WorkspaceSection({
           onClick={() => setNegMode('ghostwriter')}
           className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
             negMode === 'ghostwriter'
-              ? 'bg-[#092E26] text-white shadow'
-              : 'text-neutral-600 hover:text-neutral-800'
+              ? 'bg-[#D92662] text-white shadow'
+              : 'text-neutral-400 hover:text-neutral-200'
           }`}
         >
           {t.negModeGhostwriter}
@@ -1258,9 +1258,9 @@ export default function WorkspaceSection({
           <form onSubmit={handleNegotiation} className="space-y-4">
             <div className="grid sm:grid-cols-3 gap-4">
               <div>
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.clauseTypeLabel}</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">{t.clauseTypeLabel}</label>
                 <select value={negotiationClauseType} onChange={e => setNegotiationClauseType(e.target.value)}
-                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer">
                   <option value="Limitation of Liability">Limitation of Liability</option>
                   <option value="Indemnification">Indemnification</option>
                   <option value="IP Ownership">Intellectual Property</option>
@@ -1269,18 +1269,18 @@ export default function WorkspaceSection({
                 </select>
               </div>
               <div>
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.buyerLabel}</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">{t.buyerLabel}</label>
                 <select value={buyerStance} onChange={e => setBuyerStance(e.target.value)}
-                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer">
                   <option value="Conservative (Protects Buyer strictly)">Conservative</option>
                   <option value="Standard (Balanced risk)">Standard</option>
                   <option value="Aggressive (Pushes liability onto Seller)">Aggressive</option>
                 </select>
               </div>
               <div>
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">{t.sellerLabel}</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">{t.sellerLabel}</label>
                 <select value={sellerStance} onChange={e => setSellerStance(e.target.value)}
-                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer">
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer">
                   <option value="Conservative (Protects Seller strictly)">Conservative</option>
                   <option value="Standard (Balanced risk)">Standard</option>
                   <option value="Aggressive (Pushes liability onto Buyer)">Aggressive</option>
@@ -1289,19 +1289,19 @@ export default function WorkspaceSection({
             </div>
 
             <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+              <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
               <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Paste Clause to Negotiate</label>
+              <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Paste Clause to Negotiate</label>
               <textarea value={negotiationText} onChange={e => setNegotiationText(e.target.value)}
                 placeholder="Paste the original contract clause here..."
-                className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" />
+                className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" />
             </div>
 
             <button type="submit" disabled={!negotiationText.trim() || isNegotiating}
-              className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+              className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
               {isNegotiating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isNegotiating ? t.simulatingBtn : t.simulateBtn}
             </button>
@@ -1309,8 +1309,8 @@ export default function WorkspaceSection({
 
           {negotiationTranscript.length > 0 && (
             <div className="space-y-4 border-t border-neutral-100 pt-6">
-              <h4 className="text-sm font-bold text-neutral-700">Negotiation Dialogue Transcript</h4>
-              <div className="space-y-3 bg-neutral-50 rounded-xl p-4 border border-neutral-150 max-h-[300px] overflow-y-auto">
+              <h4 className="text-sm font-bold text-neutral-300">Negotiation Dialogue Transcript</h4>
+              <div className="space-y-3 bg-[#1A1821] rounded-xl p-4 border border-neutral-150 max-h-[300px] overflow-y-auto">
                 {negotiationTranscript.map((turn, i) => (
                   <div key={i} className={`p-3 rounded-lg border text-xs leading-relaxed ${
                     turn.role.includes("Buyer") 
@@ -1328,23 +1328,23 @@ export default function WorkspaceSection({
           {(negotiationCompromise || negotiationExplanation) && (
             <div className="grid md:grid-cols-2 gap-4 border-t border-neutral-100 pt-6">
               {negotiationCompromise && (
-                <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
-                    <h4 className="font-bold text-sm text-[#092E26]">{t.compromiseResultHeader}</h4>
+                <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
+                    <h4 className="font-bold text-sm text-[#D92662]">{t.compromiseResultHeader}</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-800 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-200 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                     {renderFormattedText(negotiationCompromise)}
                   </div>
                 </div>
               )}
               {negotiationExplanation && (
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
-                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-200">
-                    <h4 className="font-bold text-sm text-neutral-700">{t.explanationHeader}</h4>
+                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-850">
+                    <h4 className="font-bold text-sm text-neutral-300">{t.explanationHeader}</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
+                  <div className="text-xs text-neutral-400 leading-relaxed whitespace-pre-wrap">
                     {renderFormattedText(negotiationExplanation)}
                   </div>
                 </div>
@@ -1358,27 +1358,27 @@ export default function WorkspaceSection({
         <>
           <form onSubmit={handleCounterpartySim} className="space-y-4">
             <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+              <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
               <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Original Clause</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Original Clause</label>
                 <textarea 
                   value={counterOriginal} 
                   onChange={e => setCounterOriginal(e.target.value)}
                   placeholder="Paste the original contract clause here..."
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
               <div>
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Your Proposed Edit</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Your Proposed Edit</label>
                 <textarea 
                   value={counterProposed} 
                   onChange={e => setCounterProposed(e.target.value)}
                   placeholder="Paste or describe your proposed amendment or edit here..."
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
             </div>
@@ -1386,7 +1386,7 @@ export default function WorkspaceSection({
             <button 
               type="submit" 
               disabled={!counterOriginal.trim() || !counterProposed.trim() || isCounterSimulating}
-              className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               {isCounterSimulating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isCounterSimulating ? "Simulating Counsel..." : "Predict Opposition"}
@@ -1401,27 +1401,27 @@ export default function WorkspaceSection({
                     <h4 className="font-bold text-sm text-red-800">Opposing Counsel Objections & Arguments</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.counter_arguments)}
                   </div>
                 </div>
-                <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
-                    <h4 className="font-bold text-sm text-[#092E26]">Opposing Counter-Proposals</h4>
+                <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
+                    <h4 className="font-bold text-sm text-[#D92662]">Opposing Counter-Proposals</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.pushback_clauses)}
                   </div>
                 </div>
               </div>
 
-              <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
-                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-200">
-                  <h4 className="font-bold text-sm text-neutral-800">Negotiation Strategy Recommendation</h4>
+              <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5">
+                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-850">
+                  <h4 className="font-bold text-sm text-neutral-200">Negotiation Strategy Recommendation</h4>
                   
                 </div>
-                <div className="text-xs text-neutral-600 leading-relaxed whitespace-pre-wrap">
+                <div className="text-xs text-neutral-400 leading-relaxed whitespace-pre-wrap">
                   {renderFormattedText(counterSimResult.recommendation)}
                 </div>
               </div>
@@ -1434,27 +1434,27 @@ export default function WorkspaceSection({
         <>
           <form onSubmit={handleGhostwrite} className="space-y-4">
             <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+              <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
               <LangSelect value={negotiationLang} onChange={setNegotiationLang} />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Original Clause</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Original Clause</label>
                 <textarea 
                   value={ghostOriginal} 
                   onChange={e => setGhostOriginal(e.target.value)}
                   placeholder="Paste the original contract clause here..."
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
               <div>
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Counterparty's Redlined Edit</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Counterparty's Redlined Edit</label>
                 <textarea 
                   value={ghostCounter} 
                   onChange={e => setGhostCounter(e.target.value)}
                   placeholder="Paste the counterparty's proposed edit or redline here..."
-                  className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]" 
+                  className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]" 
                 />
               </div>
             </div>
@@ -1462,7 +1462,7 @@ export default function WorkspaceSection({
             <button 
               type="submit" 
               disabled={!ghostOriginal.trim() || !ghostCounter.trim() || isGhostwriting}
-              className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               {isGhostwriting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
               {isGhostwriting ? "Drafting..." : "Ghostwrite Response"}
@@ -1472,12 +1472,12 @@ export default function WorkspaceSection({
           {ghostResult && (
             <div className="space-y-6 border-t border-neutral-100 pt-6">
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
-                    <h4 className="font-bold text-sm text-[#092E26] font-sans">Accept with Modification</h4>
+                <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
+                    <h4 className="font-bold text-sm text-[#D92662] font-sans">Accept with Modification</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.accept_with_modification)}
                   </div>
                 </div>
@@ -1486,7 +1486,7 @@ export default function WorkspaceSection({
                     <h4 className="font-bold text-sm text-red-800 font-sans">Reject with Rationale & Precedent</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.reject_with_rationale)}
                   </div>
                 </div>
@@ -1501,32 +1501,32 @@ export default function WorkspaceSection({
   const renderSemanticDiff = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-neutral-900">{t.semanticDiffHeader}</h3>
-        <p className="text-xs text-neutral-500">{t.semanticDiffSub}</p>
+        <h3 className="text-lg font-bold text-neutral-100">{t.semanticDiffHeader}</h3>
+        <p className="text-xs text-neutral-450">{t.semanticDiffSub}</p>
       </div>
       <form onSubmit={handleSemanticDiff} className="space-y-4">
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+          <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
           <LangSelect value={diffLang} onChange={setDiffLang} />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Version 1 (Original Text)</label>
+            <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Version 1 (Original Text)</label>
             <textarea value={diffTextV1} onChange={e => setDiffTextV1(e.target.value)}
               placeholder="Paste original clause or wording..."
-              className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#092E26]" />
+              className="w-full border border-neutral-850 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#D92662]" />
           </div>
           <div>
-            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Version 2 (Revised Text)</label>
+            <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Version 2 (Revised Text)</label>
             <textarea value={diffTextV2} onChange={e => setDiffTextV2(e.target.value)}
               placeholder="Paste revised clause or wording..."
-              className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#092E26]" />
+              className="w-full border border-neutral-850 rounded-xl px-4 py-3 text-sm h-36 resize-none focus:outline-none focus:border-[#D92662]" />
           </div>
         </div>
 
         <button type="submit" disabled={!diffTextV1.trim() || !diffTextV2.trim() || isDiffing}
-          className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
+          className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed">
           {isDiffing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Diff className="w-4 h-4" />}
           {isDiffing ? t.runningDiffBtn : t.runDiffBtn}
         </button>
@@ -1536,13 +1536,13 @@ export default function WorkspaceSection({
       {(diffSimilarity !== null || diffExplanation) && (
         <div className="space-y-4 border-t border-neutral-100 pt-6">
           {diffSimilarity !== null && (
-            <div className="flex items-center gap-4 bg-neutral-50 rounded-xl p-4 border border-neutral-150">
-              <div className="shrink-0 flex items-center justify-center w-16 h-16 rounded-full border-4 border-[#092E26] bg-[#092E26]/5">
-                <span className="font-bold text-base text-[#092E26]">{diffSimilarity}%</span>
+            <div className="flex items-center gap-4 bg-[#1A1821] rounded-xl p-4 border border-neutral-150">
+              <div className="shrink-0 flex items-center justify-center w-16 h-16 rounded-full border-4 border-[#D92662] bg-[#D92662]/5">
+                <span className="font-bold text-base text-[#D92662]">{diffSimilarity}%</span>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-neutral-800">{t.semanticMatchHeader}</h4>
-                <p className="text-xs text-neutral-500 mt-0.5">
+                <h4 className="text-sm font-bold text-neutral-200">{t.semanticMatchHeader}</h4>
+                <p className="text-xs text-neutral-450 mt-0.5">
                   {diffSimilarity > 90 
                     ? "Very High semantic match. The wording changed but the core legal intent/meaning is preserved." 
                     : diffSimilarity > 70 
@@ -1554,12 +1554,12 @@ export default function WorkspaceSection({
           )}
 
           {diffExplanation && (
-            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-              <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
-                <h4 className="font-bold text-sm text-[#092E26]">{t.shiftExplanationHeader}</h4>
+            <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+              <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
+                <h4 className="font-bold text-sm text-[#D92662]">{t.shiftExplanationHeader}</h4>
                 
               </div>
-              <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                 {renderFormattedText(diffExplanation)}
               </div>
             </div>
@@ -1575,24 +1575,24 @@ export default function WorkspaceSection({
     return (
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.timelineHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.timelineSub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.timelineHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.timelineSub}</p>
         </div>
         
         {successDocs.length === 0 ? (
           <div className="text-center py-16 text-neutral-400">
-            <Clock className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <Clock className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D92662]" />
             <p className="text-sm">Upload documents first to predict contract timelines.</p>
           </div>
         ) : (
           <form onSubmit={handlePredictTimeline} className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
               <div className="flex-1">
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Select Document</label>
                 <select 
                   value={selectedTimelineDoc} 
                   onChange={e => setSelectedTimelineDoc(e.target.value)}
-                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -1602,7 +1602,7 @@ export default function WorkspaceSection({
               <button 
                 type="submit" 
                 disabled={isPredictingTimeline}
-                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isPredictingTimeline ? <Loader2 className="w-4 h-4 animate-spin" /> : <Clock className="w-4 h-4" />}
                 {isPredictingTimeline ? "Predicting..." : "Predict Timeline"}
@@ -1614,50 +1614,50 @@ export default function WorkspaceSection({
         {timelineResult && (
           <div className="grid md:grid-cols-2 gap-6 border-t border-neutral-150 pt-6">
             {/* Visual Timeline Column */}
-            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-4">
-              <h4 className="font-bold text-sm text-neutral-800">Visual Contract Lifecycle Timeline</h4>
+            <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-4">
+              <h4 className="font-bold text-sm text-neutral-200">Visual Contract Lifecycle Timeline</h4>
               
-              <div className="relative pl-6 border-l-2 border-[#092E26]/20 space-y-6 py-2">
+              <div className="relative pl-6 border-l-2 border-[#D92662]/20 space-y-6 py-2">
                 {/* Node 1 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
-                  <h5 className="text-xs font-bold text-neutral-800">Negotiation Stage</h5>
-                  <p className="text-xs text-neutral-500 mt-0.5">
-                    Estimated Duration: <span className="font-semibold text-[#092E26]">{timelineResult.negotiation_duration_days} days</span>
+                  <h5 className="text-xs font-bold text-neutral-200">Negotiation Stage</h5>
+                  <p className="text-xs text-neutral-450 mt-0.5">
+                    Estimated Duration: <span className="font-semibold text-[#D92662]">{timelineResult.negotiation_duration_days} days</span>
                   </p>
                 </div>
                 
                 {/* Node 2 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
-                  <h5 className="text-xs font-bold text-neutral-800">Active Monitoring Stage</h5>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <h5 className="text-xs font-bold text-neutral-200">Active Monitoring Stage</h5>
+                  <p className="text-xs text-neutral-450 mt-0.5">
                     Effective date initialized and obligations tracked.
                   </p>
                 </div>
                 
                 {/* Node 3 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
-                  <h5 className="text-xs font-bold text-neutral-800">Amendment / Change Cliffs</h5>
-                  <p className="text-xs text-neutral-500 mt-0.5">
-                    Likely Update Frequency: <span className="font-semibold text-neutral-700">{timelineResult.amendment_frequency}</span>
+                  <h5 className="text-xs font-bold text-neutral-200">Amendment / Change Cliffs</h5>
+                  <p className="text-xs text-neutral-450 mt-0.5">
+                    Likely Update Frequency: <span className="font-semibold text-neutral-300">{timelineResult.amendment_frequency}</span>
                   </p>
                 </div>
                 
                 {/* Node 4 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#092E26] bg-white flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#092E26]"></div>
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
-                  <h5 className="text-xs font-bold text-neutral-800">Expiration & Renewal</h5>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <h5 className="text-xs font-bold text-neutral-200">Expiration & Renewal</h5>
+                  <p className="text-xs text-neutral-450 mt-0.5">
                     Critical renewal tracking based on contract dates.
                   </p>
                 </div>
@@ -1667,13 +1667,13 @@ export default function WorkspaceSection({
             {/* Metrics & Cascade Warnings Column */}
             <div className="space-y-6">
               {/* Renewal Risk Score */}
-              <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5">
-                <h4 className="font-bold text-sm text-neutral-800 mb-3">Renewal Risk Audit</h4>
+              <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5">
+                <h4 className="font-bold text-sm text-neutral-200 mb-3">Renewal Risk Audit</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-medium text-neutral-600">Renewal Risk Score:</span>
+                    <span className="font-medium text-neutral-400">Renewal Risk Score:</span>
                     <span className={`font-bold ${
-                      timelineResult.renewal_risk_score > 70 ? 'text-red-600' : timelineResult.renewal_risk_score > 30 ? 'text-amber-600' : 'text-green-600'
+                      timelineResult.renewal_risk_score > 70 ? 'text-red-600' : timelineResult.renewal_risk_score > 30 ? 'text-amber-600' : 'text-[#D92662]'
                     }`}>{timelineResult.renewal_risk_score} / 100</span>
                   </div>
                   
@@ -1685,7 +1685,7 @@ export default function WorkspaceSection({
                           ? 'bg-red-500' 
                           : timelineResult.renewal_risk_score > 30 
                           ? 'bg-amber-500' 
-                          : 'bg-green-500'
+                          : 'bg-[#1C1115]0'
                       }`}
                       style={{ width: `${timelineResult.renewal_risk_score}%` }}
                     />
@@ -1697,12 +1697,12 @@ export default function WorkspaceSection({
               </div>
 
               {/* Cascade effects / Coverage gaps */}
-              <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
-                  <h4 className="font-bold text-sm text-[#092E26]">Cascade Gaps & Dependency Warnings</h4>
+              <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
+                  <h4 className="font-bold text-sm text-[#D92662]">Cascade Gaps & Dependency Warnings</h4>
                   
                 </div>
-                <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                   {renderFormattedText(timelineResult.cascade_effects)}
                 </div>
               </div>
@@ -1717,8 +1717,8 @@ export default function WorkspaceSection({
     if (isFetchingPortfolio && !portfolioStats) {
       return (
         <div className="flex items-center justify-center py-20 gap-2">
-          <Loader2 className="w-6 h-6 animate-spin text-[#092E26]" />
-          <span className="text-sm text-neutral-500 font-semibold">Loading dashboard stats...</span>
+          <Loader2 className="w-6 h-6 animate-spin text-[#D92662]" />
+          <span className="text-sm text-neutral-450 font-semibold">Loading dashboard stats...</span>
         </div>
       );
     }
@@ -1728,19 +1728,19 @@ export default function WorkspaceSection({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-bold text-neutral-900">{t.portfolioHeader}</h3>
-              <p className="text-xs text-neutral-500">{t.portfolioSub}</p>
+              <h3 className="text-lg font-bold text-neutral-100">{t.portfolioHeader}</h3>
+              <p className="text-xs text-neutral-450">{t.portfolioSub}</p>
             </div>
             <button 
               onClick={fetchPortfolioStats}
-              className="bg-[#092E26] hover:bg-[#051C17] text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Loader2 className={`w-3.5 h-3.5 ${isFetchingPortfolio ? 'animate-spin' : ''}`} />
               Refresh
             </button>
           </div>
           <div className="text-center py-16 text-neutral-400">
-            <LayoutDashboard className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <LayoutDashboard className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D92662]" />
             <p className="text-sm">Upload PDF contracts to begin building your portfolio dashboard.</p>
           </div>
         </div>
@@ -1751,12 +1751,12 @@ export default function WorkspaceSection({
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-bold text-neutral-900">{t.portfolioHeader}</h3>
-            <p className="text-xs text-neutral-500">{t.portfolioSub}</p>
+            <h3 className="text-lg font-bold text-neutral-100">{t.portfolioHeader}</h3>
+            <p className="text-xs text-neutral-450">{t.portfolioSub}</p>
           </div>
           <button 
             onClick={fetchPortfolioStats}
-            className="bg-[#092E26] hover:bg-[#051C17] text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Loader2 className={`w-3.5 h-3.5 ${isFetchingPortfolio ? 'animate-spin' : ''}`} />
             Refresh
@@ -1765,13 +1765,13 @@ export default function WorkspaceSection({
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 flex flex-col justify-between">
-            <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">Total Active Contracts</span>
-            <span className="text-3xl font-serif font-black text-[#092E26] mt-2">{portfolioStats.total_contracts}</span>
+          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 flex flex-col justify-between">
+            <span className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Total Active Contracts</span>
+            <span className="text-3xl font-serif font-black text-[#D92662] mt-2">{portfolioStats.total_contracts}</span>
           </div>
-          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 flex flex-col justify-between">
-            <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider">Total Portfolio Liability Cap</span>
-            <span className="text-3xl font-serif font-black text-[#092E26] mt-2">
+          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 flex flex-col justify-between">
+            <span className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Total Portfolio Liability Cap</span>
+            <span className="text-3xl font-serif font-black text-[#D92662] mt-2">
               ${portfolioStats.total_liability.toLocaleString()}
             </span>
           </div>
@@ -1779,8 +1779,8 @@ export default function WorkspaceSection({
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Concentration Risk */}
-          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-4">
-            <h4 className="font-bold text-sm text-neutral-800">Vendor Concentration Risk</h4>
+          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-4">
+            <h4 className="font-bold text-sm text-neutral-200">Vendor Concentration Risk</h4>
             {portfolioStats.concentration_risk.length === 0 ? (
               <p className="text-xs text-neutral-400">No concentration risk metrics calculated.</p>
             ) : (
@@ -1788,14 +1788,14 @@ export default function WorkspaceSection({
                 {portfolioStats.concentration_risk.map((item, idx) => (
                   <div key={idx} className="space-y-1.5">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="font-bold text-neutral-700">{item.vendor}</span>
-                      <span className="text-neutral-500 font-semibold">
+                      <span className="font-bold text-neutral-300">{item.vendor}</span>
+                      <span className="text-neutral-450 font-semibold">
                         ${item.value.toLocaleString()} ({item.share}%)
                       </span>
                     </div>
                     <div className="h-2.5 w-full bg-neutral-200 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-[#092E26] rounded-full transition-all duration-500" 
+                        className="h-full bg-[#D92662] rounded-full transition-all duration-500" 
                         style={{ width: `${item.share}%` }} 
                       />
                     </div>
@@ -1806,14 +1806,14 @@ export default function WorkspaceSection({
           </div>
 
           {/* Upcoming Renewal Cliffs */}
-          <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-4">
-            <h4 className="font-bold text-sm text-neutral-800">Upcoming Renewal Timeline Cliffs</h4>
+          <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-4">
+            <h4 className="font-bold text-sm text-neutral-200">Upcoming Renewal Timeline Cliffs</h4>
             {portfolioStats.upcoming_renewals.length === 0 ? (
               <p className="text-xs text-neutral-400">No upcoming renewals found.</p>
             ) : (
               <div className="space-y-2">
                 {portfolioStats.upcoming_renewals.map((renewal, idx) => {
-                  let badgeClass = "bg-green-50 text-green-700 border-green-150";
+                  let badgeClass = "bg-[#1C1115] text-[#F472B6] border-[#D92662]/20";
                   if (renewal.days_remaining < 30) {
                     badgeClass = "bg-red-50 text-red-700 border-red-150 animate-pulse";
                   } else if (renewal.days_remaining < 90) {
@@ -1823,7 +1823,7 @@ export default function WorkspaceSection({
                   return (
                     <div key={idx} className="bg-white border border-neutral-150 rounded-lg p-3 flex justify-between items-center gap-3">
                       <div className="min-w-0">
-                        <div className="text-xs font-bold text-neutral-800 truncate">{renewal.vendor}</div>
+                        <div className="text-xs font-bold text-neutral-200 truncate">{renewal.vendor}</div>
                         <div className="text-[10px] text-neutral-400 mt-0.5">Expires: {renewal.expiration_date}</div>
                       </div>
                       <span className={`text-[10px] font-bold border px-2 py-0.5 rounded-full shrink-0 ${badgeClass}`}>
@@ -1846,24 +1846,24 @@ export default function WorkspaceSection({
     return (
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.shadowHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.shadowSub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.shadowHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.shadowSub}</p>
         </div>
 
         {successDocs.length === 0 ? (
           <div className="text-center py-16 text-neutral-400">
-            <Swords className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <Swords className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D92662]" />
             <p className="text-sm">Upload documents first to start a Shadow Battle.</p>
           </div>
         ) : (
           <form onSubmit={handleShadowBattle} className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
               <div className="flex-1">
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Select Document</label>
                 <select
                   value={selectedShadowDoc}
                   onChange={e => setSelectedShadowDoc(e.target.value)}
-                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -1873,7 +1873,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isBattling}
-                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isBattling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Swords className="w-4 h-4" />}
                 {isBattling ? "Conducting Battle..." : "Conduct Battle"}
@@ -1887,14 +1887,14 @@ export default function WorkspaceSection({
             {/* Clause under debate */}
             <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-5">
               <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2">Clause Under Debate</h4>
-              <p className="text-xs text-neutral-800 leading-relaxed font-mono whitespace-pre-wrap bg-white border border-amber-100 p-3 rounded-lg">
+              <p className="text-xs text-neutral-200 leading-relaxed font-mono whitespace-pre-wrap bg-white border border-amber-100 p-3 rounded-lg">
                 {shadowResult.clause_focus}
               </p>
             </div>
 
             {/* Battle Dialogue */}
             <div className="space-y-4">
-              <h4 className="text-sm font-bold text-neutral-800">Counsel Debate Rounds</h4>
+              <h4 className="text-sm font-bold text-neutral-200">Counsel Debate Rounds</h4>
               
               {/* Attacker turn */}
               <div className="bg-red-50/30 border border-red-200/50 rounded-xl p-5 relative">
@@ -1905,7 +1905,7 @@ export default function WorkspaceSection({
                   </div>
                   
                 </div>
-                <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/30 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/30 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.attacker_turn)}
                 </div>
               </div>
@@ -1919,19 +1919,19 @@ export default function WorkspaceSection({
                   </div>
                   
                 </div>
-                <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-blue-100/30 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-blue-100/30 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.defender_turn)}
                 </div>
               </div>
             </div>
 
             {/* Assessment */}
-            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-              <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#092E26]/10">
-                <h4 className="font-bold text-sm text-[#092E26]">Legal Risk Assessment & Verdict</h4>
+            <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+              <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#D92662]/10">
+                <h4 className="font-bold text-sm text-[#D92662]">Legal Risk Assessment & Verdict</h4>
                 
               </div>
-              <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                 {renderFormattedText(shadowResult.assessment)}
               </div>
             </div>
@@ -1947,24 +1947,24 @@ export default function WorkspaceSection({
     return (
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.residueHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.residueSub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.residueHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.residueSub}</p>
         </div>
 
         {successDocs.length === 0 ? (
           <div className="text-center py-16 text-neutral-400">
-            <Binary className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <Binary className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D92662]" />
             <p className="text-sm">Upload documents first to run document forensics.</p>
           </div>
         ) : (
           <form onSubmit={handleResidueForensics} className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
               <div className="flex-1">
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Select Document</label>
                 <select
                   value={selectedResidueDoc}
                   onChange={e => setSelectedResidueDoc(e.target.value)}
-                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -1974,7 +1974,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isInspecting}
-                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isInspecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Binary className="w-4 h-4" />}
                 {isInspecting ? "Inspecting..." : "Extract & Analyze"}
@@ -1986,43 +1986,43 @@ export default function WorkspaceSection({
         {residueResult && (
           <div className="space-y-6 border-t border-neutral-150 pt-6">
             {/* Metadata Table */}
-            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-3">
-              <h4 className="font-bold text-sm text-neutral-800">Extracted PDF File Metadata</h4>
+            <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-5 space-y-3">
+              <h4 className="font-bold text-sm text-neutral-200">Extracted PDF File Metadata</h4>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-neutral-200 text-xs">
                   <thead>
-                    <tr className="text-left text-neutral-500 uppercase tracking-wider font-bold">
+                    <tr className="text-left text-neutral-450 uppercase tracking-wider font-bold">
                       <th className="py-2 px-3">Metadata Field</th>
                       <th className="py-2 px-3">Value</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-200 text-neutral-700 bg-white">
+                  <tbody className="divide-y divide-neutral-200 text-neutral-300 bg-white">
                     <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Author</td>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Author</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.author || 'Unknown'}</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Creator / Application</td>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Creator / Application</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.creator || 'Unknown'}</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-600">PDF Producer</td>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-400">PDF Producer</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.producer || 'Unknown'}</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Creation Date</td>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Creation Date</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.creation_date || 'Unknown'}</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Modification Date</td>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Modification Date</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.mod_date || 'Unknown'}</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-600">Page Count</td>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Page Count</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.page_count || 0}</td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-600">File Size</td>
+                      <td className="py-2.5 px-3 font-semibold text-neutral-400">File Size</td>
                       <td className="py-2.5 px-3">
                         {residueResult.metadata.file_size_bytes 
                           ? `${(residueResult.metadata.file_size_bytes / 1024).toFixed(1)} KB` 
@@ -2035,15 +2035,15 @@ export default function WorkspaceSection({
             </div>
 
             {/* Forensic AI Audits */}
-            <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-              <div className="flex items-center justify-between mb-3 border-b border-[#092E26]/10 pb-2">
+            <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+              <div className="flex items-center justify-between mb-3 border-b border-[#D92662]/20 pb-2">
                 <div className="flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-[#092E26]" />
-                  <h4 className="font-bold text-sm text-[#092E26]">Forensic Text Alteration Audit</h4>
+                  <ShieldAlert className="w-4 h-4 text-[#D92662]" />
+                  <h4 className="font-bold text-sm text-[#D92662]">Forensic Text Alteration Audit</h4>
                 </div>
                 
               </div>
-              <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
                 {renderFormattedText(residueResult.forensics_report)}
               </div>
             </div>
@@ -2063,23 +2063,23 @@ export default function WorkspaceSection({
     return (
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.echoHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.echoSub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.echoHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.echoSub}</p>
         </div>
 
         <form onSubmit={handleEchoHarmonics} className="space-y-4">
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-neutral-700">{t.langLabel}</label>
+            <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
             <LangSelect value={echoLang} onChange={setEchoLang} />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Legal Phrase or Clause to Analyze</label>
+            <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Legal Phrase or Clause to Analyze</label>
             <textarea
               value={echoInput}
               onChange={e => setEchoInput(e.target.value)}
               placeholder="Paste a clause (or enter a term like 'best efforts') to audit cross-language semantic trapping..."
-              className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#092E26]"
+              className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]"
             />
           </div>
 
@@ -2092,7 +2092,7 @@ export default function WorkspaceSection({
                   key={i}
                   type="button"
                   onClick={() => setEchoInput(tpl.text)}
-                  className="px-2.5 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-md text-xs font-medium cursor-pointer transition-colors border border-neutral-200/50"
+                  className="px-2.5 py-1.5 bg-[#1A1821] hover:bg-neutral-200 text-neutral-300 rounded-md text-xs font-medium cursor-pointer transition-colors border border-neutral-850/50"
                 >
                   {tpl.label}
                 </button>
@@ -2103,7 +2103,7 @@ export default function WorkspaceSection({
           <button
             type="submit"
             disabled={!echoInput.trim() || isEchoing}
-            className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
+            className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
           >
             {isEchoing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
             {isEchoing ? "Analyzing Harmonics..." : "Evaluate Harmonics"}
@@ -2111,15 +2111,15 @@ export default function WorkspaceSection({
         </form>
 
         {echoResult && (
-          <div className="bg-[#092E26]/5 border border-[#092E26]/20 rounded-xl p-5">
-            <div className="flex items-center justify-between mb-3 border-b border-[#092E26]/10 pb-2">
+          <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
+            <div className="flex items-center justify-between mb-3 border-b border-[#D92662]/20 pb-2">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#092E26]" />
-                <h4 className="font-bold text-sm text-[#092E26]">Cross-Language Translation Trap Audit</h4>
+                <Sparkles className="w-4 h-4 text-[#D92662]" />
+                <h4 className="font-bold text-sm text-[#D92662]">Cross-Language Translation Trap Audit</h4>
               </div>
               
             </div>
-            <div className="text-xs text-neutral-700 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+            <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
               {renderFormattedText(echoResult)}
             </div>
           </div>
@@ -2134,24 +2134,24 @@ export default function WorkspaceSection({
     return (
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-bold text-neutral-900">{t.alchemyHeader}</h3>
-          <p className="text-xs text-neutral-500">{t.alchemySub}</p>
+          <h3 className="text-lg font-bold text-neutral-100">{t.alchemyHeader}</h3>
+          <p className="text-xs text-neutral-450">{t.alchemySub}</p>
         </div>
 
         {successDocs.length === 0 ? (
           <div className="text-center py-16 text-neutral-400">
-            <Code className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#092E26]" />
+            <Code className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D92662]" />
             <p className="text-sm">Upload documents first to compile SLA metrics.</p>
           </div>
         ) : (
           <form onSubmit={handleAlchemyCompile} className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
               <div className="flex-1">
-                <label className="text-xs font-semibold text-neutral-600 block mb-1.5">Select Document</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Select Document</label>
                 <select
                   value={selectedAlchemyDoc}
                   onChange={e => setSelectedAlchemyDoc(e.target.value)}
-                  className="w-full border border-neutral-200 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#092E26] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -2161,7 +2161,7 @@ export default function WorkspaceSection({
               <button
                 type="submit"
                 disabled={isCompiling}
-                className="bg-[#092E26] hover:bg-[#051C17] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
+                className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
               >
                 {isCompiling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Code className="w-4 h-4" />}
                 {isCompiling ? "Compiling..." : "Compile to Prometheus YAML"}
@@ -2174,23 +2174,23 @@ export default function WorkspaceSection({
           <div className="space-y-6 border-t border-neutral-150 pt-6">
             {/* Metric Targets Cards */}
             <div className="space-y-3">
-              <h4 className="font-bold text-sm text-neutral-800">Extracted SLA Targets</h4>
+              <h4 className="font-bold text-sm text-neutral-200">Extracted SLA Targets</h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 flex flex-col justify-between">
+                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-4 flex flex-col justify-between">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Uptime Target</span>
-                  <span className="text-base font-bold text-[#092E26] mt-1">
+                  <span className="text-base font-bold text-[#D92662] mt-1">
                     {alchemyResult.parameters.uptime_target || 'N/A'}
                   </span>
                 </div>
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 flex flex-col justify-between">
+                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-4 flex flex-col justify-between">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Latency Target</span>
-                  <span className="text-base font-bold text-[#092E26] mt-1">
+                  <span className="text-base font-bold text-[#D92662] mt-1">
                     {alchemyResult.parameters.latency_target || 'N/A'}
                   </span>
                 </div>
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 flex flex-col justify-between">
+                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-4 flex flex-col justify-between">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Resolution Target</span>
-                  <span className="text-base font-bold text-[#092E26] mt-1">
+                  <span className="text-base font-bold text-[#D92662] mt-1">
                     {alchemyResult.parameters.resolution_target || 'N/A'}
                   </span>
                 </div>
@@ -2200,11 +2200,11 @@ export default function WorkspaceSection({
             {/* Generated Prometheus Rule */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="font-bold text-sm text-neutral-800">Compiled Prometheus Alert Rules (.yml)</h4>
+                <h4 className="font-bold text-sm text-neutral-200">Compiled Prometheus Alert Rules (.yml)</h4>
                 <button
                   type="button"
                   onClick={() => copyToClipboard(alchemyResult.code_block)}
-                  className="px-3 py-1 bg-[#092E26]/10 hover:bg-[#092E26]/20 text-[#092E26] rounded-md text-xs font-semibold cursor-pointer transition-colors"
+                  className="px-3 py-1 bg-[#D92662]/10 hover:bg-[#D92662]/20 text-[#D92662] rounded-md text-xs font-semibold cursor-pointer transition-colors"
                 >
                   {copiedAlchemy ? "Copied!" : "Copy Code"}
                 </button>
@@ -2230,7 +2230,7 @@ export default function WorkspaceSection({
   };
 
   return (
-    <section id="workspace" className={`bg-[#F6F4F0] overflow-hidden flex flex-col ${
+    <section id="workspace" className={`bg-[#080709] overflow-hidden flex flex-col ${
       isFullscreen ? 'h-[calc(100vh-64px)] w-full' : 'py-16 sm:py-24'
     }`}>
       <div className={`transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 ${
@@ -2238,27 +2238,27 @@ export default function WorkspaceSection({
       }`}>
         {!isFullscreen && (
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.uploadTab}</p>
-            <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
+            <p className="text-[#D92662] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.uploadTab}</p>
+            <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-100 tracking-tight">
               {t.title}
             </h2>
-            <p className="mt-3 text-neutral-500 text-sm font-sans">{t.subtitle}</p>
+            <p className="mt-3 text-neutral-450 text-sm font-sans">{t.subtitle}</p>
           </div>
         )}
 
-        <div className={`bg-white border border-neutral-200 overflow-hidden flex flex-col flex-1 min-h-0 ${
+        <div className={`bg-white border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 ${
           isFullscreen ? 'rounded-none border-0' : 'rounded-2xl shadow-xl'
         }`}>
           {/* Tab bar */}
-          <div className="border-b border-neutral-200 flex items-center justify-between bg-white pr-4">
+          <div className="border-b border-neutral-850 flex items-center justify-between bg-white pr-4">
             <div className="flex-1 overflow-x-auto min-w-0">
               <div className="flex min-w-max">
                 {tabs.map(t => (
                   <button key={t.id} onClick={() => setActiveTab(t.id)}
                     className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
                       activeTab === t.id
-                        ? 'border-[#092E26] text-[#092E26] bg-[#092E26]/5'
-                        : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50'
+                        ? 'border-[#D92662] text-[#D92662] bg-[#D92662]/5'
+                        : 'border-transparent text-neutral-450 hover:text-neutral-300 hover:bg-[#1A1821]'
                     }`}>
                     <t.icon className="w-4 h-4" />
                     <span>{t.label}</span>
@@ -2270,7 +2270,7 @@ export default function WorkspaceSection({
             <button
               type="button"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="ml-2 p-2 text-neutral-500 hover:text-[#092E26] hover:bg-neutral-50 rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center"
+              className="ml-2 p-2 text-neutral-450 hover:text-[#D92662] hover:bg-[#1A1821] rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center"
               title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Workspace"}
             >
               {isFullscreen ? (
