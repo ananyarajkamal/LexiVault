@@ -101,22 +101,22 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               
               {/* SVG Connectors overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
-                {/* Curve 1: Portfolio Risk (Left Card 1) */}
-                <path d="M 150 50 C 165 50, 165 150, 180 150" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 2: Lifecycle Timeline (Right Card 1) */}
-                <path d="M 430 65 C 415 65, 415 180, 400 180" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 3: Counterparty Pushback (Left Card 2) */}
-                <path d="M 150 170 C 165 170, 165 210, 180 210" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 4: Voice Briefing (Right Card 2) */}
-                <path d="M 430 180 C 415 180, 415 240, 400 240" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 5: The Shadow (Left Card 3) */}
-                <path d="M 150 290 C 165 290, 165 310, 180 310" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 6: The Residue (Right Card 3) */}
-                <path d="M 430 295 C 415 295, 415 350, 400 350" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 7: The Echo (Left Card 4) */}
-                <path d="M 150 410 C 165 410, 165 390, 180 390" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
-                {/* Curve 8: The Alchemy (Right Card 4) */}
-                <path d="M 430 410 C 415 410, 415 430, 400 430" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 1: Portfolio Risk (Left Card 1) -> Points to top skeleton text lines */}
+                <path d="M 150 50 C 170 50, 195 135, 210 135" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 2: Lifecycle Timeline (Right Card 1) -> Points to toolbar page number */}
+                <path d="M 430 65 C 410 65, 395 70, 380 70" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 3: Counterparty Pushback (Left Card 2) -> Points directly to clause number '12.1' */}
+                <path d="M 150 170 C 170 170, 185 180, 195 180" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 4: Voice Briefing (Right Card 2) -> Points directly to the highlighted financial value '₹50,000' */}
+                <path d="M 430 180 C 410 180, 350 198, 330 198" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 5: The Shadow (Left Card 3) -> Points to skeleton lines below highlighted block */}
+                <path d="M 150 290 C 170 290, 195 245, 210 245" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 6: The Residue (Right Card 3) -> Points to Clause 12.2 marker */}
+                <path d="M 430 295 C 410 295, 395 305, 380 305" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 7: The Echo (Left Card 4) -> Points to bottom skeleton lines */}
+                <path d="M 150 410 C 170 410, 195 355, 210 355" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
+                {/* Curve 8: The Alchemy (Right Card 4) -> Points to lowest skeleton lines */}
+                <path d="M 430 410 C 410 410, 395 390, 380 390" stroke="#0B7A63" strokeWidth="1.2" strokeOpacity="0.4" fill="none" />
 
                 {/* Dots at callout edges */}
                 <circle cx="150" cy="50" r="3" fill="#0B7A63" />
@@ -128,25 +128,35 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 <circle cx="430" cy="295" r="3" fill="#0B7A63" />
                 <circle cx="430" cy="410" r="3" fill="#0B7A63" />
 
-                {/* Dots at document highlights */}
-                <circle cx="180" cy="150" r="3" fill="#0B7A63" />
-                <circle cx="180" cy="210" r="3" fill="#0B7A63" />
-                <circle cx="180" cy="310" r="3" fill="#0B7A63" />
-                <circle cx="180" cy="390" r="3" fill="#0B7A63" />
-                <circle cx="400" cy="180" r="3" fill="#0B7A63" />
-                <circle cx="400" cy="240" r="3" fill="#0B7A63" />
-                <circle cx="400" cy="350" r="3" fill="#0B7A63" />
-                <circle cx="400" cy="430" r="3" fill="#0B7A63" />
+                {/* Dots at document highlights (mapping precisely to target elements) */}
+                <circle cx="210" cy="135" r="3" fill="#0B7A63" />
+                <circle cx="195" cy="180" r="3" fill="#0B7A63" />
+                <circle cx="210" cy="245" r="3" fill="#0B7A63" />
+                <circle cx="210" cy="355" r="3" fill="#0B7A63" />
+                <circle cx="380" cy="70" r="3" fill="#0B7A63" />
+                <circle cx="330" cy="198" r="3" fill="#0B7A63" />
+                <circle cx="380" cy="305" r="3" fill="#0B7A63" />
+                <circle cx="380" cy="390" r="3" fill="#0B7A63" />
               </svg>
 
               {/* CENTER: Document Viewer Card */}
               <div className="absolute left-[180px] top-[40px] w-[220px] h-[440px] bg-white rounded-2xl border border-neutral-200/80 shadow-2xl flex flex-col overflow-hidden">
-                {/* PDF Header */}
-                <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-neutral-100">
-                  <div className="w-5 h-5 bg-red-500 rounded flex items-center justify-center text-white font-sans font-black text-[7px] tracking-tighter shrink-0 select-none">
-                    PDF
+                {/* Document Format Tabs */}
+                <div className="flex border-b border-neutral-150 bg-[#F4F4F4] select-none text-[10px]">
+                  {/* PDF Tab (Active) */}
+                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 bg-white border-r border-neutral-200/50 font-semibold text-neutral-800">
+                    <div className="w-5 h-3.5 bg-red-500 rounded-[3px] flex items-center justify-center text-white font-sans font-black text-[6px] tracking-tighter shrink-0">
+                      PDF
+                    </div>
+                    <span className="truncate max-w-[70px]">Vendor.pdf</span>
                   </div>
-                  <span className="text-neutral-800 font-semibold text-[11px] truncate">Vendor Agreement.pdf</span>
+                  {/* DOCX Tab (Inactive) */}
+                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 text-neutral-400 font-medium">
+                    <div className="w-5 h-3.5 bg-blue-500 rounded-[3px] flex items-center justify-center text-white font-sans font-black text-[6px] tracking-tighter shrink-0 opacity-55">
+                      DOC
+                    </div>
+                    <span className="truncate max-w-[70px]">SOW.docx</span>
+                  </div>
                 </div>
 
                 {/* PDF Toolbar */}
