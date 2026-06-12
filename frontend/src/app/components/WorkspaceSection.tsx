@@ -2208,6 +2208,15 @@ export default function WorkspaceSection({
       }>
         {!isFullscreen && (
           <div className="text-center max-w-2xl mx-auto mb-10">
+            {/* Animated Floating Logo */}
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 rounded-3xl bg-neutral-900 border border-neutral-800/80 flex items-center justify-center shadow-xl relative overflow-hidden group animate-float">
+                {/* Glowing backdrop */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#D92662]/15 to-[#F472B6]/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-[#D92662]/5 animate-pulse"></div>
+                <LogoIcon className="w-9 h-9 text-white relative z-10 transition-transform duration-500 group-hover:rotate-12" />
+              </div>
+            </div>
             <p className="text-[#D92662] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.uploadTab}</p>
             <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-100 tracking-tight">
               {t.title}
@@ -2223,18 +2232,8 @@ export default function WorkspaceSection({
         }>
           {/* Tab bar */}
           <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
-            <div className="flex items-center min-w-0 flex-1">
-              {/* Brand Logo & Name */}
-              <div className="flex items-center gap-2 px-4 py-3.5 border-r border-[#222026] select-none shrink-0 group">
-                <LogoIcon className="w-5 h-5 text-white transition-transform duration-300 group-hover:rotate-6" />
-                <span className="font-serif font-black text-[11px] tracking-wider text-white uppercase bg-gradient-to-r from-[#D92662] to-[#F472B6] bg-clip-text text-transparent">
-                  LexiVault
-                </span>
-              </div>
-
-              {/* Tabs */}
-              <div className="flex-1 overflow-x-auto min-w-0">
-                <div className="flex min-w-max">
+            <div className="flex-1 overflow-x-auto min-w-0">
+              <div className="flex min-w-max">
                 {tabs.map(t => (
                   <button key={t.id} onClick={() => setActiveTab(t.id)}
                     className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
@@ -2247,7 +2246,6 @@ export default function WorkspaceSection({
                   </button>
                 ))}
               </div>
-            </div>
             </div>
             {/* Maximize Toggle Button */}
             <button
