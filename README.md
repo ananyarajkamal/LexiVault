@@ -15,11 +15,16 @@ LexiVault is designed to be fast, private, and accurate simultaneously. It allow
 
 Furthermore, LexiVault features advanced contract intelligence tools:
 * AI Negotiation Sandbox & Opposing Counsel Pushback Simulator: Simulate clause-by-clause debates between customizable Buyer and Seller counsel personas, or input a proposed edit to predict counterarguments and alternative clauses from opposing counsel.
+* Negotiation Ghostwriter: Draft diplomatic compromise language or legally sound rejections with alternatives when receiving counterparty redlined edits.
 * Semantic Diff Analyzer: Compute similarity changes between two clauses using local sentence vector embeddings and generate a structured audit explaining the legal shifts in rights or obligations.
 * Hinglish Code-Switching explaining engine: Translate complex legal legalese directly into conversational Hinglish (Hindi written in the Latin alphabet) for simple and intuitive understanding.
 * Contract Lifecycle Timeline Predictor: Estimate negotiation duration, renewal risks, and expiration cascades using LLM temporal graph analysis on contract metadata.
 * Voice-Powered Contract Briefing: Interact with your document repository hands-free using browser-native SpeechRecognition and SpeechSynthesis read-aloud features.
 * Cross-Document Portfolio Risk Dashboard: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
+* The Shadow (AI vs. AI Contract Battle): Select a document to watch adversarial Attacker and Defender AI counsel debate clause liabilities and deliver a final legal risk assessment.
+* The Residue (Invisible Document Forensics): Extract hidden PDF document metadata (author, tools, dates, sizes) using PyMuPDF and perform text forensics checks for altered boilerplates.
+* The Echo (Cross-Language Legal Harmonics): Compare semantic legal weight and translation traps (e.g. "best efforts" vs "reasonable efforts") across English, Hindi, and Hinglish.
+* The Alchemy (Contract to Executable Code): Parse SLA performance bounds (uptime, latency, resolution times) and compile them into Prometheus Alert YAML rules.
 
 ---
 
