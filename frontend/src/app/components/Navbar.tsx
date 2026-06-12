@@ -126,7 +126,7 @@ export default function Navbar({
                 {/* Login button */}
                 <button 
                   onClick={onLoginClick}
-                  className="hidden sm:inline-flex items-center justify-center border border-[#092E26]/30 hover:border-[#092E26]/60 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer bg-white"
+                  className="hidden sm:inline-flex items-center justify-center border border-white/20 hover:border-white/40 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer bg-transparent hover:bg-white/5"
                 >
                   {t.login}
                 </button>
@@ -190,10 +190,10 @@ export default function Navbar({
             </div>
             {isLoggedIn ? (
               <div className="px-3 py-2 flex flex-col gap-2">
-                <div className="text-xs font-bold text-neutral-700">Logged in as {username}</div>
+                <div className="text-xs font-bold text-neutral-400">Logged in as {username}</div>
                 <button 
                   onClick={() => { setMobileOpen(false); onLogout(); }}
-                  className="w-full text-center text-red-600 border border-red-200 text-sm font-semibold py-2 rounded-lg bg-white"
+                  className="w-full text-center text-red-500 border border-red-900/30 text-sm font-semibold py-2 rounded-lg bg-transparent hover:bg-red-950/20"
                 >
                   {t.logout}
                 </button>

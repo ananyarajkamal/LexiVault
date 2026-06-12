@@ -823,7 +823,7 @@ export default function WorkspaceSection({
   // ---- Language selector helper (Updated with Hinglish) ----
   const LangSelect = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
     <select value={value} onChange={e => onChange(e.target.value)}
-      className="border border-neutral-850 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer font-medium text-neutral-200">
+      className="border border-neutral-850 rounded-lg px-3 py-2 text-sm bg-[#1A1821] focus:outline-none focus:border-[#D92662] cursor-pointer font-medium text-neutral-200">
       <option value="English">English</option>
       <option value="Hindi">Hindi</option>
       <option value="Hinglish">Hinglish</option>
@@ -901,7 +901,7 @@ export default function WorkspaceSection({
         <div className="space-y-2">
           <h4 className="text-sm font-semibold text-neutral-300">{t.uploadedDocs} ({documents.length})</h4>
           {documents.map((doc, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 bg-[#1A1821] rounded-xl border border-neutral-100">
+            <div key={i} className="flex items-center gap-3 p-3 bg-[#1A1821] rounded-xl border border-neutral-850">
               {doc.status === 'success'
                 ? <CheckCircle2 className="w-5 h-5 text-[#D92662] shrink-0" />
                 : <XCircle className="w-5 h-5 text-red-500 shrink-0" />}
@@ -912,7 +912,7 @@ export default function WorkspaceSection({
               {doc.status === 'success' && (
                 <button
                   onClick={() => handleDeleteDocument(doc.namespace)}
-                  className="text-neutral-400 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-50 transition-colors cursor-pointer shrink-0"
+                  className="text-neutral-400 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-900/20 transition-colors cursor-pointer shrink-0"
                   title="Remove document"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -974,10 +974,10 @@ export default function WorkspaceSection({
         <input type="text" value={chatInput} onChange={e => setChatInput(e.target.value)}
           placeholder={t.placeholderChat}
           disabled={documents.length === 0}
-          className="flex-1 border border-neutral-850 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#D92662] disabled:opacity-50 disabled:cursor-not-allowed" />
+          className="flex-1 bg-[#1A1821] text-white border border-neutral-850 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#D92662] disabled:opacity-50 disabled:cursor-not-allowed" />
         <button type="button" onClick={startSpeechRecognition} disabled={documents.length === 0}
           className={`w-11 h-11 border text-neutral-450 rounded-xl flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0 ${
-            isListening ? 'bg-red-50 border-red-200 text-red-500 animate-pulse' : 'bg-white border-neutral-850 hover:bg-[#1A1821] hover:text-[#D92662]'
+            isListening ? 'bg-red-50 border-red-200 text-red-500 animate-pulse' : 'bg-[#131118] border-neutral-850 hover:bg-[#1A1821] hover:text-[#D92662]'
           }`}
           title="Voice Input"
         >
@@ -1026,7 +1026,7 @@ export default function WorkspaceSection({
                 </div>
                 <div className="space-y-2">
                   {items.map((r: any, i: number) => (
-                    <div key={i} className="bg-white rounded-lg p-3 border border-neutral-100">
+                    <div key={i} className="bg-[#1A1821] rounded-lg p-3 border border-neutral-850">
                       <div className="flex justify-between items-start gap-2 mb-1">
                         <span className="text-sm font-semibold text-neutral-200">{r.clause_name}</span>
                         <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 shrink-0 ${badgeColors[level]}`}>{levelLabel}</span>
@@ -1046,7 +1046,7 @@ export default function WorkspaceSection({
                 <span className="font-bold text-sm text-[#D92662]">{t.wolframHeader}</span>
               </div>
               {wolframCtx.map((w: any, i: number) => (
-                <div key={i} className="bg-white rounded-lg p-3 border border-neutral-100 mb-2 last:mb-0">
+                <div key={i} className="bg-[#1A1821] rounded-lg p-3 border border-neutral-850 mb-2 last:mb-0">
                   <div className="text-sm font-semibold text-neutral-200">{w.clause} ({w.document})</div>
                   <p className="text-xs text-neutral-400 mt-1">{w.context}</p>
                 </div>
@@ -1260,7 +1260,7 @@ export default function WorkspaceSection({
               <div>
                 <label className="text-xs font-semibold text-neutral-400 block mb-1.5">{t.clauseTypeLabel}</label>
                 <select value={negotiationClauseType} onChange={e => setNegotiationClauseType(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer">
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer">
                   <option value="Limitation of Liability">Limitation of Liability</option>
                   <option value="Indemnification">Indemnification</option>
                   <option value="IP Ownership">Intellectual Property</option>
@@ -1271,7 +1271,7 @@ export default function WorkspaceSection({
               <div>
                 <label className="text-xs font-semibold text-neutral-400 block mb-1.5">{t.buyerLabel}</label>
                 <select value={buyerStance} onChange={e => setBuyerStance(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer">
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer">
                   <option value="Conservative (Protects Buyer strictly)">Conservative</option>
                   <option value="Standard (Balanced risk)">Standard</option>
                   <option value="Aggressive (Pushes liability onto Seller)">Aggressive</option>
@@ -1280,7 +1280,7 @@ export default function WorkspaceSection({
               <div>
                 <label className="text-xs font-semibold text-neutral-400 block mb-1.5">{t.sellerLabel}</label>
                 <select value={sellerStance} onChange={e => setSellerStance(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer">
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer">
                   <option value="Conservative (Protects Seller strictly)">Conservative</option>
                   <option value="Standard (Balanced risk)">Standard</option>
                   <option value="Aggressive (Pushes liability onto Buyer)">Aggressive</option>
@@ -1333,7 +1333,7 @@ export default function WorkspaceSection({
                     <h4 className="font-bold text-sm text-[#D92662]">{t.compromiseResultHeader}</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-200 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-200 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
                     {renderFormattedText(negotiationCompromise)}
                   </div>
                 </div>
@@ -1401,7 +1401,7 @@ export default function WorkspaceSection({
                     <h4 className="font-bold text-sm text-red-800">Opposing Counsel Objections & Arguments</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-[#D92662]/20 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.counter_arguments)}
                   </div>
                 </div>
@@ -1410,7 +1410,7 @@ export default function WorkspaceSection({
                     <h4 className="font-bold text-sm text-[#D92662]">Opposing Counter-Proposals</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
                     {renderFormattedText(counterSimResult.pushback_clauses)}
                   </div>
                 </div>
@@ -1477,7 +1477,7 @@ export default function WorkspaceSection({
                     <h4 className="font-bold text-sm text-[#D92662] font-sans">Accept with Modification</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-150 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.accept_with_modification)}
                   </div>
                 </div>
@@ -1486,7 +1486,7 @@ export default function WorkspaceSection({
                     <h4 className="font-bold text-sm text-red-800 font-sans">Reject with Rationale & Precedent</h4>
                     
                   </div>
-                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/50 p-3 rounded-lg">
+                  <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-[#D92662]/20 p-3 rounded-lg">
                     {renderFormattedText(ghostResult.reject_with_rationale)}
                   </div>
                 </div>
@@ -1559,7 +1559,7 @@ export default function WorkspaceSection({
                 <h4 className="font-bold text-sm text-[#D92662]">{t.shiftExplanationHeader}</h4>
                 
               </div>
-              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
                 {renderFormattedText(diffExplanation)}
               </div>
             </div>
@@ -1592,7 +1592,7 @@ export default function WorkspaceSection({
                 <select 
                   value={selectedTimelineDoc} 
                   onChange={e => setSelectedTimelineDoc(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -1620,7 +1620,7 @@ export default function WorkspaceSection({
               <div className="relative pl-6 border-l-2 border-[#D92662]/20 space-y-6 py-2">
                 {/* Node 1 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
                   <h5 className="text-xs font-bold text-neutral-200">Negotiation Stage</h5>
@@ -1631,7 +1631,7 @@ export default function WorkspaceSection({
                 
                 {/* Node 2 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
                   <h5 className="text-xs font-bold text-neutral-200">Active Monitoring Stage</h5>
@@ -1642,7 +1642,7 @@ export default function WorkspaceSection({
                 
                 {/* Node 3 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
                   <h5 className="text-xs font-bold text-neutral-200">Amendment / Change Cliffs</h5>
@@ -1653,7 +1653,7 @@ export default function WorkspaceSection({
                 
                 {/* Node 4 */}
                 <div className="relative">
-                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-white flex items-center justify-center">
+                  <div className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full border-2 border-[#D92662] bg-[#131118] flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#D92662]"></div>
                   </div>
                   <h5 className="text-xs font-bold text-neutral-200">Expiration & Renewal</h5>
@@ -1702,7 +1702,7 @@ export default function WorkspaceSection({
                   <h4 className="font-bold text-sm text-[#D92662]">Cascade Gaps & Dependency Warnings</h4>
                   
                 </div>
-                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
                   {renderFormattedText(timelineResult.cascade_effects)}
                 </div>
               </div>
@@ -1821,7 +1821,7 @@ export default function WorkspaceSection({
                   }
                   
                   return (
-                    <div key={idx} className="bg-white border border-neutral-150 rounded-lg p-3 flex justify-between items-center gap-3">
+                    <div key={idx} className="bg-[#131118] border border-neutral-150 rounded-lg p-3 flex justify-between items-center gap-3">
                       <div className="min-w-0">
                         <div className="text-xs font-bold text-neutral-200 truncate">{renewal.vendor}</div>
                         <div className="text-[10px] text-neutral-400 mt-0.5">Expires: {renewal.expiration_date}</div>
@@ -1863,7 +1863,7 @@ export default function WorkspaceSection({
                 <select
                   value={selectedShadowDoc}
                   onChange={e => setSelectedShadowDoc(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -1887,7 +1887,7 @@ export default function WorkspaceSection({
             {/* Clause under debate */}
             <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-5">
               <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2">Clause Under Debate</h4>
-              <p className="text-xs text-neutral-200 leading-relaxed font-mono whitespace-pre-wrap bg-white border border-amber-100 p-3 rounded-lg">
+              <p className="text-xs text-neutral-200 leading-relaxed font-mono whitespace-pre-wrap bg-[#1A1821] border border-amber-900/40 p-3 rounded-lg">
                 {shadowResult.clause_focus}
               </p>
             </div>
@@ -1905,7 +1905,7 @@ export default function WorkspaceSection({
                   </div>
                   
                 </div>
-                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-red-100/30 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-[#D92662]/20 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.attacker_turn)}
                 </div>
               </div>
@@ -1919,7 +1919,7 @@ export default function WorkspaceSection({
                   </div>
                   
                 </div>
-                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-blue-100/30 p-3 rounded-lg">
+                <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-blue-900/30 p-3 rounded-lg">
                   {renderFormattedText(shadowResult.defender_turn)}
                 </div>
               </div>
@@ -1931,7 +1931,7 @@ export default function WorkspaceSection({
                 <h4 className="font-bold text-sm text-[#D92662]">Legal Risk Assessment & Verdict</h4>
                 
               </div>
-              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
                 {renderFormattedText(shadowResult.assessment)}
               </div>
             </div>
@@ -1964,7 +1964,7 @@ export default function WorkspaceSection({
                 <select
                   value={selectedResidueDoc}
                   onChange={e => setSelectedResidueDoc(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -1996,7 +1996,7 @@ export default function WorkspaceSection({
                       <th className="py-2 px-3">Value</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-200 text-neutral-300 bg-white">
+                  <tbody className="divide-y divide-neutral-200 text-neutral-300 bg-[#131118]">
                     <tr>
                       <td className="py-2.5 px-3 font-semibold text-neutral-400">Author</td>
                       <td className="py-2.5 px-3">{residueResult.metadata.author || 'Unknown'}</td>
@@ -2043,7 +2043,7 @@ export default function WorkspaceSection({
                 </div>
                 
               </div>
-              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
                 {renderFormattedText(residueResult.forensics_report)}
               </div>
             </div>
@@ -2119,7 +2119,7 @@ export default function WorkspaceSection({
               </div>
               
             </div>
-            <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-white border border-neutral-100 p-3 rounded-lg">
+            <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
               {renderFormattedText(echoResult)}
             </div>
           </div>
@@ -2151,7 +2151,7 @@ export default function WorkspaceSection({
                 <select
                   value={selectedAlchemyDoc}
                   onChange={e => setSelectedAlchemyDoc(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:border-[#D92662] cursor-pointer"
+                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer"
                 >
                   {successDocs.map((doc, i) => (
                     <option key={i} value={doc.namespace}>{doc.name}</option>
@@ -2246,11 +2246,11 @@ export default function WorkspaceSection({
           </div>
         )}
 
-        <div className={`bg-white border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 ${
+        <div className={`bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 ${
           isFullscreen ? 'rounded-none border-0' : 'rounded-2xl shadow-xl'
         }`}>
           {/* Tab bar */}
-          <div className="border-b border-neutral-850 flex items-center justify-between bg-white pr-4">
+          <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
             <div className="flex-1 overflow-x-auto min-w-0">
               <div className="flex min-w-max">
                 {tabs.map(t => (
