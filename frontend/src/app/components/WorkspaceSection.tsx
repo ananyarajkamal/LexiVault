@@ -3,7 +3,7 @@ import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
   CheckCircle2, XCircle, Scale, Diff, Mic, Volume2, Clock, LayoutDashboard,
-  Swords, Fingerprint, Languages, Code
+  Swords, Fingerprint, Languages, Code, Maximize2, Minimize2
 } from 'lucide-react';
 
 const workspaceTranslations = {
@@ -376,6 +376,7 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
 
   // Voice State & Helpers
   const [isListening, setIsListening] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const startSpeechRecognition = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -2138,7 +2139,9 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
 
   return (
     <section id="workspace" className="py-16 sm:py-24 bg-[#F6F4F0]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className={`mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out ${
+        isMaximized ? 'max-w-[98%] w-full' : 'max-w-5xl'
+      }`}>
         <div className="text-center max-w-2xl mx-auto mb-10">
           <p className="text-[#092E26] font-bold text-xs tracking-[0.2em] uppercase mb-3">{t.uploadTab}</p>
           <h2 className="text-3xl sm:text-4xl font-serif font-black text-neutral-900 tracking-tight">
@@ -2149,20 +2152,35 @@ export default function WorkspaceSection({ globalLanguage }: { globalLanguage: '
 
         <div className="bg-white rounded-2xl shadow-xl border border-neutral-200 overflow-hidden">
           {/* Tab bar */}
-          <div className="border-b border-neutral-200 overflow-x-auto">
-            <div className="flex min-w-max">
-              {tabs.map(t => (
-                <button key={t.id} onClick={() => setActiveTab(t.id)}
-                  className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
-                    activeTab === t.id
-                      ? 'border-[#092E26] text-[#092E26] bg-[#092E26]/5'
-                      : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50'
-                  }`}>
-                  <t.icon className="w-4 h-4" />
-                  <span>{t.label}</span>
-                </button>
-              ))}
+          <div className="border-b border-neutral-200 flex items-center justify-between bg-white pr-4">
+            <div className="flex-1 overflow-x-auto min-w-0">
+              <div className="flex min-w-max">
+                {tabs.map(t => (
+                  <button key={t.id} onClick={() => setActiveTab(t.id)}
+                    className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
+                      activeTab === t.id
+                        ? 'border-[#092E26] text-[#092E26] bg-[#092E26]/5'
+                        : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50'
+                    }`}>
+                    <t.icon className="w-4 h-4" />
+                    <span>{t.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
+            {/* Maximize Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setIsMaximized(!isMaximized)}
+              className="ml-2 p-2 text-neutral-500 hover:text-[#092E26] hover:bg-neutral-50 rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center"
+              title={isMaximized ? "Collapse View" : "Maximize View"}
+            >
+              {isMaximized ? (
+                <Minimize2 className="w-4.5 h-4.5" />
+              ) : (
+                <Maximize2 className="w-4.5 h-4.5" />
+              )}
+            </button>
           </div>
 
           {/* Tab content */}
