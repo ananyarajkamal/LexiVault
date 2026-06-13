@@ -1,6 +1,6 @@
 # LexiVault
 
-LexiVault is a fully private AI document intelligence tool. It reads legal and business documents, extracts key clauses, flags risks, explains complex language in plain terms, and helps users make decisions about what they are reading. The entire document parsing, embedding generation, and vector search pipeline runs locally on the user's system to ensure absolute confidentiality.
+LexiVault is a private AI document intelligence tool. It reads legal and business documents, extracts key clauses, flags risks, explains complex language in plain terms, and helps users make decisions about what they are reading. The document parsing, embedding generation, and vector database search pipeline runs locally on the user's system to ensure confidentiality (note: an active internet connection is required for external Groq Cloud LLM and Wolfram Alpha API requests).
 
 ---
 
@@ -11,7 +11,7 @@ When a contract, NDA, vendor agreement, or other legal document needs to be revi
 2. Review it manually, which keeps the data private but takes hours and increases the chance of human error.
 3. Hire external legal counsel, which is highly accurate but expensive and slow.
 
-LexiVault is designed to be fast, private, and accurate simultaneously, providing a comprehensive suite of document intelligence and contract negotiation tools:
+LexiVault is designed to be fast, private, and accurate simultaneously, providing a comprehensive suite of document intelligence and contract negotiation tools without the entire document ever leaving the local machine (only short retrieved context chunks are sent to the external LLM API):
 
 ### Core Features
 * **Bilingual Chat & Q&A**: Ask natural language questions in English or Hindi about your uploaded documents and get response citations with exact page numbers.
@@ -170,7 +170,8 @@ The FastAPI backend (`app.py`) exposes the following endpoints:
 
 ## Prerequisites
 
-Before setting up the project, make sure you have the following installed on your system:
+Before setting up the project, make sure you meet these requirements:
+* **Active Internet Connection**: Required to connect to the external Groq Cloud LLM and Wolfram Alpha APIs (as the application does not run 100% offline).
 * **Python 3.8+**
 * **Node.js** (v18 or newer recommended, with npm)
 * **Tesseract OCR**
