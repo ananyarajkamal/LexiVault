@@ -343,6 +343,7 @@ export default function WorkspaceSection({
     assessment: string;
   } | null>(null);
   const [isBattling, setIsBattling] = useState(false);
+  const [shadowLang, setShadowLang] = useState('English');
 
   // Residue state
   const [selectedResidueDoc, setSelectedResidueDoc] = useState('');
@@ -431,6 +432,7 @@ export default function WorkspaceSection({
     setNegotiationLang(l);
     setDiffLang(l);
     setEchoLang(l);
+    setShadowLang(l);
   }, [globalLanguage]);
 
   useEffect(() => {
@@ -513,7 +515,7 @@ export default function WorkspaceSection({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           namespace: selectedShadowDoc,
-          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
+          language: shadowLang,
         }),
       });
       const data = await res.json();
@@ -860,31 +862,33 @@ export default function WorkspaceSection({
     if (!text) return null;
     const lines = text.split('\n');
     return lines.map((line, idx) => {
-      let headerLevel = 0;
-      let headerText = line;
-      if (line.startsWith('### ')) {
-        headerLevel = 3;
-        headerText = line.substring(4);
-      } else if (line.startsWith('## ')) {
-        headerLevel = 2;
-        headerText = line.substring(3);
-      } else if (line.startsWith('# ')) {
-        headerLevel = 1;
-        headerText = line.substring(2);
+      // Robust regex header matching for # to ######
+      const headerMatch = line.match(/^(#{1,6})\s+(.*)$/);
+      if (headerMatch) {
+        const level = headerMatch[1].length;
+        const headerText = headerMatch[2];
+        const parts = headerText.split(/\*\*([^*]+)\*\*/g);
+        const content = parts.map((part, i) => 
+          i % 2 === 1 ? <strong key={i} className="font-bold text-[#D92662]">{part}</strong> : part
+        );
+
+        const classNames = [
+          "text-xl font-bold text-neutral-100 mt-4 mb-2",       // h1
+          "text-lg font-bold text-neutral-100 mt-3 mb-1.5",     // h2
+          "text-base font-bold text-neutral-100 mt-2.5 mb-1",   // h3
+          "text-sm font-bold text-neutral-100 mt-2 mb-1",       // h4
+          "text-xs font-bold text-neutral-100 mt-1.5 mb-1",     // h5
+          "text-xs font-bold text-neutral-100 mt-1 mb-1"        // h6
+        ];
+        const headingClass = classNames[Math.min(level - 1, 5)];
+        const TagName = `h${Math.min(level, 6)}`;
+        return React.createElement(TagName, { key: idx, className: headingClass }, content);
       }
 
-      const parts = headerText.split(/\*\*([^*]+)\*\*/g);
+      const parts = line.split(/\*\*([^*]+)\*\*/g);
       const content = parts.map((part, i) => 
         i % 2 === 1 ? <strong key={i} className="font-bold text-[#D92662]">{part}</strong> : part
       );
-
-      if (headerLevel === 1) {
-        return <h1 key={idx} className="text-xl font-bold text-neutral-100 mt-4 mb-2">{content}</h1>;
-      } else if (headerLevel === 2) {
-        return <h2 key={idx} className="text-lg font-bold text-neutral-100 mt-3 mb-1.5">{content}</h2>;
-      } else if (headerLevel === 3) {
-        return <h3 key={idx} className="text-base font-bold text-neutral-100 mt-2.5 mb-1">{content}</h3>;
-      }
 
       return (
         <React.Fragment key={idx}>
@@ -1779,7 +1783,7 @@ export default function WorkspaceSection({
           <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 flex flex-col justify-between">
             <span className="text-xs font-bold text-neutral-450 uppercase tracking-wider">Total Portfolio Liability Cap</span>
             <span className="text-3xl font-serif font-black text-[#D92662] mt-2">
-              ${portfolioStats.total_liability.toLocaleString()}
+              ₹{portfolioStats.total_liability.toLocaleString()}
             </span>
           </div>
         </div>
@@ -1796,7 +1800,7 @@ export default function WorkspaceSection({
                     <div className="flex justify-between items-center text-xs">
                       <span className="font-bold text-neutral-300">{item.vendor}</span>
                       <span className="text-neutral-450 font-semibold">
-                        ${item.value.toLocaleString()} ({item.share}%)
+                        ₹{item.value.toLocaleString()} ({item.share}%)
                       </span>
                     </div>
                     <div className="h-2.5 w-full bg-neutral-800 rounded-full overflow-hidden">
@@ -1874,6 +1878,10 @@ export default function WorkspaceSection({
                     <option key={i} value={doc.namespace}>{doc.name}</option>
                   ))}
                 </select>
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
+                <LangSelect value={shadowLang} onChange={setShadowLang} />
               </div>
               <button
                 type="submit"

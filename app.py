@@ -14,6 +14,31 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTa
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+# ---------------------------------------------------------------------------
+# Resilient LLM Wrapper Patch to handle Groq rate limits (429) automatically
+# ---------------------------------------------------------------------------
+import langchain_groq
+original_ChatGroq = langchain_groq.ChatGroq
+
+class ResilientChatGroq(original_ChatGroq):
+    def invoke(self, *args, **kwargs):
+        try:
+            return super().invoke(*args, **kwargs)
+        except Exception as e:
+            err_str = str(e)
+            if "429" in err_str or "rate_limit" in err_str.lower() or "rate limit" in err_str.lower():
+                print(f"Rate limit hit on model '{self.model_name}'! Falling back to 'llama-3.1-8b-instant'...")
+                api_key_str = self.groq_api_key.get_secret_value() if hasattr(self.groq_api_key, "get_secret_value") else self.groq_api_key
+                fallback_llm = original_ChatGroq(
+                    model_name="llama-3.1-8b-instant",
+                    groq_api_key=api_key_str,
+                    temperature=self.temperature
+                )
+                return fallback_llm.invoke(*args, **kwargs)
+            raise e
+
+langchain_groq.ChatGroq = ResilientChatGroq
+
 from ingestion.pdf_parser import parse_pdf
 from ingestion.docx_parser import parse_docx
 from ingestion.chunker import chunk_text

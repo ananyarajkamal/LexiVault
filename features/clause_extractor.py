@@ -13,13 +13,16 @@ def extract_clauses(document_text: str) -> dict:
         prompt = CLAUSE_EXTRACTION_PROMPT.format(contract_text=document_text)
         response = llm.invoke(prompt)
         response_text = response.content.strip()
-        if response_text.startswith("```json"): response_text = response_text[7:]
-        if response_text.startswith("```"): response_text = response_text[3:]
-        if response_text.endswith("```"): response_text = response_text[:-3]
-        clauses = json.loads(response_text.strip())
+        import re
+        json_match = re.search(r"(\{.*\})", response_text, re.DOTALL)
+        if json_match:
+            json_str = json_match.group(1)
+        else:
+            json_str = response_text
+        clauses = json.loads(json_str.strip())
         for key in REQUIRED_KEYS:
             if key not in clauses: clauses[key] = "NOT FOUND"
         return clauses
     except Exception as e:
         print(e)
-        return default_result
+        raise e
