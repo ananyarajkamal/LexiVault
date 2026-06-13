@@ -49,14 +49,38 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 ### 2. Multi-Contract Portfolio Dashboard
 ![Portfolio Risk Dashboard](assets/portfolio.png)
 
-### 3. Multi-Agent AI Negotiation Sandbox
-![AI Negotiation Sandbox Dialogue](assets/negotiate.png)
+### 3. Core Workspace Features
+<details>
+  <summary>🔍 Click to view Core Analysis Showcase (Decision Brief, Redline, Diff, etc.)</summary>
+  <br/>
 
-### 4. Semantic Diff Analyzer
-![Semantic Similarity & Shift Audit](assets/diff.png)
+  #### Multi-Document Decision Brief in Hinglish
+  ![Bilingual Hinglish Decision Brief](assets/brief.png)
 
-### 5. Multi-Document Decision Brief in Hinglish
-![Bilingual Hinglish Decision Brief](assets/brief.png)
+  #### Multi-Agent AI Negotiation Sandbox
+  ![AI Negotiation Sandbox Dialogue](assets/negotiate.png)
+
+  #### Semantic Diff Analyzer
+  ![Semantic Similarity & Shift Audit](assets/diff.png)
+</details>
+
+### 4. Advanced Intelligence Showcase
+<details>
+  <summary>⚡ Click to view Advanced Features (AI Contract Battle, Timeline, SLA Compiler, Forensics)</summary>
+  <br/>
+
+  #### AI vs. AI Contract Battle (The Shadow)
+  ![AI vs. AI Contract Battle](assets/shadow.png)
+
+  #### Contract Lifecycle Timeline Predictor
+  ![Contract Lifecycle Timeline](assets/timeline.png)
+
+  #### Invisible Document Forensics (The Residue)
+  ![Invisible Document Forensics](assets/residue.png)
+
+  #### Contract-to-Code Compiler (The Alchemy)
+  ![Contract-to-Code Compiler](assets/alchemy.png)
+</details>
 
 ---
 
