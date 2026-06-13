@@ -51,23 +51,38 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 
 ### 3. Core Workspace Features
 <details>
-  <summary>Click to view Core Analysis Showcase (Decision Brief, Redline, Diff, etc.)</summary>
+  <summary>Click to view Core Analysis Showcase (Chat, Risk Scoring, Plain Language, Brief, Redline, Contradictions)</summary>
   <br/>
 
-  #### Multi-Document Decision Brief in Hinglish
-  ![Bilingual Hinglish Decision Brief](assets/brief.png)
+  #### Bilingual Chat & Q&A
+  ![Bilingual Chat & Q&A](assets/chat.png)
 
-  #### Multi-Agent AI Negotiation Sandbox
-  ![AI Negotiation Sandbox Dialogue](assets/negotiate.png)
+  #### Risk Scorer & Analysis
+  ![Risk Scorer & Analysis](assets/risks.png)
 
-  #### Semantic Diff Analyzer
-  ![Semantic Similarity & Shift Audit](assets/diff.png)
+  #### Plain Language Mode
+  ![Plain Language Mode](assets/plain.png)
+
+  #### Multi-Document Decision Brief
+  ![Multi-Document Decision Brief](assets/brief.png)
+
+  #### Contract Redline Compare (Hindi Output)
+  ![Contract Redline Compare](assets/redline.png)
+
+  #### Contradiction Detector (Hindi Output)
+  ![Contradiction Detector](assets/contradictions.png)
 </details>
 
 ### 4. Advanced Intelligence Showcase
 <details>
-  <summary>Click to view Advanced Features (AI Contract Battle, Timeline, SLA Compiler, Forensics)</summary>
+  <summary>Click to view Advanced Features (Negotiation Sandbox, Semantic Diff, Contract Battle, Timeline, Forensics, SLA Compiler)</summary>
   <br/>
+
+  #### AI Negotiation Sandbox
+  ![AI Negotiation Sandbox](assets/negotiate.png)
+
+  #### Semantic Diff Analyzer
+  ![Semantic Diff Analyzer](assets/diff.png)
 
   #### AI vs. AI Contract Battle (The Shadow)
   ![AI vs. AI Contract Battle](assets/shadow.png)
@@ -77,6 +92,9 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 
   #### Invisible Document Forensics (The Residue)
   ![Invisible Document Forensics](assets/residue.png)
+
+  #### Cross-Language Legal Harmonics (The Echo)
+  ![Cross-Language Legal Harmonics](assets/echo.png)
 
   #### Contract-to-Code Compiler (The Alchemy)
   ![Contract-to-Code Compiler](assets/alchemy.png)
