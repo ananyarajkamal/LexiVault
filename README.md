@@ -11,25 +11,33 @@ When a contract, NDA, vendor agreement, or other legal document needs to be revi
 2. Review it manually, which keeps the data private but takes hours and increases the chance of human error.
 3. Hire external legal counsel, which is highly accurate but expensive and slow.
 
-LexiVault is designed to be fast, private, and accurate simultaneously. It allows users to upload documents, ask questions in a chat interface, generate structured summaries (decision briefs), compare versions to find changes (redline autopilot), and audit conflict terms (contradiction detector) without any of the document content leaving the local machine.
+LexiVault is designed to be fast, private, and accurate simultaneously, providing a comprehensive suite of document intelligence and contract negotiation tools:
 
-Furthermore, LexiVault features advanced contract intelligence tools:
-* AI Negotiation Sandbox & Opposing Counsel Pushback Simulator: Simulate clause-by-clause debates between customizable Buyer and Seller counsel personas, or input a proposed edit to predict counterarguments and alternative clauses from opposing counsel.
-* Negotiation Ghostwriter: Draft diplomatic compromise language or legally sound rejections with alternatives when receiving counterparty redlined edits.
-* Semantic Diff Analyzer: Compute similarity changes between two clauses using local sentence vector embeddings and generate a structured audit explaining the legal shifts in rights or obligations.
-* Hinglish Code-Switching explaining engine: Translate complex legal legalese directly into conversational Hinglish (Hindi written in the Latin alphabet) for simple and intuitive understanding.
-* Contract Lifecycle Timeline Predictor: Estimate negotiation duration, renewal risks, and expiration cascades using LLM temporal graph analysis on contract metadata.
-* Cross-Document Portfolio Risk Dashboard: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
-* The Shadow (AI vs. AI Contract Battle): Select a document to watch adversarial Attacker and Defender AI counsel debate clause liabilities and deliver a final legal risk assessment.
-* The Residue (Invisible Document Forensics): Run binary inspections of PDF bytes to extract hidden metadata (author, tools, creation dates) using PyMuPDF and perform text checks for altered boilerplates.
-* The Echo (Cross-Language Legal Harmonics): Compare semantic legal weight and translation traps (e.g. "best efforts" vs "reasonable efforts") across English, Hindi, and Hinglish.
-* The Alchemy (Contract to Executable Code): Parse SLA performance bounds (uptime, latency, resolution times) and compile them into Prometheus Alert YAML rules.
+### Core Features
+* **Bilingual Chat & Q&A**: Ask natural language questions in English or Hindi about your uploaded documents and get response citations with exact page numbers.
+* **Risk Scorer & Analysis**: Extract critical clauses and automatically score risks (High/Medium/Low) based on liability caps, indemnification, non-competes, and termination, with Wolfram Alpha context integration.
+* **Plain Language Mode**: Translate complex legal jargon into clear, one-sentence explanations without losing legal meaning.
+* **Decision Brief Generator**: Generate structured, multi-document summaries with risks and strategic recommendations.
+* **Contract Redline Autopilot**: Compare two versions of a contract to highlight character changes and analyze legal impact.
+* **Contradiction Detector**: Automatically scan and flag conflicting terms across multiple agreements.
+
+### Advanced Features
+* **AI Negotiation Sandbox & Opposing Counsel Pushback Simulator**: Simulate clause-by-clause debates between customizable Buyer and Seller counsel personas, or input a proposed edit to predict counterarguments and alternative clauses from opposing counsel.
+* **Negotiation Ghostwriter**: Draft diplomatic compromise language or legally sound rejections with alternatives when receiving counterparty redlined edits.
+* **Semantic Diff Analyzer**: Compute similarity changes between two clauses using local sentence vector embeddings and generate a structured audit explaining the legal shifts in rights or obligations.
+* **Hinglish Code-Switching explaining engine**: Translate complex legal legalese directly into conversational Hinglish (Hindi written in the Latin alphabet) for simple and intuitive understanding.
+* **Contract Lifecycle Timeline Predictor**: Estimate negotiation duration, renewal risks, and expiration cascades using LLM temporal graph analysis on contract metadata.
+* **Cross-Document Portfolio Risk Dashboard**: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
+* **The Shadow (AI vs. AI Contract Battle)**: Select a document to watch adversarial Attacker and Defender AI counsel debate clause liabilities and deliver a final legal risk assessment.
+* **The Residue (Invisible Document Forensics)**: Run binary inspections of PDF bytes to extract hidden metadata (author, tools, creation dates) using PyMuPDF and perform text checks for altered boilerplates.
+* **The Echo (Cross-Language Legal Harmonics)**: Compare semantic legal weight and translation traps (e.g. "best efforts" vs "reasonable efforts") across English, Hindi, and Hinglish.
+* **The Alchemy (Contract to Executable Code)**: Parse SLA performance bounds (uptime, latency, resolution times) and compile them into Prometheus Alert YAML rules.
 
 ### Seamless Workspace Transition
 LexiVault blends a content-rich landing page with a dedicated, focused web-application dashboard:
 * **Zero-Friction Entry:** The interactive Workspace is accessible directly at the bottom of the landing page.
 * **Instant Fullscreen App Mode:** The moment you engage with the workspace—whether by uploading a file, selecting a tab, clicking interactive cards, or focusing a chat/text input—the landing page copy, headers, and footers are hidden, and the workspace instantly transitions into a distraction-free 100vw/100vh application viewport.
-* **Full State Preservation:** Using a single-mount layout architecture, all React state (such as indexed documents, active chat history, form inputs, and compiled outputs) is fully preserved during fullscreen toggling.
+* **Full State Preservation:** Using a single-mount layout architecture, all React state (such as indexed documents, active chat history, form inputs, and compiled outputs) is preserved during fullscreen toggling.
 
 ---
 
