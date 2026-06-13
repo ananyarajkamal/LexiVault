@@ -69,7 +69,7 @@ LexiVault uses a hybrid, local-first RAG (Retrieval-Augmented Generation) pipeli
 Before setting up the project, make sure you have the following installed on your system:
 * **Python 3.8+**
 * **Node.js** (v18 or newer recommended, with npm)
-* **Tesseract OCR** (optional: only required if you need to perform optical character recognition on scanned PDFs)
+* **Tesseract OCR**
   * *Windows:* Install via installer and add to your System PATH.
   * *macOS:* Install via Homebrew: `brew install tesseract`
   * *Linux:* Install via apt: `sudo apt-get install tesseract-ocr`
