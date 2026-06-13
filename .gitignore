@@ -20,6 +20,7 @@ pyenv/
 
 # Locally Generated Database & Vector Indexes
 data/faiss_index/
+data/uploads/
 
 # Node/React Frontend dependencies and build outputs
 frontend/node_modules/
