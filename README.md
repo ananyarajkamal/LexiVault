@@ -1,6 +1,6 @@
 # LexiVault
 
-LexiVault is a private AI document intelligence tool. It reads legal and business documents, extracts key clauses, flags risks, explains complex language in plain terms, and helps users make decisions about what they are reading. The document parsing, embedding generation, and vector database search pipeline runs on the host machine to ensure confidentiality (note: an active internet connection is required for external Groq Cloud LLM and Wolfram Alpha API requests).
+LexiVault is a private AI document intelligence tool featuring a novel **India-specific Hinglish legal explanation engine**. It reads legal and business documents, extracts key clauses, flags risks, explains complex jargon in plain English, Hindi, or conversational Hinglish, and helps users make decisions about what they are reading. The document parsing, embedding generation, and vector database search pipeline runs on the host machine to ensure confidentiality (note: an active internet connection is required for external Groq Cloud LLM and Wolfram Alpha API requests).
 
 ---
 
@@ -15,6 +15,7 @@ LexiVault is designed to be fast, private, and accurate simultaneously, providin
 
 ### Core Features
 * **Bilingual Chat & Q&A**: Ask natural language questions in English or Hindi about your uploaded documents and get response citations with exact page numbers.
+* **Hinglish Code-Switching Engine (India-Specific)**: Translate complex legal jargon directly into conversational Hinglish (Hindi written in the Latin alphabet, e.g., *"Is clause ka matlab hai ki..."*) for intuitive, culturally tuned understanding.
 * **Risk Scorer & Analysis**: Extract critical clauses and automatically score risks (High/Medium/Low) based on liability caps, indemnification, non-competes, and termination, with Wolfram Alpha context integration.
 * **Plain Language Mode**: Translate complex legal jargon into clear, one-sentence explanations without losing legal meaning.
 * **Decision Brief Generator**: Generate structured, multi-document summaries with risks and strategic recommendations.
@@ -25,13 +26,12 @@ LexiVault is designed to be fast, private, and accurate simultaneously, providin
 * **AI Negotiation Sandbox & Opposing Counsel Pushback Simulator**: Simulate clause-by-clause debates between customizable Buyer and Seller counsel personas, or input a proposed edit to predict counterarguments and alternative clauses from opposing counsel.
 * **Negotiation Ghostwriter**: Draft diplomatic compromise language or legally sound rejections with alternatives when receiving counterparty redlined edits.
 * **Semantic Diff Analyzer**: Compute similarity changes between two clauses using sentence vector embeddings computed on the host machine and generate a structured audit explaining the legal shifts in rights or obligations.
-* **Hinglish Code-Switching explaining engine**: Translate complex legal legalese directly into conversational Hinglish (Hindi written in the Latin alphabet) for simple and intuitive understanding.
 * **Contract Lifecycle Timeline Predictor**: Estimate negotiation duration, renewal risks, and expiration cascades using LLM temporal graph analysis on contract metadata.
 * **Cross-Document Portfolio Risk Dashboard**: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
 * **The Shadow (AI vs. AI Contract Battle)**: Select a document to watch adversarial Attacker and Defender AI counsel debate clause liabilities and deliver a final legal risk assessment.
 * **The Residue (Invisible Document Forensics)**: Run binary inspections of PDF bytes to extract hidden metadata (author, tools, creation dates) using PyMuPDF and perform text checks for altered boilerplates.
 * **The Echo (Cross-Language Legal Harmonics)**: Compare semantic legal weight and translation traps (e.g. "best efforts" vs "reasonable efforts") across English, Hindi, and Hinglish.
-* **The Alchemy (Contract to Executable Code)**: Parse SLA performance bounds (uptime, latency, resolution times) and compile them into Prometheus Alert YAML rules.
+* **The Alchemy (SLA-to-Code Compiler)**: Automatically extracts service level agreement (SLA) bounds (such as uptime percentages, latency thresholds, and support resolution times) and compiles them into Prometheus Alert YAML rules. This allows engineering leads and product managers to immediately enforce vendor legal commitments directly in their production monitoring dashboard.
 
 ### Seamless Workspace Transition
 LexiVault blends a content-rich landing page with a dedicated, focused web-application dashboard:
@@ -105,10 +105,10 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 ## Target Audience
 
 LexiVault is tailored for professionals who frequently handle legal and business documents without a dedicated legal team:
-* Startup Founders: Who review and sign dozens of contracts, NDAs, and partnership agreements per year.
-* Product Managers: Who need to scan vendor API agreements for critical terms, liabilities, and data ownership clauses.
-* Business Consultants: Who compare multiple complex proposals or statements of work.
+* Startup Founders & Product Managers: Who review and sign dozens of contracts, NDAs, and vendor API service level agreements (SLAs).
 * HR Professionals: Who audit employee handbooks, policies, and contracts.
+* Business Consultants: Who compare multiple complex proposals or statements of work.
+* Engineering Managers & DevOps Leads: Who need to bridge the gap between legal vendor SLA commitments (e.g., uptime, latency thresholds) and operational monitoring configuration.
 
 ---
 
@@ -126,6 +126,17 @@ LexiVault uses a hybrid host-ingestion RAG (Retrieval-Augmented Generation) pipe
 
 > [!NOTE]
 > All document ingestion (parsing, chunking, embeddings) and retrieval (vector storage, top-k similarity search) occur 100% on your host machine. Final LLM inference is powered via the Groq Cloud API using ONLY the matching host-retrieved context chunks.
+
+### API Model Routing & Resiliency Details
+* **Primary Legal Inference Model (Llama 3.3 70B):** LexiVault uses `Llama 3.3 70B` (`llama-3.3-70b-versatile`) via the Groq Cloud API for all primary legal logic, risk scoring, contradiction audits, and negotiation simulations. Its large parameter size is necessary to handle complex legal terminology and reasoning.
+* **Automated Rate-Limit Failover (Llama 3.1 8B):** To prevent request failures under high-traffic conditions or token/rate limit exhaustion (HTTP 429), the backend utilizes a custom python resiliency wrapper (`ResilientChatGroq`). When a rate limit exception is caught, the request is instantly and transparently rerouted to the lightweight **Llama 3.1 8B** (`llama-3.1-8b-instant`) model, guaranteeing high availability.
+
+### Contract Lifecycle Timeline Predictor: Technical Workflow
+How does "temporal graph analysis on contract metadata" work technically?
+1. **Metadata Extraction:** Upon contract upload, LexiVault uses structured metadata extraction prompts to parse the document and extract key dates (`effective_date`, `expiration_date`), the counterparty (`vendor_name`), and specific termination or amendment notice windows.
+2. **Chronological Event Node Map:** The extracted dates are mapped into a chronological dependency graph (nodes represent contract milestones: Execution, Expiration, Notice Deadlines; edges represent elapsed durations and dependencies).
+3. **Temporal Gap & Dependency Analysis:** The engine programmatically inspects this graph to spot contract timeline overlaps or dependency errors. For instance, it flags a "coverage gap" if an NDA/SLA sub-agreement's expiration date falls before the master service agreement (MSA) expiration date.
+4. **Renewal Risk Scoring:** A risk score is computed by correlating the remaining contract duration against the required notice period for termination, flagging imminent renewal cliffs.
 
 ---
 
