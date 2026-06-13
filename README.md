@@ -33,6 +33,25 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 
 ---
 
+## Product Showcase
+
+### 1. Interactive Landing Page & Advanced Mockups
+![LexiVault Hero Landing Page](assets/hero.png)
+
+### 2. Multi-Contract Portfolio Dashboard
+![Portfolio Risk Dashboard](assets/portfolio.png)
+
+### 3. Multi-Agent AI Negotiation Sandbox
+![AI Negotiation Sandbox Dialogue](assets/negotiate.png)
+
+### 4. Semantic Diff Analyzer
+![Semantic Similarity & Shift Audit](assets/diff.png)
+
+### 5. Multi-Document Decision Brief in Hinglish
+![Bilingual Hinglish Decision Brief](assets/brief.png)
+
+---
+
 ## Target Audience
 
 LexiVault is tailored for professionals who frequently handle legal and business documents without a dedicated legal team:
