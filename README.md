@@ -114,15 +114,18 @@ LexiVault is tailored for professionals who frequently handle legal and business
 
 ## Technical Architecture and Privacy Model
 
-LexiVault uses a hybrid, local-first RAG (Retrieval-Augmented Generation) pipeline:
+LexiVault uses a hybrid local-ingestion RAG (Retrieval-Augmented Generation) pipeline:
 
 1. Text Extraction: PDF files are parsed locally using PyMuPDF and pdfplumber. No text extraction is sent to external APIs.
 2. Chunking: Extracted text is split into semantic chunks locally.
 3. Local Embeddings: Chunks are converted into vector representations locally using a multilingual sentence transformer model (paraphrase-multilingual-MiniLM-L12-v2).
 4. Vector Storage: Vector embeddings are indexed and stored locally on your system using a FAISS vector database.
 5. Retrieval: When a query is made, the most relevant chunks are retrieved from the local FAISS index.
-6. Local-First Inference: Only the relevant retrieved text chunks are sent to the LLM (Llama 3.3 70B via the Groq Cloud API) to generate final answers, summaries, and assessments, ensuring that entire documents are never uploaded to a cloud environment. High-risk clauses are cross-referenced with Wolfram to retrieve legal definitions and context.
-7. Local Semantic Similarity: The Semantic Diff Analyzer calculates sentence vector similarity locally on your CPU using the local embedding model, before calling the LLM to audit the legal shifts, ensuring comparison data remains completely private.
+6. Cloud-Based LLM Inference with Local Context (Groq Cloud API): To generate responses, summaries, and legal audits, only the relevant retrieved text chunks (never the entire document) are sent to the LLM (Llama 3.3 70B / Llama 3.1 8B via the Groq Cloud API). High-risk clauses are cross-referenced with Wolfram Alpha to retrieve legal definitions and context.
+7. Local Semantic Similarity: The Semantic Diff Analyzer calculates sentence vector similarity locally on your CPU using the local embedding model, before calling the LLM to audit the legal shifts, ensuring comparison data remains private.
+
+> [!NOTE]
+> All document ingestion (parsing, chunking, embeddings) and retrieval (vector storage, top-k similarity search) occur 100% locally on your machine. Final LLM inference is powered via the Groq Cloud API using ONLY the matching local context chunks.
 
 ---
 
@@ -130,6 +133,38 @@ LexiVault uses a hybrid, local-first RAG (Retrieval-Augmented Generation) pipeli
 
 * / (Root) - Python FastAPI backend containing modules for PDF parsing, text chunking, local embeddings, FAISS storage, and LLM integrations.
 * /frontend - React, TypeScript, and Tailwind CSS user interface.
+
+---
+
+## Backend API Endpoints
+
+The FastAPI backend (`app.py`) exposes the following endpoints:
+
+### Core Document Management
+* **`GET /api/documents`** (`get_documents`): Retrieves the list of currently indexed documents and their namespaces.
+* **`POST /api/upload`** (`upload_documents`): Accepts `.pdf` or `.docx` files, parses them, generates local embeddings, and persists them into FAISS indices.
+* **`DELETE /api/documents/{namespace}`** (`delete_document`): Deletes a specific document from the catalog and removes its local FAISS vector index database.
+
+### Core Analysis Endpoints
+* **`POST /api/ask`** (`ask_lexivault`): Handles bilingual conversational Q&A using top-k local retrieval and cites sources.
+* **`POST /api/clear-chat`** (`clear_chat`): Resets the LLM QA chain memory context.
+* **`GET /api/risks`** (`analyze_risks`): Scans the document, extracts key clauses, runs risk rules (High/Medium/Low), and fetches Wolfram Alpha context for high-risk clauses.
+* **`POST /api/features/plain-language`** (`plain_language`): Translates complex legalese clauses into simple, single-sentence explanations.
+* **`POST /api/features/decision-brief`** (`decision_brief`): Generates structured summary briefs, risk logs, and recommendations for uploaded contracts.
+* **`POST /api/features/redline`** (`redline_compare_api`): Compares two versions of a contract, audits additions/deletions, and generates a structured redline impact audit.
+* **`POST /api/features/contradictions`** (`contradictions`): Compares multiple agreements to detect conflicting clauses, governing laws, or liabilities.
+
+### Advanced Intelligence Endpoints
+* **`POST /api/features/negotiate`** (`negotiate_clause`): Runs a Buyer vs. Seller multi-agent clause debate simulation to output a mediated compromise clause.
+* **`POST /api/features/semantic-diff`** (`semantic_diff`): Calculates cosine similarity percentage between two clauses locally on CPU and audits the legal shift.
+* **`POST /api/features/predict-timeline`** (`predict_timeline`): Analyzes contract metadata to predict negotiation duration, likely amendment frequencies, and renewal cliffs.
+* **`POST /api/features/counterparty-sim`** (`counterparty_sim`): Simulates opposing counsel objections and counter-proposals to user-proposed clause edits.
+* **`POST /api/features/ghostwrite`** (`ghostwrite`): Drafts compromise versions or legally sound rejections with fallbacks when receiving counterparty markups.
+* **`POST /api/features/shadow`** (`shadow_battle`): Exposes the **The Shadow** feature, conducting adversarial Attacker vs. Defender debates on clause liability.
+* **`POST /api/features/residue`** (`residue_forensics`): Exposes the **The Residue** feature, extracting hidden PDF byte metadata and flagging altered standard boilerplate text.
+* **`POST /api/features/echo`** (`echo_harmonics`): Exposes the **The Echo** feature, auditing translation traps and semantic equivalence weights across English, Hindi, and Hinglish.
+* **`POST /api/features/alchemy`** (`alchemy_exporter`): Exposes the **The Alchemy** feature, parsing SLA uptime/latency clauses and exporting copyable Prometheus Alert YAML rules.
+* **`GET /api/portfolio/dashboard`** (`portfolio_dashboard`): Aggregates liability caps, active contracts count, vendor concentrations, and renewal dates into portfolio stats.
 
 ---
 
