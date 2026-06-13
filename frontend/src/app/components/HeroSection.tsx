@@ -1,4 +1,5 @@
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Swords, Languages, Scale, Feather, Fingerprint } from 'lucide-react';
+import { useState } from 'react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Swords, Languages, Scale, Feather, Fingerprint, Play, X } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -8,6 +9,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ onUploadClick, language, t }: HeroSectionProps) {
+  const [showVideoModal, setShowVideoModal] = useState(false);
   return (
     <section className="relative overflow-hidden bg-[radial-gradient(circle_at_75%_50%,#200c2e_0%,#0e0617_60%,#0e0617_100%)] border-b border-neutral-900/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-16 sm:pb-24">
@@ -45,10 +47,11 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 {t.uploadDoc}
               </button>
               <button
-                onClick={onUploadClick}
-                className="inline-flex items-center justify-center border border-neutral-700 hover:border-neutral-500 text-white font-semibold text-sm px-6 py-3.5 rounded-lg transition-all cursor-pointer bg-transparent"
+                onClick={() => setShowVideoModal(true)}
+                className="inline-flex items-center justify-center gap-2 border border-neutral-700 hover:border-neutral-500 text-white font-semibold text-sm px-6 py-3.5 rounded-lg transition-all cursor-pointer bg-transparent"
               >
-                {language === 'hi' ? 'एक नमूना आज़माएं' : 'Try a Sample'}
+                <Play className="w-4 h-4 text-[#D92662]" />
+                {language === 'hi' ? 'डेमो देखें' : 'Watch Demo'}
               </button>
             </div>
 
@@ -341,6 +344,58 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
 
         </div>
       </div>
+
+      {showVideoModal && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 transition-all duration-300">
+          <div className="relative w-full max-w-4xl bg-[#110B1B] border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.05]">
+              <h3 className="font-semibold text-white text-base">
+                {language === 'hi' ? 'लेक्सीवॉल्ट वीडियो डेमो' : 'LexiVault Product Walkthrough'}
+              </h3>
+              <button
+                onClick={() => setShowVideoModal(false)}
+                className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Video Container / Player */}
+            <div className="relative aspect-video bg-black flex items-center justify-center">
+              <video
+                src="/demo.mp4"
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.style.display = 'none';
+                  const sibling = target.nextElementSibling as HTMLElement;
+                  if (sibling) sibling.style.display = 'flex';
+                }}
+              />
+              <div 
+                className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[#1c0d29] to-[#0e0617]"
+                style={{ display: 'none' }}
+              >
+                <div className="w-16 h-16 rounded-full bg-[#D92662]/10 border border-[#D92662]/30 flex items-center justify-center text-[#D92662] mb-4 animate-pulse">
+                  <Play className="w-8 h-8 fill-current ml-1" />
+                </div>
+                <h4 className="text-white font-bold text-lg mb-2">
+                  {language === 'hi' ? 'डेमो वीडियो जल्द ही आ रहा है!' : 'Demo Video coming soon!'}
+                </h4>
+                <p className="text-sm text-neutral-400 max-w-md leading-relaxed font-sans">
+                  {language === 'hi' 
+                    ? 'कृपया अपने कस्टम वीडियो को दिखाने के लिए demo.mp4 फ़ाइल को frontend/public/ फ़ोल्डर में रखें।'
+                    : 'To display your custom walkthrough, place your demo.mp4 file in the frontend/public/ directory.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
