@@ -51,7 +51,7 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 
 ### 3. Core Workspace Features
 <details>
-  <summary>🔍 Click to view Core Analysis Showcase (Decision Brief, Redline, Diff, etc.)</summary>
+  <summary>Click to view Core Analysis Showcase (Decision Brief, Redline, Diff, etc.)</summary>
   <br/>
 
   #### Multi-Document Decision Brief in Hinglish
@@ -66,7 +66,7 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 
 ### 4. Advanced Intelligence Showcase
 <details>
-  <summary>⚡ Click to view Advanced Features (AI Contract Battle, Timeline, SLA Compiler, Forensics)</summary>
+  <summary>Click to view Advanced Features (AI Contract Battle, Timeline, SLA Compiler, Forensics)</summary>
   <br/>
 
   #### AI vs. AI Contract Battle (The Shadow)
