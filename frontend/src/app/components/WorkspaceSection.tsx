@@ -250,6 +250,7 @@ export default function WorkspaceSection({
   const [risks, setRisks] = useState<any[]>([]);
   const [wolframCtx, setWolframCtx] = useState<any[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [hasAnalyzedRisks, setHasAnalyzedRisks] = useState(false);
 
   // Plain language state
   const [clauseInput, setClauseInput] = useState('');
@@ -431,6 +432,21 @@ export default function WorkspaceSection({
     setDiffLang(l);
     setEchoLang(l);
   }, [globalLanguage]);
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/documents`);
+        const data = await res.json();
+        if (res.ok && data.documents) {
+          setDocuments(data.documents);
+        }
+      } catch (err) {
+        console.error("Failed to fetch active documents:", err);
+      }
+    };
+    fetchDocuments();
+  }, []);
 
   useEffect(() => {
     const successDocs = documents.filter(d => d.status === 'success');
@@ -658,7 +674,14 @@ export default function WorkspaceSection({
       const res = await fetch(`${API_BASE}/documents/${namespace}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Delete failed');
-      setDocuments(prev => prev.filter(doc => doc.namespace !== namespace));
+      setDocuments(prev => {
+        const remaining = prev.filter(doc => doc.namespace !== namespace);
+        if (remaining.length === 0) {
+          setRisks([]);
+          setHasAnalyzedRisks(false);
+        }
+        return remaining;
+      });
       alert('Document removed successfully.');
     } catch (err: any) {
       alert('Delete error: ' + err.message);
@@ -698,6 +721,7 @@ export default function WorkspaceSection({
       if (!res.ok) throw new Error(data.detail || 'Error');
       setRisks(data.risks || []);
       setWolframCtx(data.wolfram_context || []);
+      setHasAnalyzedRisks(true);
     } catch (err: any) { alert('Risk analysis error: ' + err.message); }
     finally { setIsAnalyzing(false); }
   };
@@ -1008,7 +1032,13 @@ export default function WorkspaceSection({
       {risks.length === 0 ? (
         <div className="text-center py-16 text-neutral-400">
           <ShieldAlert className="w-10 h-10 mx-auto mb-3 opacity-40" />
-          <p className="text-sm">{documents.length === 0 ? t.noDocsChat : t.noRisks}</p>
+          <p className="text-sm">
+            {documents.length === 0 
+              ? t.noDocsChat 
+              : hasAnalyzedRisks 
+                ? (globalLanguage === 'hi' ? "इस दस्तावेज़ में कोई कानूनी जोखिम नहीं मिला।" : "No legal risks detected in the uploaded documents.")
+                : t.noRisks}
+          </p>
         </div>
       ) : (
         <div className="space-y-4">

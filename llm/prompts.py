@@ -40,13 +40,17 @@ PLAIN_LANGUAGE_PROMPT = (
 
 DECISION_BRIEF_PROMPT = (
     "You are LexiVault. Analyze the following retrieved document chunks from multiple "
-    "documents and produce a structured decision brief with these exact sections: "
-    "1. Document Summaries, two sentences per document. 2. Key Terms Comparison, a "
-    "comparison of important terms across all documents. 3. Risk Flags, list every risk "
-    "with severity High Medium or Low. 4. Recommendation, one paragraph advising the user. "
-    "Cite every claim with exact page number and clause. Respond in the language specified: "
-    "English, Hindi, or Hinglish (Hindi text written in the Latin/English script). "
-    "Context: {context} Language: {language}"
+    "documents and produce a structured decision brief with these exact sections:\n"
+    "1. Document Summaries (two sentences per document)\n"
+    "2. Key Terms Comparison (a comparison of important terms across all documents)\n"
+    "3. Risk Flags (list every risk with severity High, Medium, or Low)\n"
+    "4. Recommendation (one paragraph advising the user)\n\n"
+    "Cite every claim with its exact page number and clause. "
+    "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
+    "If the language is 'Hindi', write everything in Devanagari script. "
+    "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet, e.g., 'Hum recommend karte hain ki...', 'Document summaries niche diye gaye hain...').\n"
+    "Do not use English for headers or summaries if Hindi or Hinglish is selected.\n"
+    "Context: {context}"
 )
 """Prompt template for decision brief generation. Placeholders: {context}, {language}."""
 
@@ -55,9 +59,12 @@ CONTRADICTION_PROMPT = (
     "identify every contradiction, conflict, or inconsistency between them. For each "
     "contradiction state: which documents conflict, which clauses conflict, what the "
     "conflict is in plain language, and which document the user should trust or renegotiate. "
-    "Cite exact page numbers and clauses. Respond in the language specified: "
-    "English, Hindi, or Hinglish (Hindi text written in the Latin/English script). "
-    "Context: {context} Language: {language}"
+    "Cite exact page numbers and clauses. "
+    "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
+    "If the language is 'Hindi', write everything in Devanagari script. "
+    "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet).\n"
+    "Do not use English for headers or summaries if Hindi or Hinglish is selected.\n"
+    "Context: {context}"
 )
 """Prompt template for contradiction detection. Placeholders: {context}, {language}."""
 
@@ -66,8 +73,11 @@ REDLINE_PROMPT = (
     "change between version 1 and version 2. For each change state: what changed in plain "
     "language, which party this change favors, whether this change is High Risk Medium Risk "
     "or Low Risk for the user, and one suggested counter-clause if the change is unfavorable. "
-    "Respond in the language specified: English, Hindi, or Hinglish (Hindi text written in the "
-    "Latin/English script). Version 1: {version_1} Version 2: {version_2} Language: {language}"
+    "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
+    "If the language is 'Hindi', write everything in Devanagari script. "
+    "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet).\n"
+    "Do not use English for headers or summaries if Hindi or Hinglish is selected.\n"
+    "Version 1: {version_1} Version 2: {version_2}"
 )
 """Prompt template for redline comparison. Placeholders: {version_1}, {version_2}, {language}."""
 

@@ -80,13 +80,43 @@ session_state = {
     "analyzed_risks": {}
 }
 
+def restore_session_state():
+    upload_dir = os.path.join("data", "uploads")
+    faiss_dir = "data/faiss_index"
+    
+    if os.path.exists(upload_dir):
+        for filename in os.listdir(upload_dir):
+            file_path = os.path.join(upload_dir, filename)
+            if os.path.isfile(file_path):
+                namespace = os.path.splitext(filename)[0]
+                
+                # Check if FAISS index files exist for this namespace
+                faiss_file = os.path.join(faiss_dir, f"{namespace}.faiss")
+                pkl_file = os.path.join(faiss_dir, f"{namespace}.pkl")
+                
+                if os.path.exists(faiss_file) and os.path.exists(pkl_file):
+                    if namespace not in session_state["namespaces"]:
+                        session_state["namespaces"].append(namespace)
+                    session_state["uploaded_files"][namespace] = file_path
+                    
+                    # Extract text and store in cache
+                    try:
+                        text = extract_text_from_file(file_path)
+                        if text:
+                            session_state["extracted_texts"][namespace] = text
+                    except Exception as e:
+                        print(f"Failed to restore text for {namespace}: {e}")
+
+# Run restoration immediately on startup
+restore_session_state()
+
 def _lang_code(lang_display: str) -> str:
     if lang_display == "Hindi":
-        return "hindi"
+        return "Hindi"
     elif lang_display == "Hinglish":
-        return "hinglish"
+        return "Hinglish"
     else:
-        return "english"
+        return "English"
 
 # ---------------------------------------------------------------------------
 # API Models
@@ -154,17 +184,33 @@ class AlchemyRequest(BaseModel):
 # Endpoints
 # ---------------------------------------------------------------------------
 
+@app.get("/api/documents")
+def get_documents():
+    docs = []
+    for ns in session_state["namespaces"]:
+        file_path = session_state["uploaded_files"].get(ns, "")
+        filename = os.path.basename(file_path) if file_path else f"{ns}.pdf"
+        docs.append({
+            "name": filename,
+            "status": "success",
+            "namespace": ns,
+            "message": "Indexed successfully"
+        })
+    return {"documents": docs}
+
 @app.post("/api/upload")
 async def upload_documents(files: List[UploadFile] = File(...)):
     if not files:
         raise HTTPException(status_code=400, detail="No files uploaded.")
     
     results = []
+    upload_dir = os.path.join("data", "uploads")
+    os.makedirs(upload_dir, exist_ok=True)
     
     for file in files:
         try:
-            # Save to temp file
-            temp_path = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}_{file.filename}")
+            # Save to project persistent upload folder
+            temp_path = os.path.join(upload_dir, file.filename)
             with open(temp_path, "wb") as f:
                 f.write(await file.read())
                 
