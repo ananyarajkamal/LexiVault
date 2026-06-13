@@ -37,21 +37,37 @@ def conduct_shadow_battle(contract_text: str, language: str) -> Dict[str, Any]:
         defend_match = re.search(r"DEFENDER_TURN:\s*(.*?)(?=\n\s*ASSESSMENT:|$)", output, re.DOTALL | re.IGNORECASE)
         assess_match = re.search(r"ASSESSMENT:\s*(.*)", output, re.DOTALL | re.IGNORECASE)
 
+        def clean_section(t_str: str) -> str:
+            t_str = t_str.strip()
+            # Strip leading/trailing asterisks, colons, newlines, and spaces
+            t_str = re.sub(r"^[\s\*:]+|[\s\*:]+$", "", t_str)
+            lines = t_str.split('\n')
+            cleaned_lines = []
+            for line in lines:
+                l_strip = line.strip()
+                if l_strip == "**" or l_strip == "*" or not l_strip:
+                    continue
+                if any(hdr in l_strip.upper() for hdr in ["CLAUSE_FOCUS", "ATTACKER_TURN", "DEFENDER_TURN", "ASSESSMENT"]):
+                    if len(l_strip) < 30:
+                        continue
+                cleaned_lines.append(line)
+            return "\n".join(cleaned_lines).strip()
+
         if focus_match:
-            clause_focus = focus_match.group(1).strip()
+            clause_focus = clean_section(focus_match.group(1))
         else:
             clause_focus = "General liability terms"
 
         if attack_match:
-            attacker_turn = attack_match.group(1).strip()
+            attacker_turn = clean_section(attack_match.group(1))
         else:
-            attacker_turn = output
+            attacker_turn = clean_section(output)
 
         if defend_match:
-            defender_turn = defend_match.group(1).strip()
+            defender_turn = clean_section(defend_match.group(1))
 
         if assess_match:
-            assessment = assess_match.group(1).strip()
+            assessment = clean_section(assess_match.group(1))
 
         return {
             "clause_focus": clause_focus,
