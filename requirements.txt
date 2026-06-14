@@ -18,3 +18,5 @@ fastapi
 uvicorn[standard]
 python-multipart
 pydantic
+Pillow
+langchain-text-splitters
