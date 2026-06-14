@@ -32,9 +32,10 @@ CLAUSE_EXTRACTION_PROMPT = (
 
 PLAIN_LANGUAGE_PROMPT = (
     "You are a plain language legal translator. Explain the following legal clause in one "
-    "simple sentence that a non-lawyer can understand. If the user language is Hindi, respond "
-    "in Hindi. If English, respond in English. If Hinglish, explain in simple, conversational "
-    "Hinglish (Hindi written in the Latin/English script, e.g., 'Is clause ka matlab hai ki...'). "
+    "simple sentence that a non-lawyer can understand. "
+    "CRITICAL: If the user language is 'Hindi', you MUST respond in Hindi using the Devanagari script (e.g. 'यह क्लॉज...'). "
+    "If 'Hinglish', explain in simple, conversational Hinglish (Hindi written in the Latin/English script, e.g., 'Is clause ka matlab hai ki...'). "
+    "If 'English', respond in plain English. "
     "Do not add any extra information beyond what the clause says. Clause: {clause} User language: {language}"
 )
 """Prompt template for plain language explanation. Placeholders: {clause}, {language}."""
@@ -88,7 +89,10 @@ NEGOTIATION_BUYER_PROMPT = (
     "Review the current clause text: '{current_text}'. "
     "Write your argument/objection (favoring the Buyer according to your stance) and "
     "propose a modified version of the clause. Keep your response brief, professional, "
-    "and focused. Write in {language}."
+    "and focused. Write in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST write everything in Devanagari script. "
+    "If 'Hinglish', you MUST write in conversational Hinglish (Hindi written in the Latin/English script, e.g. 'Hum propose karte hain...'). "
+    "If 'English', write in plain English."
 )
 """Prompt template for the buyer agent in the negotiation sandbox. Placeholders: {stance}, {clause_type}, {current_text}, {language}."""
 
@@ -98,7 +102,10 @@ NEGOTIATION_SELLER_PROMPT = (
     "Review the Buyer's argument and proposed clause: '{buyer_proposal}'. "
     "Write your counterargument (favoring the Seller according to your stance) and "
     "propose an alternative compromise version of the clause. Keep your response brief, "
-    "professional, and focused. Write in {language}."
+    "professional, and focused. Write in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST write everything in Devanagari script. "
+    "If 'Hinglish', you MUST write in conversational Hinglish (Hindi written in the Latin/English script, e.g. 'Hum accept nahi kar sakte...'). "
+    "If 'English', write in plain English."
 )
 """Prompt template for the seller agent in the negotiation sandbox. Placeholders: {stance}, {clause_type}, {buyer_proposal}, {language}."""
 
@@ -108,10 +115,14 @@ NEGOTIATION_MEDIATOR_PROMPT = (
     "Transcript:\n{transcript}\n\n"
     "Your job is to generate a finalized compromised version of the clause that represents "
     "a balanced middle ground satisfying both stances. Explain in one clear paragraph "
-    "why this compromise is fair to both parties. Respond in {language}. "
+    "why this compromise is fair to both parties. "
     "Format your response exactly as follows:\n"
     "COMPROMISE_CLAUSE:\n[The compromise clause text]\n\n"
-    "EXPLANATION:\n[The mediator explanation]"
+    "EXPLANATION:\n[The mediator explanation]\n\n"
+    "Respond in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST write the explanation and clause (if translated) in Devanagari script. "
+    "If 'Hinglish', you MUST write the explanation/clause in conversational Hinglish (Hindi written in the Latin/English script). "
+    "If 'English', write in plain English."
 )
 """Prompt template for the mediator agent in the negotiation sandbox. Placeholders: {clause_type}, {transcript}, {language}."""
 
@@ -122,7 +133,10 @@ SEMANTIC_DIFF_PROMPT = (
     "Identify any shift in legal rights, liabilities, or obligations. If the meaning is the "
     "same but just rephrased, say so. If there is a shift, detail exactly what changed, "
     "which party this change favors, and the severity of the shift (High, Medium, or Low). "
-    "Respond in {language}."
+    "Respond in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "If 'Hinglish', you MUST respond in conversational Hinglish (Hindi written in the Latin/English script). "
+    "If 'English', write in plain English."
 )
 """Prompt template for semantic diff auditing. Placeholders: {version_1}, {version_2}, {language}."""
 
@@ -134,7 +148,10 @@ LIFECYCLE_TIMELINE_PROMPT = (
     "renewal_risk_score (0-100 integer representing the risk of not renewing or termination issues), "
     "cascade_effects (a clear description of expiration gaps or dependencies, e.g., 'This NDA "
     "expires 30 days before the master agreement, creating a coverage gap'). "
-    "Respond in the specified language. Contract text: {contract_text} Language: {language}"
+    "Respond in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', all text descriptions inside the JSON (like cascade_effects) MUST be written in Hindi using the Devanagari script. "
+    "If 'Hinglish', text descriptions inside the JSON MUST be written in conversational Hinglish (Hindi written in the Latin/English script). "
+    "If 'English', write in plain English. Contract text: {contract_text}"
 )
 """Prompt template for predicting contract lifecycles. Placeholders: {contract_text}, {language}."""
 
@@ -145,7 +162,10 @@ COUNTERPARTY_SIMULATION_PROMPT = (
     "COUNTER_ARGUMENTS:\n[Your objections and counterarguments to the proposed edit]\n\n"
     "PUSHBACK_CLAUSES:\n[Alternate counter-proposed clause phrasing you would accept]\n\n"
     "RECOMMENDATION:\n[Brief strategy advice for the user to reach a compromise]\n\n"
-    "Respond in {language}."
+    "Respond in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
+    "If 'English', respond in plain English."
 )
 """Prompt template for counterparty negotiation simulator. Placeholders: {clause_text}, {proposed_edit}, {language}."""
 
@@ -168,7 +188,10 @@ NEGOTIATION_GHOSTWRITER_PROMPT = (
     "Output your response exactly in this format:\n"
     "ACCEPT_WITH_MODIFICATION:\n[Drafted softened compromise language that accepts the intent but protects the user]\n\n"
     "REJECT_WITH_RATIONALE:\n[Legal rationale or precedent explaining the rejection, followed by a proposed alternative/fallback clause]\n\n"
-    "Respond in the specified language: {language}."
+    "Respond in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
+    "If 'English', respond in plain English."
 )
 """Prompt template for negotiation ghostwriter. Placeholders: {clause_text}, {redlined_text}, {language}."""
 
@@ -196,7 +219,10 @@ RESIDUE_FORENSICS_PROMPT = (
     "hidden traps, or unusual deviations from industry standards.\n"
     "Output a list of forensic findings. For each finding state: the clause/term involved, the "
     "suspicion level (High, Medium, Low), the nature of the anomaly, and a remediation advice.\n"
-    "Respond in {language}."
+    "Respond in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
+    "If 'English', respond in plain English."
 )
 """Prompt template for residue forensics. Placeholders: {contract_text}, {language}."""
 
@@ -206,7 +232,10 @@ ECHO_HARMONICS_PROMPT = (
     "Explain standard semantic gaps and traps (for example, why 'best efforts' is legally heavier "
     "than 'reasonable efforts' and how those differences map to Hindi translations like 'भरसक प्रयास' "
     "vs 'उचित प्रयास'). Provide clear recommendations on how to draft it safely.\n"
-    "Respond in {language}."
+    "Respond in the specified language: {language}. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
+    "If 'English', respond in plain English."
 )
 """Prompt template for echo harmonics. Placeholders: {clause_text}, {language}."""
 
@@ -216,7 +245,7 @@ ALCHEMY_EXPORTER_PROMPT = (
     "Extract the parameters and output a copyable, valid YAML block containing Prometheus alert rules "
     "representing these SLA boundaries.\n"
     "For example, if latency is 500ms, generate a rule with `http_request_duration_seconds > 0.5`.\n"
-    "Ensure the YAML block is well-formatted and valid. Respond in {language}."
+    "Ensure the YAML alert keys, metrics, and technical configurations remain in English. If the language is 'Hindi', you MUST write the descriptions, comments, or alert annotations in Devanagari script. If 'Hinglish', write descriptions/comments in Hinglish (Latin alphabet). Respond in {language}."
 )
 """Prompt template for alchemy compiler. Placeholders: {contract_text}, {language}."""
 
