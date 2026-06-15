@@ -200,7 +200,7 @@ const workspaceTranslations = {
   }
 };
 
-const API_BASE = `http://${window.location.hostname}:8000/api`;
+const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
 
 type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow' | 'residue' | 'echo' | 'alchemy';
 
