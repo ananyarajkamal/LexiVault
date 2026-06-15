@@ -1,10 +1,12 @@
 # LexiVault
 
+## Project Overview
+
 LexiVault is a private AI document intelligence tool featuring a novel **India-specific Hinglish legal explanation engine**. It reads legal and business documents, extracts key clauses, flags risks, explains complex jargon in plain English, Hindi, or conversational Hinglish, and helps users make decisions about what they are reading. The document parsing, embedding generation, and vector database search pipeline runs on the host machine to ensure confidentiality (note: an active internet connection is required for external Groq Cloud LLM and Wolfram Alpha API requests).
 
 ---
 
-## What LexiVault Is
+## Problem Statement
 
 When a contract, NDA, vendor agreement, or other legal document needs to be reviewed, professionals typically face three imperfect options:
 1. Send the document to a public LLM cloud service, which is fast but risks leaking confidential business data.
@@ -12,6 +14,8 @@ When a contract, NDA, vendor agreement, or other legal document needs to be revi
 3. Hire external legal counsel, which is highly accurate but expensive and slow.
 
 LexiVault is designed to be fast, private, and accurate simultaneously, providing a comprehensive suite of document intelligence and contract negotiation tools without the entire document ever being uploaded to the cloud (only short retrieved context chunks are sent to the external LLM API):
+
+## Features
 
 ### Core Features
 * **Bilingual Chat & Q&A**: Ask natural language questions in English or Hindi about your uploaded documents and get response citations with exact page numbers.
@@ -140,6 +144,29 @@ How does "temporal graph analysis on contract metadata" work technically?
 
 ---
 
+## Tech Stack
+
+LexiVault is built using a modern, performant, and premium stack spanning local ingestion and robust cloud LLM APIs:
+
+* **Frontend:**
+  * **Framework & Core:** React (TypeScript) and Vite for super-fast build times and hot module replacement.
+  * **Styling & Aesthetics:** Vanilla CSS and Tailwind CSS using a midnight dark and hot pink theme.
+  * **Icons:** `lucide-react` for outline iconography.
+  * **Speech Capabilities:** Native Web Speech API for bilingual text-to-speech and speech-to-text dictation.
+* **Backend:**
+  * **API Framework:** FastAPI (Python) for asynchronous, high-performance REST endpoint processing.
+  * **Document Ingestion & Parsing:** PyMuPDF (`fitz`), `pdfplumber`, and `python-docx` for robust document reading.
+  * **OCR Engine:** Tesseract OCR (via `pytesseract`) for scanned document text extraction.
+  * **Vector Database:** FAISS (`faiss-cpu`) for fast similarity index search.
+  * **Embeddings Model:** `sentence-transformers` utilizing the `paraphrase-multilingual-MiniLM-L12-v2` model computed directly on the host machine.
+  * **LLM Orchestration:** LangChain and `langchain-groq` for structured legal Q&A chains.
+* **APIs & External Services:**
+  * **Primary LLM:** Groq Cloud API running **Llama 3.3 70B** (`llama-3.3-70b-versatile`) for deep reasoning and legal audits.
+  * **Fallback LLM:** Groq Cloud API running **Llama 3.1 8B** (`llama-3.1-8b-instant`) for fast rate-limit resiliency.
+  * **Legal Definitions & Context:** Wolfram Alpha API for definitions of indemnification, liability caps, and termination.
+
+---
+
 ## Project Structure
 
 * / (Root) - Python FastAPI backend containing modules for PDF parsing, text chunking, host-based embeddings, FAISS storage, and LLM integrations.
@@ -192,7 +219,7 @@ Before setting up the project, make sure you meet these requirements:
 
 ---
 
-## Getting Started
+## Setup Instructions
 
 Follow these steps to run both the backend and frontend on your development machine:
 
@@ -262,3 +289,12 @@ To verify that the frontend compiles cleanly for production:
 cd frontend
 npm run build
 ```
+
+---
+
+## Team Details
+
+* **Team Name:** GlitchX
+* **Team Members:**
+  * **Ananya Raj**
+  * **Meghana Ranjith**
