@@ -13,12 +13,7 @@ pinned: false
 
 LexiVault is a private AI document intelligence tool featuring a novel **India-specific Hinglish legal explanation engine**. It reads legal and business documents, extracts key clauses, flags risks, explains complex jargon in plain English, Hindi, or conversational Hinglish, and helps users make decisions about what they are reading. The document parsing, embedding generation, and vector database search pipeline runs on the host machine to ensure confidentiality (note: an active internet connection is required for external Groq Cloud LLM and Wolfram Alpha API requests).
 
-### 🎥 Meet LexiVault (Product Demo)
 
-Watch the 2-minute product walkthrough demo on YouTube:
-👉 **[Watch the Meet LexiVault Video Walkthrough](https://youtu.be/SDUfcI-tctA)**
-
----
 
 ## Problem Statement
 
@@ -312,3 +307,9 @@ npm run build
 * **Team Members:**
   * **Ananya Raj**
   * **Meghana Ranjith**
+
+---
+
+## Demo Link
+
+* **Demo Link:** https://youtu.be/N3sBv4WVUpA
