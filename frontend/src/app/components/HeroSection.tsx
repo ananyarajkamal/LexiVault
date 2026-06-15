@@ -51,7 +51,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 className="inline-flex items-center justify-center gap-2 border border-neutral-700 hover:border-neutral-500 text-white font-semibold text-sm px-6 py-3.5 rounded-lg transition-all cursor-pointer bg-transparent"
               >
                 <Play className="w-4 h-4 text-[#D92662]" />
-                {language === 'hi' ? 'डेमो देखें' : 'Watch Demo'}
+                {language === 'hi' ? 'लेक्सीवॉल्ट से मिलें' : 'Meet LexiVault'}
               </button>
             </div>
 
@@ -351,7 +351,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.05]">
               <h3 className="font-semibold text-white text-base">
-                {language === 'hi' ? 'लेक्सीवॉल्ट वीडियो डेमो' : 'LexiVault Product Walkthrough'}
+                {language === 'hi' ? 'लेक्सीवॉल्ट से मिलें' : 'Meet LexiVault'}
               </h3>
               <button
                 onClick={() => setShowVideoModal(false)}
@@ -362,36 +362,14 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
             </div>
 
             {/* Video Container / Player */}
-            <div className="relative aspect-video bg-black flex items-center justify-center">
-              <video
-                src="/demo.mp4"
-                controls
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = 'none';
-                  const sibling = target.nextElementSibling as HTMLElement;
-                  if (sibling) sibling.style.display = 'flex';
-                }}
+            <div className="relative aspect-video bg-black flex items-center justify-center w-full h-full">
+              <iframe
+                src="https://drive.google.com/file/d/1R0EGOmzGW8njfDyc3L5xaFBi5zwGEivr/preview"
+                className="w-full h-full border-0 aspect-video"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                title="Meet LexiVault Walkthrough Video"
               />
-              <div 
-                className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[#1c0d29] to-[#0e0617]"
-                style={{ display: 'none' }}
-              >
-                <div className="w-16 h-16 rounded-full bg-[#D92662]/10 border border-[#D92662]/30 flex items-center justify-center text-[#D92662] mb-4 animate-pulse">
-                  <Play className="w-8 h-8 fill-current ml-1" />
-                </div>
-                <h4 className="text-white font-bold text-lg mb-2">
-                  {language === 'hi' ? 'डेमो वीडियो जल्द ही आ रहा है!' : 'Demo Video coming soon!'}
-                </h4>
-                <p className="text-sm text-neutral-400 max-w-md leading-relaxed font-sans">
-                  {language === 'hi' 
-                    ? 'कृपया अपने कस्टम वीडियो को दिखाने के लिए demo.mp4 फ़ाइल को frontend/public/ फ़ोल्डर में रखें।'
-                    : 'To display your custom walkthrough, place your demo.mp4 file in the frontend/public/ directory.'}
-                </p>
-              </div>
             </div>
           </div>
         </div>
