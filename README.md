@@ -1,3 +1,12 @@
+---
+title: LexiVault Backend
+emoji: 🚀
+colorFrom: violet
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # LexiVault
 
 ## Project Overview
