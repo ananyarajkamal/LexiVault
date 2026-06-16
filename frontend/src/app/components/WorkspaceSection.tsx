@@ -594,7 +594,8 @@ export default function WorkspaceSection({
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) formData.append('files', e.target.files[i]);
     try {
-      const res = await secureFetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
+      const uploadLang = globalLanguage === 'hi' ? 'Hindi' : 'English';
+      const res = await secureFetch(`${API_BASE}/upload?language=${uploadLang}`, { method: 'POST', body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Upload failed');
       const newDocs = data.results.map((r: any) => ({

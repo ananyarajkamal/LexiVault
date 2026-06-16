@@ -69,13 +69,13 @@ from features.shadow_battle import conduct_shadow_battle
 # ---------------------------------------------------------------------------
 embedder = Embedder()
 
-def extract_text_from_file(file_path: str) -> str:
+def extract_text_from_file(file_path: str, language: str = "English") -> str:
     """Extract text from PDF, DOCX, DOC, or TXT file based on extension."""
     ext = os.path.splitext(file_path)[1].lower()
     if ext == ".docx" or ext == ".doc":
         return parse_docx(file_path)
     elif ext == ".pdf":
-        return parse_pdf(file_path)
+        return parse_pdf(file_path, language)
     else:
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
@@ -193,9 +193,12 @@ def cleanup_stale_data():
 cleanup_stale_data()
 
 def _lang_code(lang_display: str) -> str:
-    if lang_display == "Hindi":
+    if not lang_display:
+        return "English"
+    lang_lower = lang_display.lower().strip()
+    if lang_lower in ("hindi", "hi"):
         return "Hindi"
-    elif lang_display == "Hinglish":
+    elif lang_lower in ("hinglish", "hi-en"):
         return "Hinglish"
     else:
         return "English"
@@ -271,7 +274,7 @@ def get_documents():
     return {"documents": docs}
 
 @app.post("/api/upload")
-async def upload_documents(files: List[UploadFile] = File(...)):
+async def upload_documents(files: List[UploadFile] = File(...), language: Optional[str] = None):
     if not files:
         raise HTTPException(status_code=400, detail="No files uploaded.")
 
@@ -292,7 +295,8 @@ async def upload_documents(files: List[UploadFile] = File(...)):
             namespace = os.path.splitext(unique_filename)[0]
             
             # Parse & Index
-            text = extract_text_from_file(temp_path)
+            doc_lang = _lang_code(language) if language else "English"
+            text = extract_text_from_file(temp_path, doc_lang)
             if not text:
                 results.append({"file": file.filename, "status": "error", "message": "Failed to extract text."})
                 continue
