@@ -111,32 +111,29 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               {/* SVG Connectors overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
                 {/* Curve 1: Portfolio Risk (Left Card 1) */}
-                <path d="M 160 60 C 170 60, 170 135, 180 135" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 160 75 C 170 75, 170 120, 180 120" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
                 {/* Curve 2: Counterparty Pushback (Left Card 2) */}
-                <path d="M 160 180 C 170 180, 170 180, 180 180" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 160 235 C 170 235, 170 180, 180 180" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
                 {/* Curve 3: The Shadow (Left Card 3) */}
-                <path d="M 160 300 C 170 300, 170 245, 180 245" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
-
+                <path d="M 160 395 C 170 395, 170 280, 180 280" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
                 
                 {/* Curve 5: Lifecycle Timeline (Right Card 1) */}
-                <path d="M 420 60 C 410 60, 410 70, 400 70" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 420 135 C 410 135, 410 100, 400 100" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
                 {/* Curve 6: Negotiation Ghostwriter (Right Card 2) */}
-                <path d="M 420 180 C 410 180, 410 198, 400 198" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
-
-
+                <path d="M 420 335 C 410 335, 410 198, 400 198" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
 
                 {/* Dots at card edges (start of curves) */}
-                <circle cx="160" cy="60" r="3" fill="#D92662" />
-                <circle cx="160" cy="180" r="3" fill="#D92662" />
-                <circle cx="160" cy="300" r="3" fill="#D92662" />
-                <circle cx="420" cy="60" r="3" fill="#D92662" />
-                <circle cx="420" cy="180" r="3" fill="#D92662" />
+                <circle cx="160" cy="75" r="3" fill="#D92662" />
+                <circle cx="160" cy="235" r="3" fill="#D92662" />
+                <circle cx="160" cy="395" r="3" fill="#D92662" />
+                <circle cx="420" cy="135" r="3" fill="#D92662" />
+                <circle cx="420" cy="335" r="3" fill="#D92662" />
 
                 {/* Dots at mockup edges (end of curves) */}
-                <circle cx="180" cy="135" r="3" fill="#D92662" />
+                <circle cx="180" cy="120" r="3" fill="#D92662" />
                 <circle cx="180" cy="180" r="3" fill="#D92662" />
-                <circle cx="180" cy="245" r="3" fill="#D92662" />
-                <circle cx="400" cy="70" r="3" fill="#D92662" />
+                <circle cx="180" cy="280" r="3" fill="#D92662" />
+                <circle cx="400" cy="100" r="3" fill="#D92662" />
                 <circle cx="400" cy="198" r="3" fill="#D92662" />
               </svg>
 
@@ -203,7 +200,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Left Callout 1: Portfolio Risk */}
-              <div className="absolute left-[0px] top-[15px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute left-[0px] top-[30px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-[#D92662] shrink-0" />
@@ -219,7 +216,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Left Callout 2: Counterparty Simulation */}
-              <div className="absolute left-[0px] top-[135px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute left-[0px] top-[190px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <Scale className="w-4 h-4 text-[#D92662] shrink-0" />
@@ -235,7 +232,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Left Callout 3: The Shadow */}
-              <div className="absolute left-[0px] top-[255px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute left-[0px] top-[350px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <Swords className="w-4 h-4 text-[#D92662] shrink-0" />
@@ -253,7 +250,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
 
 
               {/* Right Callout 1: Lifecycle Timeline */}
-              <div className="absolute right-[0px] top-[15px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute right-[0px] top-[90px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-[#D92662] shrink-0" />
@@ -269,7 +266,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Right Callout 2: Negotiation Ghostwriter */}
-              <div className="absolute right-[0px] top-[135px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute right-[0px] top-[290px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <Feather className="w-4 h-4 text-[#D92662] shrink-0" />
