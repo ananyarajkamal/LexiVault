@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Upload, Shield, Building2, Globe, Download, MoreVertical, AlertTriangle, Clock, Swords, Scale, Feather, Play, X } from 'lucide-react';
 import type { Language } from '../App';
+import { LogoIcon } from './Navbar';
 
 interface HeroSectionProps {
   onUploadClick: () => void;
@@ -110,68 +111,90 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               
               {/* SVG Connectors overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="connector-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#D92662" />
+                    <stop offset="100%" stopColor="#7C3AED" />
+                  </linearGradient>
+                </defs>
                 {/* Curve 1: Portfolio Risk (Left Card 1) */}
-                <path d="M 160 75 C 170 75, 170 120, 180 120" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 160 75 C 170 75, 170 120, 180 120" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 {/* Curve 2: Counterparty Pushback (Left Card 2) */}
-                <path d="M 160 235 C 170 235, 170 180, 180 180" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 160 235 C 170 235, 170 180, 180 180" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 {/* Curve 3: The Shadow (Left Card 3) */}
-                <path d="M 160 395 C 170 395, 170 280, 180 280" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 160 395 C 170 395, 170 280, 180 280" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 
                 {/* Curve 5: Lifecycle Timeline (Right Card 1) */}
-                <path d="M 420 135 C 410 135, 410 100, 400 100" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 420 135 C 410 135, 410 100, 400 100" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 {/* Curve 6: Negotiation Ghostwriter (Right Card 2) */}
-                <path d="M 420 335 C 410 335, 410 198, 400 198" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+                <path d="M 420 335 C 410 335, 410 198, 400 198" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
 
                 {/* Dots at card edges (start of curves) */}
-                <circle cx="160" cy="75" r="3" fill="#D92662" />
-                <circle cx="160" cy="235" r="3" fill="#D92662" />
-                <circle cx="160" cy="395" r="3" fill="#D92662" />
-                <circle cx="420" cy="135" r="3" fill="#D92662" />
-                <circle cx="420" cy="335" r="3" fill="#D92662" />
+                <circle cx="160" cy="75" r="3.5" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="160" cy="235" r="3.5" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="160" cy="395" r="3.5" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="420" cy="135" r="3.5" fill="#7C3AED" className="animate-dot-glow" />
+                <circle cx="420" cy="335" r="3.5" fill="#7C3AED" className="animate-dot-glow" />
 
                 {/* Dots at mockup edges (end of curves) */}
-                <circle cx="180" cy="120" r="3" fill="#D92662" />
-                <circle cx="180" cy="180" r="3" fill="#D92662" />
-                <circle cx="180" cy="280" r="3" fill="#D92662" />
-                <circle cx="400" cy="100" r="3" fill="#D92662" />
-                <circle cx="400" cy="198" r="3" fill="#D92662" />
+                <circle cx="180" cy="120" r="3" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="180" cy="180" r="3" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="180" cy="280" r="3" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="400" cy="100" r="3" fill="#7C3AED" className="animate-dot-glow" />
+                <circle cx="400" cy="198" r="3" fill="#7C3AED" className="animate-dot-glow" />
               </svg>
 
               {/* CENTER: Document Viewer Card */}
-              <div className="absolute left-[180px] top-[40px] w-[220px] h-[440px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+              <div className="absolute left-[180px] top-[40px] w-[220px] h-[440px] bg-[#12101A]/95 border border-neutral-805 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden">
+                
+                {/* Horizontal scanning glowing bar */}
+                <div className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D92662] to-transparent shadow-[0_0_12px_#D92662] pointer-events-none animate-scan-line z-20"></div>
+
                 {/* Document Format Tabs */}
-                <div className="flex border-b border-neutral-200 bg-[#F4F4F5] select-none text-[10px]">
+                <div className="flex border-b border-neutral-850 bg-[#171523] select-none text-[10px]">
                   {/* PDF Tab (Active) */}
-                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 bg-white border-r border-neutral-200 font-semibold text-neutral-800">
-                    <div className="w-5 h-3.5 bg-red-600 rounded-[3px] flex items-center justify-center text-white font-sans font-black text-[6px] tracking-tighter shrink-0">
+                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 bg-[#12101A] border-r border-neutral-850 font-semibold text-neutral-100">
+                    <div className="w-5 h-3.5 bg-red-600/90 rounded-[3px] flex items-center justify-center text-white font-sans font-black text-[6px] tracking-tighter shrink-0">
                       PDF
                     </div>
                     <span className="truncate max-w-[70px]">Vendor.pdf</span>
                   </div>
                   {/* DOCX Tab (Inactive) */}
-                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 text-neutral-400 font-medium">
-                    <div className="w-5 h-3.5 bg-blue-500 rounded-[3px] flex items-center justify-center text-white font-sans font-black text-[6px] tracking-tighter shrink-0 opacity-55">
+                  <div className="flex-1 flex items-center gap-1.5 px-3 py-2 text-neutral-500 hover:text-neutral-300 transition-colors font-medium">
+                    <div className="w-5 h-3.5 bg-blue-600/30 rounded-[3px] flex items-center justify-center text-blue-400/80 font-sans font-black text-[6px] tracking-tighter shrink-0">
                       DOC
                     </div>
                     <span className="truncate max-w-[70px]">SOW.docx</span>
                   </div>
                 </div>
 
+                {/* AI Agent Status Banner with Rotating Logo */}
+                <div className="flex items-center justify-between px-3 py-1.5 bg-[#161421] border-b border-neutral-850 text-[8px] text-neutral-400 font-sans font-semibold">
+                  <div className="flex items-center gap-1.5 text-[#F472B6] animate-heartbeat-glow">
+                    <LogoIcon className="w-3.5 h-3.5 text-[#D92662]" />
+                    <span>LexiVault Core AI Active</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span className="text-[7.5px] text-neutral-400">Processing</span>
+                  </div>
+                </div>
+
                 {/* PDF Toolbar */}
-                <div className="flex items-center justify-between px-3 py-2 bg-[#FBFBFB] border-b border-neutral-200 text-[9px] text-neutral-500 font-sans">
+                <div className="flex items-center justify-between px-3 py-2 bg-[#14121F] border-b border-neutral-855 text-[9px] text-neutral-400 font-sans">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-6 py-0.5 border border-neutral-200 rounded text-center text-[8px] bg-white font-medium text-neutral-700">31</span>
-                    <span className="text-[8px] text-neutral-400">/ 47</span>
-                    <span className="cursor-pointer hover:text-neutral-800 font-bold text-[9px] ml-0.5">›</span>
+                    <span className="w-6 py-0.5 border border-neutral-800 rounded text-center text-[8px] bg-[#1C1A29] font-medium text-neutral-300">31</span>
+                    <span className="text-[8px] text-neutral-500">/ 47</span>
+                    <span className="cursor-pointer hover:text-white font-bold text-[9px] ml-0.5">›</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="cursor-pointer hover:text-neutral-800 font-semibold text-[10px]">-</span>
-                    <span className="w-10 py-0.5 border border-neutral-200 rounded text-center text-[8px] bg-white font-medium text-neutral-700">125%</span>
-                    <span className="cursor-pointer hover:text-neutral-800 font-semibold text-[10px]">+</span>
+                    <span className="cursor-pointer hover:text-white font-semibold text-[10px]">-</span>
+                    <span className="w-10 py-0.5 border border-neutral-800 rounded text-center text-[8px] bg-[#1C1A29] font-medium text-neutral-300">125%</span>
+                    <span className="cursor-pointer hover:text-white font-semibold text-[10px]">+</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Download className="w-2.8 h-2.8 cursor-pointer hover:text-neutral-800 text-neutral-500" />
-                    <MoreVertical className="w-2.8 h-2.8 cursor-pointer hover:text-neutral-800 text-neutral-500" />
+                    <Download className="w-2.8 h-2.8 cursor-pointer hover:text-white text-neutral-400" />
+                    <MoreVertical className="w-2.8 h-2.8 cursor-pointer hover:text-white text-neutral-400" />
                   </div>
                 </div>
 
@@ -179,115 +202,118 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 <div className="flex-1 p-3.5 space-y-3 font-mono">
                   {/* Gray Skeleton Lines */}
                   <div className="space-y-2">
-                    <div className="h-[3px] bg-neutral-200/80 rounded w-[90%]"></div>
-                    <div className="h-[3px] bg-neutral-200/80 rounded w-[70%]"></div>
+                    <div className="h-[3px] bg-neutral-800/60 rounded w-[90%]"></div>
+                    <div className="h-[3px] bg-neutral-800/60 rounded w-[70%]"></div>
                   </div>
 
                   {/* Highlighted Clause Box */}
-                  <div className="bg-[#FFF0F3] border-l-[3px] border-[#D92662] rounded-r p-2.5 py-3 text-neutral-900 text-[9.5px] leading-relaxed font-sans font-semibold shadow-sm">
+                  <div className="bg-[#D92662]/10 border-l-[3px] border-[#D92662] rounded-r p-2.5 py-3 text-neutral-100 text-[9.5px] leading-relaxed font-sans font-semibold shadow-[0_0_15px_rgba(217,38,98,0.1)]">
                     <span className="font-bold">12.1</span> {language === 'hi' ? 'विक्रेता की देयता ₹50,000 तक सीमित होगी।' : 'Vendor liability shall be limited to ₹50,000.'}
                   </div>
 
                   {/* Gray Skeleton Lines below */}
                   <div className="space-y-2 pt-3">
-                    <div className="h-[3px] bg-neutral-200/80 rounded w-[95%]"></div>
-                    <div className="h-[3px] bg-neutral-200/80 rounded w-[85%]"></div>
-                    <div className="h-[3px] bg-neutral-200/80 rounded w-[90%]"></div>
-                    <span className="text-[9px] text-neutral-350 font-sans block mt-1.5 font-semibold">12.2</span>
-                    <div className="h-[3px] bg-neutral-200/80 rounded w-[80%]"></div>
+                    <div className="h-[3px] bg-neutral-800/60 rounded w-[95%]"></div>
+                    <div className="h-[3px] bg-neutral-800/60 rounded w-[85%]"></div>
+                    <div className="h-[3px] bg-neutral-800/60 rounded w-[90%]"></div>
+                    <span className="text-[9px] text-neutral-500 font-sans block mt-1.5 font-semibold">12.2</span>
+                    <div className="h-[3px] bg-neutral-800/60 rounded w-[80%]"></div>
                   </div>
                 </div>
               </div>
 
               {/* Left Callout 1: Portfolio Risk */}
-              <div className="absolute left-[0px] top-[30px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute left-[0px] top-[30px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-1">
                 <div>
                   <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'पोर्टफोलियो जोखिम' : 'Portfolio Risk'}</span>
+                    <div className="w-6 h-6 rounded bg-[#D92662]/10 border border-[#D92662]/20 flex items-center justify-center text-[#D92662] group-hover:bg-[#D92662]/20 transition-all shrink-0">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-100 group-hover:text-white transition-colors">{language === 'hi' ? 'पोर्टफोलियो जोखिम' : 'Portfolio Risk'}</span>
                   </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'उच्च देयता' : 'High Liability'}</span>
+                  <div className="mt-2.5">
+                    <span className="inline-block text-[8px] font-bold bg-[#D92662]/10 text-[#F472B6] border border-[#D92662]/20 rounded px-2 py-0.5">{language === 'hi' ? 'उच्च देयता' : 'High Liability'}</span>
                   </div>
                 </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
+                <div className="mt-2 text-neutral-300 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'कुल देयता: ₹50,000 limit' : 'Total: ₹50,000 limit'}
                 </div>
               </div>
 
               {/* Left Callout 2: Counterparty Simulation */}
-              <div className="absolute left-[0px] top-[190px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute left-[0px] top-[190px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-2">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Scale className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'विरोधी पक्ष पुशबैक' : 'Counterparty Pushback'}</span>
+                    <div className="w-6 h-6 rounded bg-[#D92662]/10 border border-[#D92662]/20 flex items-center justify-center text-[#D92662] group-hover:bg-[#D92662]/20 transition-all shrink-0">
+                      <Scale className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-100 group-hover:text-white transition-colors">{language === 'hi' ? 'विरोधी पक्ष पुशबैक' : 'Counterparty Pushback'}</span>
                   </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'आक्रामक रवैया' : 'Aggressive Stance'}</span>
+                  <div className="mt-2.5">
+                    <span className="inline-block text-[8px] font-bold bg-[#D92662]/10 text-[#F472B6] border border-[#D92662]/20 rounded px-2 py-0.5">{language === 'hi' ? 'आक्रामक रवैया' : 'Aggressive Stance'}</span>
                   </div>
                 </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
+                <div className="mt-2 text-neutral-300 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'धारा 12.1 पर आपत्ति' : 'Objection to Clause 12.1'}
                 </div>
               </div>
 
               {/* Left Callout 3: The Shadow */}
-              <div className="absolute left-[0px] top-[350px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute left-[0px] top-[350px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#7C3AED]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] animate-float-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Swords className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द शैडो' : 'The Shadow'}</span>
+                    <div className="w-6 h-6 rounded bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex items-center justify-center text-[#A78BFA] group-hover:bg-[#7C3AED]/20 transition-all shrink-0">
+                      <Swords className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-100 group-hover:text-white transition-colors">{language === 'hi' ? 'द शैडो' : 'The Shadow'}</span>
                   </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'एआई मुकाबला' : 'AI vs. AI Battle'}</span>
+                  <div className="mt-2.5">
+                    <span className="inline-block text-[8px] font-bold bg-[#7C3AED]/10 text-[#C084FC] border border-[#7C3AED]/20 rounded px-2 py-0.5">{language === 'hi' ? 'एआई मुकाबला' : 'AI vs. AI Battle'}</span>
                   </div>
                 </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
+                <div className="mt-2 text-neutral-300 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'वास्तविक समय देयता बहस' : 'Real-time liability debate'}
                 </div>
               </div>
 
-
-
               {/* Right Callout 1: Lifecycle Timeline */}
-              <div className="absolute right-[0px] top-[90px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute right-[0px] top-[90px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#7C3AED]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] animate-float-2">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'समयसीमा भविष्यवक्ता' : 'Lifecycle Timeline'}</span>
+                    <div className="w-6 h-6 rounded bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex items-center justify-center text-[#A78BFA] group-hover:bg-[#7C3AED]/20 transition-all shrink-0">
+                      <Clock className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-100 group-hover:text-white transition-colors">{language === 'hi' ? 'समयसीमा भविष्यवक्ता' : 'Lifecycle Timeline'}</span>
                   </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'नवीनीकरण: 12 महीने' : 'Renewal: 12 Months'}</span>
+                  <div className="mt-2.5">
+                    <span className="inline-block text-[8px] font-bold bg-[#7C3AED]/10 text-[#C084FC] border border-[#7C3AED]/20 rounded px-2 py-0.5">{language === 'hi' ? 'नवीनीकरण: 12 महीने' : 'Renewal: 12 Months'}</span>
                   </div>
                 </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
+                <div className="mt-2 text-neutral-300 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'अगला क्लिफ: नवंबर 2026' : 'Next Cliff: Nov 2026'}
                 </div>
               </div>
 
               {/* Right Callout 2: Negotiation Ghostwriter */}
-              <div className="absolute right-[0px] top-[290px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
+              <div className="absolute right-[0px] top-[290px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-1">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Feather className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'नेगोशिएशन घोस्टराइटर' : 'Negotiation Ghostwriter'}</span>
+                    <div className="w-6 h-6 rounded bg-[#D92662]/10 border border-[#D92662]/20 flex items-center justify-center text-[#D92662] group-hover:bg-[#D92662]/20 transition-all shrink-0">
+                      <Feather className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-100 group-hover:text-white transition-colors">{language === 'hi' ? 'नेगोशिएशन घोस्टराइटर' : 'Negotiation Ghostwriter'}</span>
                   </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'समझौता मसौदा' : 'Compromise Draft'}</span>
+                  <div className="mt-2.5">
+                    <span className="inline-block text-[8px] font-bold bg-[#D92662]/10 text-[#F472B6] border border-[#D92662]/20 rounded px-2 py-0.5">{language === 'hi' ? 'समझौता मसौदा' : 'Compromise Draft'}</span>
                   </div>
                 </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
+                <div className="mt-2 text-neutral-300 font-semibold text-[10px] font-sans">
                   {language === 'hi' ? 'वैकल्पिक मसौदा तैयार करें' : 'Generate fallback options'}
                 </div>
               </div>
 
-
-
-
-
             </div>
           </div>
-
         </div>
       </div>
 
