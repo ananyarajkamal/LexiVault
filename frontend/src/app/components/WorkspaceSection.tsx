@@ -833,7 +833,7 @@ export default function WorkspaceSection({
 
   const renderUpload = () => (
     <div className="max-w-2xl mx-auto w-full space-y-6 py-8">
-      <div>
+      <div className="text-center">
         <h3 className="text-lg font-bold text-neutral-100 mb-1">{t.uploadHeader}</h3>
         <p className="text-sm text-neutral-450">{t.uploadSub}</p>
       </div>
@@ -1930,7 +1930,7 @@ export default function WorkspaceSection({
         <div className={
           isFullscreen 
             ? "bg-[#131118] overflow-hidden flex flex-col flex-1 min-h-0 rounded-none border-0" 
-            : "bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-2xl shadow-xl"
+            : "bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-2xl shadow-xl max-w-3xl mx-auto w-full"
         }>
           {viewMode === 'upload' ? (
             /* Upload View */
