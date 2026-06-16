@@ -14,10 +14,10 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
   return (
     <section className="relative overflow-hidden bg-[radial-gradient(circle_at_75%_50%,#200c2e_0%,#0e0617_60%,#0e0617_100%)] border-b border-neutral-900/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-16 sm:pb-24">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start lg:pt-4">
           
           {/* LEFT - Text & Typography */}
-          <div className="lg:col-span-5 flex flex-col justify-center lg:pr-4">
+          <div className="lg:col-span-6 flex flex-col justify-center lg:pr-4">
             <h1 className="font-serif font-black text-[38px] sm:text-[54px] lg:text-[44px] xl:text-[60px] 2xl:text-[72px] leading-[0.96] tracking-tight uppercase select-none">
               {language === 'en' ? (
                 <>
@@ -105,9 +105,9 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
           </div>
 
           {/* RIGHT - Interactive Document Mockup */}
-          <div className="lg:col-span-7 relative flex lg:justify-end justify-center items-center py-4 lg:pr-4 xl:pr-8">
+          <div className="lg:col-span-6 relative flex lg:justify-end justify-center items-center py-4 lg:pr-4 xl:pr-8">
             {/* Scalable Mockup Group */}
-            <div className="relative w-full max-w-[580px] h-[520px] origin-center lg:origin-right scale-[0.6] xs:scale-[0.7] sm:scale-[0.8] md:scale-[0.85] lg:scale-[0.88] xl:scale-100 transition-all select-none">
+            <div className="relative w-full max-w-[480px] h-[480px] origin-center lg:origin-right scale-[0.65] xs:scale-[0.75] sm:scale-[0.85] md:scale-[0.95] lg:scale-[0.85] xl:scale-[0.95] 2xl:scale-100 transition-all select-none">
               
               {/* SVG Connectors overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
@@ -118,34 +118,34 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                   </linearGradient>
                 </defs>
                 {/* Curve 1: Portfolio Risk (Left Card 1) */}
-                <path d="M 160 75 C 170 75, 170 120, 180 120" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
+                <path d="M 125 50 C 135 50, 135 85, 145 85" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 {/* Curve 2: Counterparty Pushback (Left Card 2) */}
-                <path d="M 160 235 C 170 235, 170 180, 180 180" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
+                <path d="M 125 200 C 135 200, 135 145, 145 145" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 {/* Curve 3: The Shadow (Left Card 3) */}
-                <path d="M 160 395 C 170 395, 170 280, 180 280" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
+                <path d="M 125 350 C 135 350, 135 235, 145 235" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 
                 {/* Curve 5: Lifecycle Timeline (Right Card 1) */}
-                <path d="M 420 135 C 410 135, 410 100, 400 100" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
+                <path d="M 355 100 C 345 100, 345 65, 335 65" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
                 {/* Curve 6: Negotiation Ghostwriter (Right Card 2) */}
-                <path d="M 420 335 C 410 335, 410 198, 400 198" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
+                <path d="M 355 290 C 345 290, 345 160, 335 160" stroke="url(#connector-gradient)" strokeWidth="1.5" className="animate-pulse-flow" fill="none" />
 
                 {/* Dots at card edges (start of curves) */}
-                <circle cx="160" cy="75" r="3.5" fill="#D92662" className="animate-dot-glow" />
-                <circle cx="160" cy="235" r="3.5" fill="#D92662" className="animate-dot-glow" />
-                <circle cx="160" cy="395" r="3.5" fill="#D92662" className="animate-dot-glow" />
-                <circle cx="420" cy="135" r="3.5" fill="#7C3AED" className="animate-dot-glow" />
-                <circle cx="420" cy="335" r="3.5" fill="#7C3AED" className="animate-dot-glow" />
+                <circle cx="125" cy="50" r="3.5" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="125" cy="200" r="3.5" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="125" cy="350" r="3.5" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="355" cy="100" r="3.5" fill="#7C3AED" className="animate-dot-glow" />
+                <circle cx="355" cy="290" r="3.5" fill="#7C3AED" className="animate-dot-glow" />
 
                 {/* Dots at mockup edges (end of curves) */}
-                <circle cx="180" cy="120" r="3" fill="#D92662" className="animate-dot-glow" />
-                <circle cx="180" cy="180" r="3" fill="#D92662" className="animate-dot-glow" />
-                <circle cx="180" cy="280" r="3" fill="#D92662" className="animate-dot-glow" />
-                <circle cx="400" cy="100" r="3" fill="#7C3AED" className="animate-dot-glow" />
-                <circle cx="400" cy="198" r="3" fill="#7C3AED" className="animate-dot-glow" />
+                <circle cx="145" cy="85" r="3" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="145" cy="145" r="3" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="145" cy="235" r="3" fill="#D92662" className="animate-dot-glow" />
+                <circle cx="335" cy="65" r="3" fill="#7C3AED" className="animate-dot-glow" />
+                <circle cx="335" cy="160" r="3" fill="#7C3AED" className="animate-dot-glow" />
               </svg>
 
               {/* CENTER: Document Viewer Card */}
-              <div className="absolute left-[180px] top-[40px] w-[220px] h-[440px] bg-[#12101A]/95 border border-neutral-805 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden">
+              <div className="absolute left-[145px] top-[15px] w-[190px] h-[420px] bg-[#12101A]/95 border border-neutral-850 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden">
                 
                 {/* Horizontal scanning glowing bar */}
                 <div className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D92662] to-transparent shadow-[0_0_12px_#D92662] pointer-events-none animate-scan-line z-20"></div>
@@ -223,7 +223,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Left Callout 1: Portfolio Risk */}
-              <div className="absolute left-[0px] top-[30px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-1">
+              <div className="absolute left-[0px] top-[5px] w-[125px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-1">
                 <div>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded bg-[#D92662]/10 border border-[#D92662]/20 flex items-center justify-center text-[#D92662] group-hover:bg-[#D92662]/20 transition-all shrink-0">
@@ -241,7 +241,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Left Callout 2: Counterparty Simulation */}
-              <div className="absolute left-[0px] top-[190px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-2">
+              <div className="absolute left-[0px] top-[155px] w-[125px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-2">
                 <div>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded bg-[#D92662]/10 border border-[#D92662]/20 flex items-center justify-center text-[#D92662] group-hover:bg-[#D92662]/20 transition-all shrink-0">
@@ -259,7 +259,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Left Callout 3: The Shadow */}
-              <div className="absolute left-[0px] top-[350px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#7C3AED]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] animate-float-3">
+              <div className="absolute left-[0px] top-[305px] w-[125px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#7C3AED]/60 rounded-2xl p-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] animate-float-3">
                 <div>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex items-center justify-center text-[#A78BFA] group-hover:bg-[#7C3AED]/20 transition-all shrink-0">
@@ -277,7 +277,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Right Callout 1: Lifecycle Timeline */}
-              <div className="absolute right-[0px] top-[90px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#7C3AED]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] animate-float-2">
+              <div className="absolute right-[0px] top-[55px] w-[125px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#7C3AED]/60 rounded-2xl p-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] animate-float-2">
                 <div>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex items-center justify-center text-[#A78BFA] group-hover:bg-[#7C3AED]/20 transition-all shrink-0">
@@ -295,7 +295,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
               </div>
 
               {/* Right Callout 2: Negotiation Ghostwriter */}
-              <div className="absolute right-[0px] top-[290px] w-[160px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-1">
+              <div className="absolute right-[0px] top-[245px] w-[125px] bg-[#161421]/90 backdrop-blur-md border border-neutral-850 hover:border-[#D92662]/60 rounded-2xl p-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between hover:scale-[1.03] transition-all duration-300 group cursor-pointer hover:shadow-[0_0_20px_rgba(217,38,98,0.15)] animate-float-1">
                 <div>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded bg-[#D92662]/10 border border-[#D92662]/20 flex items-center justify-center text-[#D92662] group-hover:bg-[#D92662]/20 transition-all shrink-0">
