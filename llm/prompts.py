@@ -188,7 +188,9 @@ PORTFOLIO_EXTRACTION_PROMPT = (
     "vendor_name (name of the vendor or counterparty), "
     "liability_limit (maximum liability value in USD/INR as an integer, default 0 if unlimited/not found), "
     "effective_date (YYYY-MM-DD format, default null if not found), "
-    "expiration_date (YYYY-MM-DD format, default null if not found). "
+    "expiration_date (YYYY-MM-DD format, default null if not found).\n"
+    "CRITICAL: Keep the JSON keys (vendor_name, liability_limit, effective_date, expiration_date) exactly in English. Do NOT translate the keys themselves.\n"
+    "For effective_date and expiration_date, convert any dates (including Hindi dates like '16 जून 2026') into the standard YYYY-MM-DD format (e.g. '2026-06-16'). If liability_limit is unlimited or not found, return 0. "
     "Contract text: {contract_text}"
 )
 """Prompt template for portfolio metadata extraction. Placeholders: {contract_text}."""

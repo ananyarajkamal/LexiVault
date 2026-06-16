@@ -63,10 +63,30 @@ def extract_and_save_metadata(namespace: str, contract_text: str) -> Dict[str, A
             
         metadata = json.loads(raw_content)
         
+        # Safe integer extraction for liability limit
+        limit_val = metadata.get("liability_limit")
+        limit_int = 0
+        if limit_val is not None:
+            if isinstance(limit_val, (int, float)):
+                limit_int = int(limit_val)
+            else:
+                # Remove any currency symbols, commas, or non-digits (excluding dot for floats)
+                limit_str = re.sub(r"[^\d.]", "", str(limit_val).strip())
+                if limit_str:
+                    try:
+                        limit_int = int(float(limit_str))
+                    except ValueError:
+                        limit_int = 0
+
+        # Safe vendor name cleanup
+        vname = metadata.get("vendor_name") or namespace
+        if isinstance(vname, str) and vname.startswith("sess_") and "__" in vname:
+            vname = vname.split("__", 1)[1]
+
         record = {
             "namespace": namespace,
-            "vendor_name": metadata.get("vendor_name") or namespace,
-            "liability_limit": int(metadata.get("liability_limit") or 0),
+            "vendor_name": vname,
+            "liability_limit": limit_int,
             "effective_date": metadata.get("effective_date"),
             "expiration_date": metadata.get("expiration_date"),
             "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -80,10 +100,14 @@ def extract_and_save_metadata(namespace: str, contract_text: str) -> Dict[str, A
         
     except Exception as e:
         print(f"Failed to extract portfolio metadata for {namespace}: {e}")
-        # Default fallback record
+        # Default fallback record (clean prefix from namespace)
+        clean_vendor = namespace
+        if namespace.startswith("sess_") and "__" in namespace:
+            clean_vendor = namespace.split("__", 1)[1]
+            
         record = {
             "namespace": namespace,
-            "vendor_name": namespace,
+            "vendor_name": clean_vendor,
             "liability_limit": 0,
             "effective_date": None,
             "expiration_date": None,
