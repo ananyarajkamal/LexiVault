@@ -32,10 +32,10 @@ def conduct_shadow_battle(contract_text: str, language: str) -> Dict[str, Any]:
         assessment = ""
 
         # Parse sections using exact markers
-        focus_match = re.search(r"CLAUSE_FOCUS:\s*(.*?)(?=\n\s*ATTACKER_TURN:|$)", output, re.DOTALL | re.IGNORECASE)
-        attack_match = re.search(r"ATTACKER_TURN:\s*(.*?)(?=\n\s*DEFENDER_TURN:|$)", output, re.DOTALL | re.IGNORECASE)
-        defend_match = re.search(r"DEFENDER_TURN:\s*(.*?)(?=\n\s*ASSESSMENT:|$)", output, re.DOTALL | re.IGNORECASE)
-        assess_match = re.search(r"ASSESSMENT:\s*(.*)", output, re.DOTALL | re.IGNORECASE)
+        focus_match = re.search(r"(?:^|\n)\s*\*?\*?CLAUSE_FOCUS\*?\*?:\s*(.*?)(?=\n\s*\*?\*?ATTACKER_TURN\*?\*?:|$)", output, re.DOTALL | re.IGNORECASE)
+        attack_match = re.search(r"\*?\*?ATTACKER_TURN\*?\*?:\s*(.*?)(?=\n\s*\*?\*?DEFENDER_TURN\*?\*?:|$)", output, re.DOTALL | re.IGNORECASE)
+        defend_match = re.search(r"\*?\*?DEFENDER_TURN\*?\*?:\s*(.*?)(?=\n\s*\*?\*?ASSESSMENT\*?\*?:|$)", output, re.DOTALL | re.IGNORECASE)
+        assess_match = re.search(r"\*?\*?ASSESSMENT\*?\*?:\s*(.*)", output, re.DOTALL | re.IGNORECASE)
 
         def clean_section(t_str: str) -> str:
             t_str = t_str.strip()

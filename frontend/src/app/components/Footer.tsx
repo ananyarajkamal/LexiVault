@@ -48,8 +48,8 @@ const LogoIcon = ({ className }: { className?: string }) => (
 
 export default function Footer({ t }: { t: any }) {
   return (
-    <footer id="footer" className="bg-[#0e0617] border-t border-white/[0.05] text-white py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer id="footer" className="bg-[#0e0617] border-t border-white/[0.05] text-white pt-12 pb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
@@ -100,10 +100,10 @@ export default function Footer({ t }: { t: any }) {
             </ul>
           </div>
         </div>
+      </div>
 
-        <div className="border-t border-neutral-800 mt-10 pt-6 text-center text-xs text-neutral-500 font-sans">
-          © {new Date().getFullYear()} LexiVault. {t.allRightsReserved}
-        </div>
+      <div className="border-t border-neutral-800 w-full pt-6 text-center text-xs text-neutral-500 font-sans">
+        © {new Date().getFullYear()} LexiVault. {t.allRightsReserved}
       </div>
     </footer>
   );

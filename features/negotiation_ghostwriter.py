@@ -29,8 +29,8 @@ def draft_ghostwrite_response(clause_text: str, redlined_text: str, language: st
         reject_rat = ""
         
         # Parse output into accept with modification and reject with rationale segments
-        accept_match = re.search(r"ACCEPT_WITH_MODIFICATION:\s*(.*?)(?=\n\s*REJECT_WITH_RATIONALE:|$)", output, re.DOTALL | re.IGNORECASE)
-        reject_match = re.search(r"REJECT_WITH_RATIONALE:\s*(.*)", output, re.DOTALL | re.IGNORECASE)
+        accept_match = re.search(r"\*?\*?ACCEPT_WITH_MODIFICATION\*?\*?:\s*(.*?)(?=\n\s*\*?\*?REJECT_WITH_RATIONALE\*?\*?:|$)", output, re.DOTALL | re.IGNORECASE)
+        reject_match = re.search(r"\*?\*?REJECT_WITH_RATIONALE\*?\*?:\s*(.*)", output, re.DOTALL | re.IGNORECASE)
         
         if accept_match:
             accept_mod = accept_match.group(1).strip()

@@ -186,16 +186,16 @@ const workspaceTranslations = {
 
 const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
 
+let currentSessionId: string | null = null;
+
 const getSessionId = (): string => {
   if (typeof window === 'undefined') return 'default';
-  let sid = localStorage.getItem('lexivault_session_id');
-  if (!sid) {
-    sid = (typeof crypto !== 'undefined' && crypto.randomUUID)
+  if (!currentSessionId) {
+    currentSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID)
       ? crypto.randomUUID()
       : Math.random().toString(36).substring(2) + Date.now().toString(36);
-    localStorage.setItem('lexivault_session_id', sid);
   }
-  return sid;
+  return currentSessionId;
 };
 
 const secureFetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
@@ -436,7 +436,7 @@ export default function WorkspaceSection({
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const res = await secureFetch(`${API_BASE}/documents`);
+        const res = await secureFetch(`${API_BASE}/documents?t=${Date.now()}`);
         const data = await res.json();
         if (res.ok && data.documents) {
           setDocuments(data.documents);
@@ -466,12 +466,12 @@ export default function WorkspaceSection({
     if (activeTab === 'portfolioDashboard') {
       fetchPortfolioStats();
     }
-  }, [activeTab]);
+  }, [activeTab, documents]);
 
   const fetchPortfolioStats = async () => {
     setIsFetchingPortfolio(true);
     try {
-      const res = await secureFetch(`${API_BASE}/portfolio/dashboard`);
+      const res = await secureFetch(`${API_BASE}/portfolio/dashboard?t=${Date.now()}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Failed to fetch portfolio stats');
       setPortfolioStats(data);
@@ -648,7 +648,7 @@ export default function WorkspaceSection({
   const handleRisks = async () => {
     setIsAnalyzing(true);
     try {
-      const res = await secureFetch(`${API_BASE}/risks`);
+      const res = await secureFetch(`${API_BASE}/risks?t=${Date.now()}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Error');
       setRisks(data.risks || []);

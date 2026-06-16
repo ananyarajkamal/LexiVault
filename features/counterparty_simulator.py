@@ -28,9 +28,9 @@ def simulate_counterparty_pushback(clause_text: str, proposed_edit: str, languag
         recommendation = ""
         
         # Parse output into counterarguments, pushback clauses, and recommendation
-        args_match = re.search(r"COUNTER_ARGUMENTS:\s*(.*?)(?=\n\s*PUSHBACK_CLAUSES:|$)", output, re.DOTALL | re.IGNORECASE)
-        push_match = re.search(r"PUSHBACK_CLAUSES:\s*(.*?)(?=\n\s*RECOMMENDATION:|$)", output, re.DOTALL | re.IGNORECASE)
-        rec_match = re.search(r"RECOMMENDATION:\s*(.*)", output, re.DOTALL | re.IGNORECASE)
+        args_match = re.search(r"\*?\*?COUNTER_ARGUMENTS\*?\*?:\s*(.*?)(?=\n\s*\*?\*?PUSHBACK_CLAUSES\*?\*?:|$)", output, re.DOTALL | re.IGNORECASE)
+        push_match = re.search(r"\*?\*?PUSHBACK_CLAUSES\*?\*?:\s*(.*?)(?=\n\s*\*?\*?RECOMMENDATION\*?\*?:|$)", output, re.DOTALL | re.IGNORECASE)
+        rec_match = re.search(r"\*?\*?RECOMMENDATION\*?\*?:\s*(.*)", output, re.DOTALL | re.IGNORECASE)
         
         if args_match:
             counter_arguments = args_match.group(1).strip()

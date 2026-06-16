@@ -71,8 +71,8 @@ def simulate_negotiation(clause_text: str, clause_type: str, buyer_stance: str, 
         compromise_clause = ""
         explanation = ""
         
-        comp_match = re.search(r"COMPROMISE_CLAUSE:\s*(.*?)(?=\n\s*EXPLANATION:|$)", mediator_output, re.DOTALL | re.IGNORECASE)
-        expl_match = re.search(r"EXPLANATION:\s*(.*)", mediator_output, re.DOTALL | re.IGNORECASE)
+        comp_match = re.search(r"\*?\*?COMPROMISE_CLAUSE\*?\*?:\s*(.*?)(?=\n\s*\*?\*?EXPLANATION\*?\*?:|$)", mediator_output, re.DOTALL | re.IGNORECASE)
+        expl_match = re.search(r"\*?\*?EXPLANATION\*?\*?:\s*(.*)", mediator_output, re.DOTALL | re.IGNORECASE)
         
         if comp_match:
             compromise_clause = comp_match.group(1).strip()
