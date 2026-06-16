@@ -216,7 +216,13 @@ const secureFetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Resp
     }
   }
   headers.set('X-Session-ID', getSessionId());
-  return fetch(input, { ...init, headers });
+
+  // Append session_id as a query parameter to guarantee transmission through reverse proxies
+  const url = typeof input === 'string' ? input : input.toString();
+  const urlObj = new URL(url, window.location.href);
+  urlObj.searchParams.set('session_id', getSessionId());
+
+  return fetch(urlObj.toString(), { ...init, headers });
 };
 
 type Tab = 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow';

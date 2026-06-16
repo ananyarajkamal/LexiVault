@@ -95,7 +95,7 @@ app.add_middleware(
 
 class SessionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        session_id = request.headers.get("x-session-id") or "default"
+        session_id = request.headers.get("x-session-id") or request.query_params.get("session_id") or "default"
         token = active_session_id.set(session_id)
         try:
             response = await call_next(request)
