@@ -149,43 +149,48 @@ class SessionStateProxy:
 
 session_state = SessionStateProxy()
 
-def restore_session_state():
+def cleanup_stale_data():
+    """Wipe leftover uploaded files, FAISS indices, and portfolio metadata from previous runs.
+    This ensures every server start begins with a clean slate so documents
+    do not persist across browser refreshes or server restarts."""
     upload_dir = os.path.join("data", "uploads")
-    faiss_dir = "data/faiss_index"
-    
+    faiss_dir = os.path.join("data", "faiss_index")
+    data_dir = "data"
+
+    # Remove all leftover uploaded files
     if os.path.exists(upload_dir):
         for filename in os.listdir(upload_dir):
             file_path = os.path.join(upload_dir, filename)
             if os.path.isfile(file_path):
-                # Parse session_id from filename prefix
-                if filename.startswith("sess_") and "__" in filename:
-                    parts = filename.split("__", 1)
-                    session_id = parts[0][5:]
-                else:
-                    session_id = "default"
-                    
-                namespace = os.path.splitext(filename)[0]
-                
-                # Check if FAISS index files exist for this namespace
-                faiss_file = os.path.join(faiss_dir, f"{namespace}.faiss")
-                pkl_file = os.path.join(faiss_dir, f"{namespace}.pkl")
-                
-                if os.path.exists(faiss_file) and os.path.exists(pkl_file):
-                    state = get_session_state(session_id)
-                    if namespace not in state["namespaces"]:
-                        state["namespaces"].append(namespace)
-                    state["uploaded_files"][namespace] = file_path
-                    
-                    # Extract text and store in cache
-                    try:
-                        text = extract_text_from_file(file_path)
-                        if text:
-                            state["extracted_texts"][namespace] = text
-                    except Exception as e:
-                        print(f"Failed to restore text for {namespace}: {e}")
+                try:
+                    os.remove(file_path)
+                except Exception as e:
+                    print(f"Warning: could not clean up upload file {filename}: {e}")
 
-# Run restoration immediately on startup
-restore_session_state()
+    # Remove all leftover FAISS index files
+    if os.path.exists(faiss_dir):
+        for filename in os.listdir(faiss_dir):
+            file_path = os.path.join(faiss_dir, filename)
+            if os.path.isfile(file_path):
+                try:
+                    os.remove(file_path)
+                except Exception as e:
+                    print(f"Warning: could not clean up FAISS file {filename}: {e}")
+
+    # Remove leftover portfolio metadata JSON files
+    if os.path.exists(data_dir):
+        for filename in os.listdir(data_dir):
+            if filename.startswith("portfolio_metadata") and filename.endswith(".json"):
+                file_path = os.path.join(data_dir, filename)
+                try:
+                    os.remove(file_path)
+                except Exception as e:
+                    print(f"Warning: could not clean up portfolio metadata file {filename}: {e}")
+
+    print("LexiVault: stale session data cleared. Starting with a clean workspace.")
+
+# Clean up any leftover data from previous runs on startup
+cleanup_stale_data()
 
 def _lang_code(lang_display: str) -> str:
     if lang_display == "Hindi":
