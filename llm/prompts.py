@@ -60,7 +60,8 @@ DECISION_BRIEF_PROMPT = (
     "Cite every claim with its exact page number and clause.\n\n"
     "Context: {context}\n\n"
     "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
-    "If the language is 'Hindi', write everything in Devanagari script.\n"
+    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English (e.g. translate 'देयता की सीमा' to 'Limitation of Liability' or 'Deyata ki Seema') so that the final output contains no Devanagari characters.\n"
+    "If the language is 'Hindi', write everything in Devanagari script. If any terms or names from the context are in English, explain or translate them into Hindi so the output is readable in Hindi.\n"
     "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet, e.g., 'Hum recommend karte hain ki...', 'Document summaries niche diye gaye hain...').\n"
     "Do not use English for headers or summaries if Hindi or Hinglish is selected."
 )
@@ -74,8 +75,9 @@ CONTRADICTION_PROMPT = (
     "Cite exact page numbers and clauses.\n\n"
     "Context: {context}\n\n"
     "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
+    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English (e.g. translate 'देयता की सीमा' to 'Limitation of Liability' or 'Deyata ki Seema') so that the final output contains no Devanagari characters.\n"
     "If no contradictions are found, you must state exactly: 'No contradictions detected.' in English, or 'कोई विरोधाभास नहीं मिला।' in Hindi, or 'Koi contradictions nahi mile' in Hinglish.\n"
-    "If the language is 'Hindi', write everything in Devanagari script.\n"
+    "If the language is 'Hindi', write everything in Devanagari script. If any terms or names from the context are in English, explain or translate them into Hindi so the output is readable in Hindi.\n"
     "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet).\n"
     "Do not use English for headers or summaries if Hindi or Hinglish is selected."
 )
@@ -88,7 +90,8 @@ REDLINE_PROMPT = (
     "or Low Risk for the user, and one suggested counter-clause if the change is unfavorable.\n\n"
     "Version 1: {version_1}\nVersion 2: {version_2}\n\n"
     "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
-    "If the language is 'Hindi', write everything in Devanagari script.\n"
+    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English (e.g. translate 'देयता की सीमा' to 'Limitation of Liability' or 'Deyata ki Seema') so that the final output contains no Devanagari characters.\n"
+    "If the language is 'Hindi', write everything in Devanagari script. If any terms or names from the context are in English, explain or translate them into Hindi so the output is readable in Hindi.\n"
     "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet).\n"
     "Do not use English for headers or summaries if Hindi or Hinglish is selected."
 )

@@ -56,10 +56,10 @@ def extract_and_save_metadata(namespace: str, contract_text: str) -> Dict[str, A
         response = llm.invoke(prompt)
         raw_content = response.content.strip()
         
-        # Strip markdown syntax if LLM returns it
-        if raw_content.startswith("```"):
-            raw_content = re.sub(r"^```json\s*|^```\s*", "", raw_content)
-            raw_content = re.sub(r"\s*```$", "", raw_content)
+        # Robust regex-based JSON block extraction
+        json_match = re.search(r"({[\s\S]*})", raw_content)
+        if json_match:
+            raw_content = json_match.group(1)
             
         metadata = json.loads(raw_content)
         
