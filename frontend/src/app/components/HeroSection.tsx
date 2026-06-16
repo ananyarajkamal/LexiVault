@@ -336,7 +336,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
             {/* Video Container / Player */}
             <div className="relative aspect-video bg-black flex items-center justify-center w-full h-full">
               <iframe
-                src="https://drive.google.com/file/d/1R0EGOmzGW8njfDyc3L5xaFBi5zwGEivr/preview"
+                src="https://drive.google.com/file/d/1DTFLPUlwDCNgLhK97d_nmqcoWieAaJeZ/preview"
                 className="w-full h-full border-0 aspect-video"
                 allow="autoplay; fullscreen"
                 allowFullScreen
