@@ -1861,7 +1861,7 @@ export default function WorkspaceSection({
       <div className={
         isFullscreen 
           ? "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-full w-full p-0" 
-          : "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+          : "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
       }>
         {!isFullscreen && (
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -1927,7 +1927,7 @@ export default function WorkspaceSection({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
                 {/* Card 1: Core Analysis */}
                 <div 
                   onClick={() => handleCategoryChange('core')}
