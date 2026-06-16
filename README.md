@@ -21,7 +21,7 @@ LexiVault is designed to be fast, private, and accurate simultaneously, providin
 ### Core Features
 * **Bilingual Chat & Q&A**: Ask natural language questions in English or Hindi about your uploaded documents and get response citations with exact page numbers.
 * **Hinglish Code-Switching Engine (India-Specific)**: Translate complex legal jargon directly into conversational Hinglish (Hindi written in the Latin alphabet, e.g., *"Is clause ka matlab hai ki..."*) for intuitive, culturally tuned understanding.
-* **Risk Scorer & Analysis**: Extract critical clauses and automatically score risks (High/Medium/Low) based on liability caps, indemnification, non-competes, and termination, with Wolfram Alpha context integration.
+* **Risk Scorer & Analysis**: Extract critical clauses and automatically score risks (High/Medium/Low) based on liability caps, indemnification, non-competes, and termination entirely on the host machine using local regex and rule-based logic (zero LLM calls), with Wolfram Alpha context integration.
 * **Plain Language Mode**: Translate complex legal jargon into clear, one-sentence explanations without losing legal meaning.
 * **Decision Brief Generator**: Generate structured, multi-document summaries with risks and strategic recommendations.
 * **Contract Redline Autopilot**: Compare two versions of a contract to highlight character changes and analyze legal impact.
@@ -66,6 +66,7 @@ LexiVault uses a hybrid host-ingestion RAG (Retrieval-Augmented Generation) pipe
 5. Retrieval: When a query is made, the most relevant chunks are retrieved from the host-managed FAISS index.
 6. Cloud-Based LLM Inference with Host-Retrieved Context (Groq Cloud API): To generate responses, summaries, and legal audits, only the relevant retrieved text chunks (never the entire document) are sent to the LLM (Llama 3.3 70B / Llama 3.1 8B via the Groq Cloud API). High-risk clauses are cross-referenced with Wolfram Alpha to retrieve legal definitions and context.
 7. Host-Based Semantic Similarity: The Semantic Diff Analyzer calculates sentence vector similarity on your host CPU using the host-based embedding model, before calling the LLM to audit the legal shifts, ensuring comparison data remains private.
+8. Local Risk Scorer: The entire risk analysis pipeline (clause extraction and risk classification) runs 100% locally on the host machine using regular expression pattern matching and rule-based scoring (zero LLM calls). High-risk clauses are cross-referenced with Wolfram Alpha to retrieve legal definitions and context.
 
 > [!NOTE]
 > All document ingestion (parsing, chunking, embeddings) and retrieval (vector storage, top-k similarity search) occur 100% on your host machine. Final LLM inference is powered via the Groq Cloud API using ONLY the matching host-retrieved context chunks.
