@@ -3,7 +3,7 @@ import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
   CheckCircle2, XCircle, Scale, Diff, Mic, Clock, LayoutDashboard,
-  Swords, Binary, Languages, Code, Maximize2, Minimize2, ChevronLeft
+  Swords, Binary, Code, Maximize2, Minimize2, ChevronLeft
 } from 'lucide-react';
 import { LogoIcon } from './Navbar';
 
@@ -96,9 +96,7 @@ const workspaceTranslations = {
     residueTab: "The Residue",
     residueHeader: "Invisible Document Forensics",
     residueSub: "Extract hidden PDF metadata and check for suspect modifications to standard boilerplate text.",
-    echoTab: "The Echo",
-    echoHeader: "Cross-Language Legal Harmonics",
-    echoSub: "Analyze cross-language semantic gaps and translation traps across English, Hindi, and Hinglish.",
+
     alchemyTab: "The Alchemy",
     alchemyHeader: "Contract to Code Compiler",
     alchemySub: "Extract SLA constraints (uptime, latency, resolution times) and compile them into Prometheus Alert Rules."
@@ -191,9 +189,7 @@ const workspaceTranslations = {
     residueTab: "द रेजिड्यू",
     residueHeader: "द रेजिड्यू: दस्तावेज़ फोरेंसिक",
     residueSub: "छिपे हुए पीडीएफ मेटाडेटा को निकालें और मानक बॉयलरप्लेट टेक्स्ट में संदिग्ध संशोधनों की जांच करें।",
-    echoTab: "द इको",
-    echoHeader: "द इको: कानूनी सामंजस्य",
-    echoSub: "अंग्रेजी, हिंदी और हिंग्लिश में क्रॉस-लैंग्वेज अर्थगत अंतराल और अनुवाद जाल का विश्लेषण करें।",
+
     alchemyTab: "द अल्केमी",
     alchemyHeader: "द अल्केमी: SLA कंपाइलर",
     alchemySub: "SLA सीमाओं (अपटाइम, विलंबता, रिज़ॉल्यूशन समय) को निकालें और उन्हें प्रोमेथियस अलर्ट नियमों में संकलित करें।"
@@ -202,13 +198,13 @@ const workspaceTranslations = {
 
 const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
 
-type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow' | 'residue' | 'echo' | 'alchemy';
+type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow' | 'residue' | 'alchemy';
 type Category = 'core' | 'negotiation' | 'advanced';
 
 const categoryTabs: Record<Category, Tab[]> = {
   core: ['upload', 'chat', 'risks', 'plain', 'brief', 'redline', 'contradictions'],
   negotiation: ['negotiation', 'semanticDiff', 'timeline', 'shadow'],
-  advanced: ['portfolioDashboard', 'residue', 'echo', 'alchemy']
+  advanced: ['portfolioDashboard', 'residue', 'alchemy']
 };
 
 export default function WorkspaceSection({ 
@@ -236,7 +232,7 @@ export default function WorkspaceSection({
     { id: 'portfolioDashboard', label: t.portfolioTab, icon: LayoutDashboard },
     { id: 'shadow', label: t.shadowTab, icon: Swords },
     { id: 'residue', label: t.residueTab, icon: Binary },
-    { id: 'echo', label: t.echoTab, icon: Languages },
+
     { id: 'alchemy', label: t.alchemyTab, icon: Code },
   ];
 
@@ -376,11 +372,7 @@ export default function WorkspaceSection({
   } | null>(null);
   const [isInspecting, setIsInspecting] = useState(false);
 
-  // Echo state
-  const [echoInput, setEchoInput] = useState('');
-  const [echoLang, setEchoLang] = useState('English');
-  const [echoResult, setEchoResult] = useState('');
-  const [isEchoing, setIsEchoing] = useState(false);
+
 
   // Alchemy state
   const [selectedAlchemyDoc, setSelectedAlchemyDoc] = useState('');
@@ -446,7 +438,7 @@ export default function WorkspaceSection({
     setContraLang(l);
     setNegotiationLang(l);
     setDiffLang(l);
-    setEchoLang(l);
+
     setShadowLang(l);
   }, [globalLanguage]);
 
@@ -567,29 +559,7 @@ export default function WorkspaceSection({
     }
   };
 
-  const handleEchoHarmonics = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!echoInput.trim()) return;
-    setIsEchoing(true);
-    setEchoResult('');
-    try {
-      const res = await fetch(`${API_BASE}/features/echo`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clause_text: echoInput,
-          language: echoLang,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Echo harmonics analysis failed');
-      setEchoResult(data.harmonics_report || '');
-    } catch (err: any) {
-      setEchoResult('❌ ' + err.message);
-    } finally {
-      setIsEchoing(false);
-    }
-  };
+
 
   const handleAlchemyCompile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -2072,80 +2042,7 @@ export default function WorkspaceSection({
     );
   };
 
-  const renderEcho = () => {
-    const templates = [
-      { label: "Best vs. Reasonable Efforts", text: "Party A shall use best efforts to deliver the services, while Party B shall use reasonable efforts to support integration." },
-      { label: "Sole Discretion vs. Consent", text: "Seller may approve modifications in its sole discretion, and Buyer shall not withhold consent unreasonably." },
-      { label: "Indemnity vs. Hold Harmless", text: "The Contractor agrees to indemnify, defend, and hold harmless the Client from and against any third-party claims." },
-    ];
 
-    return (
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-bold text-neutral-100">{t.echoHeader}</h3>
-          <p className="text-xs text-neutral-450">{t.echoSub}</p>
-        </div>
-
-        <form onSubmit={handleEchoHarmonics} className="space-y-4">
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-neutral-300">{t.langLabel}</label>
-            <LangSelect value={echoLang} onChange={setEchoLang} />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Legal Phrase or Clause to Analyze</label>
-            <textarea
-              value={echoInput}
-              onChange={e => setEchoInput(e.target.value)}
-              placeholder="Paste a clause (or enter a term like 'best efforts') to audit cross-language semantic trapping..."
-              className="w-full bg-[#1A1821] border border-neutral-850 text-neutral-100 placeholder-neutral-500 rounded-xl px-4 py-3 text-sm h-32 resize-none focus:outline-none focus:border-[#D92662]"
-            />
-          </div>
-
-          {/* Quick templates */}
-          <div className="space-y-1.5">
-            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Quick Templates</span>
-            <div className="flex flex-wrap gap-2">
-              {templates.map((tpl, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setEchoInput(tpl.text)}
-                  className="px-2.5 py-1.5 bg-[#1A1821] hover:bg-neutral-200 text-neutral-300 rounded-md text-xs font-medium cursor-pointer transition-colors border border-neutral-850/50"
-                >
-                  {tpl.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={!echoInput.trim() || isEchoing}
-            className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] disabled:opacity-100 text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed"
-          >
-            {isEchoing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
-            {isEchoing ? "Analyzing Harmonics..." : "Evaluate Harmonics"}
-          </button>
-        </form>
-
-        {echoResult && (
-          <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
-            <div className="flex items-center justify-between mb-3 border-b border-[#D92662]/20 pb-2">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#D92662]" />
-                <h4 className="font-bold text-sm text-[#D92662]">Cross-Language Translation Trap Audit</h4>
-              </div>
-              
-            </div>
-            <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
-              {renderFormattedText(echoResult)}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
 
   const renderAlchemy = () => {
     const successDocs = documents.filter(d => d.status === 'success');
@@ -2245,7 +2142,7 @@ export default function WorkspaceSection({
     negotiation: renderNegotiation, semanticDiff: renderSemanticDiff,
     timeline: renderTimeline, portfolioDashboard: renderPortfolioDashboard,
     shadow: renderShadow, residue: renderResidue,
-    echo: renderEcho, alchemy: renderAlchemy,
+    alchemy: renderAlchemy,
   };
 
   return (
@@ -2394,7 +2291,7 @@ export default function WorkspaceSection({
                     <div className="flex flex-wrap gap-1.5 mb-6">
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Portfolio</span>
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Forensics</span>
-                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Echo Translation</span>
+
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Prometheus Compiler</span>
                     </div>
                     <div className="flex items-center text-xs font-bold text-cyan-400 group-hover:text-white transition-colors">

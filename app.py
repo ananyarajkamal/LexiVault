@@ -62,7 +62,6 @@ from features.counterparty_simulator import simulate_counterparty_pushback
 from features.negotiation_ghostwriter import draft_ghostwrite_response
 from features.shadow_battle import conduct_shadow_battle
 from features.residue_forensics import analyze_residue
-from features.echo_harmonics import analyze_echo_harmonics
 from features.alchemy_exporter import convert_sla_to_code
 
 # ---------------------------------------------------------------------------
@@ -195,10 +194,6 @@ class ShadowRequest(BaseModel):
 
 class ResidueRequest(BaseModel):
     namespace: str
-    language: str = "English"
-
-class EchoRequest(BaseModel):
-    clause_text: str
     language: str = "English"
 
 class AlchemyRequest(BaseModel):
@@ -517,11 +512,6 @@ def residue_forensics(req: ResidueRequest):
     if not text:
         raise HTTPException(status_code=400, detail="Could not read document text.")
     res = analyze_residue(temp_path, text, req.language)
-    return res
-
-@app.post("/api/features/echo")
-def echo_harmonics(req: EchoRequest):
-    res = analyze_echo_harmonics(req.clause_text, req.language)
     return res
 
 @app.post("/api/features/alchemy")
