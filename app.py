@@ -563,6 +563,82 @@ def portfolio_dashboard():
     stats = get_portfolio_dashboard_stats(active_namespaces=session_state["namespaces"])
     return stats
 
+@app.get("/api/diagnose-session/{namespace}")
+def diagnose_session(namespace: str):
+    if namespace not in session_state["namespaces"]:
+        return {
+            "error": "Document not found in current session namespaces",
+            "active_namespaces": session_state["namespaces"]
+        }
+    
+    file_path = session_state["uploaded_files"].get(namespace, "")
+    cached_text = session_state.get("extracted_texts", {}).get(namespace, "")
+    
+    file_exists = os.path.exists(file_path) if file_path else False
+    file_size = os.path.getsize(file_path) if file_exists else 0
+    
+    # Run fitz text extraction check
+    fitz_text = ""
+    fitz_page_count = 0
+    fitz_error = ""
+    try:
+        import fitz
+        doc = fitz.open(file_path)
+        fitz_page_count = len(doc)
+        if fitz_page_count > 0:
+            fitz_text = doc[0].get_text("text")
+        doc.close()
+    except Exception as e:
+        fitz_error = str(e)
+        
+    # Check tesseract installed languages
+    tesseract_version = ""
+    tesseract_languages = []
+    tesseract_error = ""
+    try:
+        import pytesseract
+        tesseract_version = pytesseract.get_tesseract_version()
+        tesseract_languages = pytesseract.get_languages()
+    except Exception as e:
+        tesseract_error = str(e)
+        
+    # Run a test OCR on page 1 image
+    ocr_test_text = ""
+    ocr_error = ""
+    try:
+        if file_exists and fitz_page_count > 0:
+            import fitz
+            doc = fitz.open(file_path)
+            page = doc[0]
+            pix = page.get_pixmap(dpi=150) # lower DPI for speed
+            import io
+            from PIL import Image
+            img_data = pix.tobytes("png")
+            img = Image.open(io.BytesIO(img_data))
+            ocr_test_text = pytesseract.image_to_string(img, lang="hin+eng")
+            doc.close()
+    except Exception as e:
+        ocr_error = str(e)
+        
+    return {
+        "namespace": namespace,
+        "file_path": file_path,
+        "file_exists": file_exists,
+        "file_size_bytes": file_size,
+        "cached_text_length": len(cached_text),
+        "cached_text_preview": cached_text[:500],
+        "fitz_page_count": fitz_page_count,
+        "fitz_text_length": len(fitz_text),
+        "fitz_text_preview": fitz_text[:500],
+        "fitz_error": fitz_error,
+        "tesseract_version": str(tesseract_version),
+        "tesseract_languages": tesseract_languages,
+        "tesseract_error": tesseract_error,
+        "ocr_test_text_length": len(ocr_test_text),
+        "ocr_test_text_preview": ocr_test_text[:500],
+        "ocr_error": ocr_error
+    }
+
 if __name__ == "__main__":
     import uvicorn
     import os
