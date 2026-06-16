@@ -908,7 +908,7 @@ export default function WorkspaceSection({
   );
 
   const renderChat = () => (
-    <div className={`flex flex-col ${isFullscreen ? 'h-full flex-1' : 'h-[500px]'}`}>
+    <div className={`flex flex-col ${isFullscreen ? 'h-full flex-1' : 'h-[400px] xs:h-[460px] sm:h-[500px]'}`}>
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-bold text-neutral-100">{t.chatHeader}</h3>
@@ -1912,12 +1912,12 @@ export default function WorkspaceSection({
     <section id="workspace" className={
       isFullscreen 
         ? "bg-[#0e0617] overflow-hidden flex flex-col h-[calc(100vh-64px)] w-full" 
-        : "bg-[#0e0617] overflow-hidden flex flex-col py-16 sm:py-24"
+        : "bg-[#0e0617] overflow-hidden flex flex-col py-8 sm:py-16 md:py-24"
     }>
       <div className={
         isFullscreen 
           ? "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-full w-full p-0" 
-          : "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+          : "transition-all duration-300 ease-in-out flex flex-col flex-1 min-h-0 max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 w-full"
       }>
         {!isFullscreen && (
           <div className="text-center max-w-2xl mx-auto mb-10">
@@ -1941,7 +1941,7 @@ export default function WorkspaceSection({
         <div className={
           isFullscreen 
             ? "bg-[#131118] overflow-hidden flex flex-col flex-1 min-h-0 rounded-none border-0" 
-            : "bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-2xl shadow-xl max-w-3xl mx-auto w-full"
+            : "bg-[#131118] border-y sm:border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-none sm:rounded-2xl shadow-xl max-w-3xl mx-auto w-full"
         }>
           {viewMode === 'upload' ? (
             /* Upload View */
@@ -2149,59 +2149,55 @@ export default function WorkspaceSection({
               {/* Mobile Header and horizontal tabs - visible only on mobile (< md) */}
               <div className="flex md:hidden flex-col bg-[#17151D] shrink-0">
                 {/* Module Header with Back Button */}
-                <div className="flex items-center justify-between border-b border-neutral-850 px-4 py-3">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between border-b border-neutral-850 px-4 py-3.5 bg-[#17151D]">
+                  <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setViewMode('hub')}
-                      className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-white bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+                      className="flex items-center gap-1.5 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-800/80 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer"
                     >
                       <ChevronLeft className="w-4 h-4" />
-                      <span>{globalLanguage === 'hi' ? "हब" : "Back"}</span>
+                      <span>{globalLanguage === 'hi' ? "हब" : "Hub"}</span>
                     </button>
-                    <div className="h-4 w-px bg-neutral-800"></div>
                     <button
                       type="button"
                       onClick={() => setViewMode('upload')}
-                      className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-white bg-neutral-900 border border-neutral-800 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer"
+                      className="flex items-center gap-1.5 text-xs font-semibold text-neutral-350 hover:text-white bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-800/80 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer"
                     >
-                      <Upload className="w-3 h-3 text-[#D92662]" />
+                      <Upload className="w-3.5 h-3.5 text-[#D92662]" />
                       <span>{globalLanguage === 'hi' ? "दस्तावेज़" : "Docs"}</span>
                     </button>
-                    <div className="h-4 w-px bg-neutral-800"></div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#D92662] max-w-[120px] truncate">
-                      {activeCategory === 'core'
-                        ? (globalLanguage === 'hi' ? "मुख्य विश्लेषण" : "Core Analysis")
-                        : activeCategory === 'negotiation'
-                        ? (globalLanguage === 'hi' ? "समझौता वार्ता" : "Negotiation Sandbox")
-                        : (globalLanguage === 'hi' ? "उन्नत" : "Advanced")}
-                    </span>
                   </div>
-                  
-                  {/* Fullscreen Toggle on Mobile */}
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#D92662] max-w-[130px] truncate">
+                    {activeCategory === 'core'
+                      ? (globalLanguage === 'hi' ? "मुख्य" : "Core")
+                      : activeCategory === 'negotiation'
+                      ? (globalLanguage === 'hi' ? "वार्ता" : "Negot.")
+                      : (globalLanguage === 'hi' ? "उन्नत" : "Adv.")}
+                  </span>
                   <button
                     type="button"
                     onClick={() => setIsFullscreen(!isFullscreen)}
-                    className="p-1.5 text-neutral-450 hover:text-[#D92662] rounded-lg transition-colors cursor-pointer"
+                    className="p-1.5 text-neutral-400 hover:text-[#D92662] bg-neutral-900/60 border border-neutral-800/80 rounded-lg transition-colors cursor-pointer"
                   >
-                    {isFullscreen ? <Minimize2 className="w-4.5 h-4.5" /> : <Maximize2 className="w-4.5 h-4.5" />}
+                    {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                   </button>
                 </div>
 
-                {/* Horizontal Scrolling Tabs Row */}
-                <div className="border-b border-neutral-850 overflow-x-auto bg-[#131118]">
-                  <div className="flex min-w-max px-2">
+                {/* Horizontal Scrolling Pill Tabs Row */}
+                <div className="border-b border-neutral-850 overflow-x-auto bg-[#131118] py-2 px-1 scrollbar-none">
+                  <div className="flex gap-2 min-w-max px-2">
                     {tabs.filter(t => categoryTabs[activeCategory].includes(t.id)).map(t => (
                       <button
                         key={t.id}
                         onClick={() => setActiveTab(t.id)}
-                        className={`flex items-center gap-2 px-4 py-3 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
+                        className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all cursor-pointer border ${
                           activeTab === t.id
-                            ? 'border-[#D92662] text-[#D92662] bg-[#D92662]/5'
-                            : 'border-transparent text-neutral-450 hover:text-neutral-300 hover:bg-[#1A1821]'
+                            ? 'bg-[#D92662] border-[#D92662] text-white shadow-md shadow-[#D92662]/10'
+                            : 'bg-neutral-900/40 border-neutral-850 text-neutral-450 hover:text-neutral-300 hover:bg-[#1A1821]'
                         }`}
                       >
-                        <t.icon className="w-4 h-4" />
+                        <t.icon className="w-3.5 h-3.5" />
                         <span>{t.label}</span>
                       </button>
                     ))}
