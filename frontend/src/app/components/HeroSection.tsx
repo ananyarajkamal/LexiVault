@@ -17,7 +17,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           
           {/* LEFT - Text & Typography */}
-          <div className="lg:col-span-5 flex flex-col justify-center xl:pr-10 lg:pr-6">
+          <div className="lg:col-span-5 flex flex-col justify-center lg:pr-4">
             <h1 className="font-serif font-black text-[38px] sm:text-[54px] lg:text-[44px] xl:text-[60px] 2xl:text-[72px] leading-[0.96] tracking-tight uppercase select-none">
               {language === 'en' ? (
                 <>
@@ -105,9 +105,9 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
           </div>
 
           {/* RIGHT - Interactive Document Mockup */}
-          <div className="lg:col-span-7 relative flex justify-center items-center py-4">
+          <div className="lg:col-span-7 relative flex lg:justify-end justify-center items-center py-4 lg:pr-4 xl:pr-8">
             {/* Scalable Mockup Group */}
-            <div className="relative w-full max-w-[580px] h-[520px] origin-center scale-[0.7] xs:scale-[0.8] sm:scale-90 md:scale-100 transition-all select-none">
+            <div className="relative w-full max-w-[580px] h-[520px] origin-center lg:origin-right scale-[0.6] xs:scale-[0.7] sm:scale-[0.8] md:scale-[0.85] lg:scale-[0.88] xl:scale-100 transition-all select-none">
               
               {/* SVG Connectors overlay */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
