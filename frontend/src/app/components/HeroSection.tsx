@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Upload, Shield, Building2, Globe, Download, MoreVertical, Sparkles, AlertTriangle, Clock, Swords, Languages, Scale, Feather, Fingerprint, Play, X } from 'lucide-react';
+import { Upload, Shield, Building2, Globe, Download, MoreVertical, AlertTriangle, Clock, Swords, Scale, Feather, Play, X } from 'lucide-react';
 import type { Language } from '../App';
 
 interface HeroSectionProps {
@@ -116,37 +116,28 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 <path d="M 160 180 C 170 180, 170 180, 180 180" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
                 {/* Curve 3: The Shadow (Left Card 3) */}
                 <path d="M 160 300 C 170 300, 170 245, 180 245" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
-                {/* Curve 4: The Echo (Left Card 4) */}
-                <path d="M 160 420 C 170 420, 170 355, 180 355" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+
                 
                 {/* Curve 5: Lifecycle Timeline (Right Card 1) */}
                 <path d="M 420 60 C 410 60, 410 70, 400 70" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
                 {/* Curve 6: Negotiation Ghostwriter (Right Card 2) */}
                 <path d="M 420 180 C 410 180, 410 198, 400 198" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
-                {/* Curve 7: The Residue (Right Card 3) */}
-                <path d="M 420 300 C 410 300, 410 305, 400 305" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
-                {/* Curve 8: The Alchemy (Right Card 4) */}
-                <path d="M 420 420 C 410 420, 410 390, 400 390" stroke="#D92662" strokeWidth="1.2" strokeOpacity="0.8" strokeDasharray="3 3" fill="none" />
+
+
 
                 {/* Dots at card edges (start of curves) */}
                 <circle cx="160" cy="60" r="3" fill="#D92662" />
                 <circle cx="160" cy="180" r="3" fill="#D92662" />
                 <circle cx="160" cy="300" r="3" fill="#D92662" />
-                <circle cx="160" cy="420" r="3" fill="#D92662" />
                 <circle cx="420" cy="60" r="3" fill="#D92662" />
                 <circle cx="420" cy="180" r="3" fill="#D92662" />
-                <circle cx="420" cy="300" r="3" fill="#D92662" />
-                <circle cx="420" cy="420" r="3" fill="#D92662" />
 
                 {/* Dots at mockup edges (end of curves) */}
                 <circle cx="180" cy="135" r="3" fill="#D92662" />
                 <circle cx="180" cy="180" r="3" fill="#D92662" />
                 <circle cx="180" cy="245" r="3" fill="#D92662" />
-                <circle cx="180" cy="355" r="3" fill="#D92662" />
                 <circle cx="400" cy="70" r="3" fill="#D92662" />
                 <circle cx="400" cy="198" r="3" fill="#D92662" />
-                <circle cx="400" cy="305" r="3" fill="#D92662" />
-                <circle cx="400" cy="390" r="3" fill="#D92662" />
               </svg>
 
               {/* CENTER: Document Viewer Card */}
@@ -259,21 +250,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 </div>
               </div>
 
-              {/* Left Callout 4: The Echo */}
-              <div className="absolute left-[0px] top-[375px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <Languages className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द इको' : 'The Echo'}</span>
-                  </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'कानूनी सामंजस्य' : 'Legal Harmonics'}</span>
-                  </div>
-                </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
-                  {language === 'hi' ? 'अनुवाद अंतर विश्लेषण' : 'Translation gap audit'}
-                </div>
-              </div>
+
 
               {/* Right Callout 1: Lifecycle Timeline */}
               <div className="absolute right-[0px] top-[15px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
@@ -307,37 +284,9 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
                 </div>
               </div>
 
-              {/* Right Callout 3: The Residue */}
-              <div className="absolute right-[0px] top-[255px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <Fingerprint className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द रेजिड्यू' : 'The Residue'}</span>
-                  </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#FFF0F3] text-[#D92662] rounded px-2 py-0.5">{language === 'hi' ? 'फोरेंसिक रिपोर्ट' : 'Forensics Report'}</span>
-                  </div>
-                </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans truncate" title="Metadata & boilerplates">
-                  {language === 'hi' ? 'छिपा हुआ मेटाडेटा ऑडिट' : 'Metadata & altered boilerplate'}
-                </div>
-              </div>
 
-              {/* Right Callout 4: The Alchemy */}
-              <div className="absolute right-[0px] top-[375px] w-[160px] bg-white rounded-[20px] p-3 shadow-lg flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#D92662] shrink-0" />
-                    <span className="font-sans font-extrabold text-[10.5px] text-neutral-900">{language === 'hi' ? 'द अल्केमी' : 'The Alchemy'}</span>
-                  </div>
-                  <div className="mt-2">
-                    <span className="inline-block text-[8px] font-bold bg-[#F3E8FF] text-[#7C3AED] rounded px-2 py-0.5">{language === 'hi' ? 'SLA कंपाइलर' : 'SLA Compiler'}</span>
-                  </div>
-                </div>
-                <div className="mt-2 text-neutral-800 font-semibold text-[10px] font-sans">
-                  {language === 'hi' ? 'SLA को प्रोमेथियस में बदलें' : 'Compile SLA to Prometheus'}
-                </div>
-              </div>
+
+
 
             </div>
           </div>

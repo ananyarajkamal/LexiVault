@@ -34,9 +34,6 @@ LexiVault is designed to be fast, private, and accurate simultaneously, providin
 * **Contract Lifecycle Timeline Predictor**: Estimate negotiation duration, renewal risks, and expiration cascades using LLM temporal graph analysis on contract metadata.
 * **Cross-Document Portfolio Risk Dashboard**: View portfolio-level analytics such as active contracts, total financial liability, vendor concentration risks, and renewal timeline cliffs.
 * **The Shadow (AI vs. AI Contract Battle)**: Select a document to watch adversarial Attacker and Defender AI counsel debate clause liabilities and deliver a final legal risk assessment.
-* **The Residue (Invisible Document Forensics)**: Run binary inspections of PDF bytes to extract hidden metadata (author, tools, creation dates) using PyMuPDF and perform text checks for altered boilerplates.
-* **The Echo (Cross-Language Legal Harmonics)**: Compare semantic legal weight and translation traps (e.g. "best efforts" vs "reasonable efforts") across English, Hindi, and Hinglish.
-* **The Alchemy (SLA-to-Code Compiler)**: Automatically extracts service level agreement (SLA) bounds (such as uptime percentages, latency thresholds, and support resolution times) and compiles them into Prometheus Alert YAML rules. This allows engineering leads and product managers to immediately enforce vendor legal commitments directly in their production monitoring dashboard.
 
 ### Seamless Workspace Transition
 LexiVault blends a content-rich landing page with a dedicated, focused web-application dashboard:
@@ -95,14 +92,8 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
   #### Contract Lifecycle Timeline Predictor
   ![Contract Lifecycle Timeline](assets/timeline.png)
 
-  #### Invisible Document Forensics (The Residue)
-  ![Invisible Document Forensics](assets/residue.png)
 
-  #### Cross-Language Legal Harmonics (The Echo)
-  ![Cross-Language Legal Harmonics](assets/echo.png)
 
-  #### Contract-to-Code Compiler (The Alchemy)
-  ![Contract-to-Code Compiler](assets/alchemy.png)
 </details>
 
 ---
@@ -200,9 +191,6 @@ The FastAPI backend (`app.py`) exposes the following endpoints:
 * **`POST /api/features/counterparty-sim`** (`counterparty_sim`): Simulates opposing counsel objections and counter-proposals to user-proposed clause edits.
 * **`POST /api/features/ghostwrite`** (`ghostwrite`): Drafts compromise versions or legally sound rejections with fallbacks when receiving counterparty markups.
 * **`POST /api/features/shadow`** (`shadow_battle`): Exposes the **The Shadow** feature, conducting adversarial Attacker vs. Defender debates on clause liability.
-* **`POST /api/features/residue`** (`residue_forensics`): Exposes the **The Residue** feature, extracting hidden PDF byte metadata and flagging altered standard boilerplate text.
-* **`POST /api/features/echo`** (`echo_harmonics`): Exposes the **The Echo** feature, auditing translation traps and semantic equivalence weights across English, Hindi, and Hinglish.
-* **`POST /api/features/alchemy`** (`alchemy_exporter`): Exposes the **The Alchemy** feature, parsing SLA uptime/latency clauses and exporting copyable Prometheus Alert YAML rules.
 * **`GET /api/portfolio/dashboard`** (`portfolio_dashboard`): Aggregates liability caps, active contracts count, vendor concentrations, and renewal dates into portfolio stats.
 
 ---

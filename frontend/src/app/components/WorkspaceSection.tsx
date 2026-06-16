@@ -3,7 +3,7 @@ import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
   CheckCircle2, XCircle, Scale, Diff, Mic, Clock, LayoutDashboard,
-  Swords, Binary, Code, Maximize2, Minimize2, ChevronLeft
+  Swords, Code, Maximize2, Minimize2, ChevronLeft
 } from 'lucide-react';
 import { LogoIcon } from './Navbar';
 
@@ -93,13 +93,7 @@ const workspaceTranslations = {
     shadowTab: "The Shadow",
     shadowHeader: "AI vs. AI Contract Battle",
     shadowSub: "Watch opposing AI counsel debate the high-risk clauses in your contract in real-time.",
-    residueTab: "The Residue",
-    residueHeader: "Invisible Document Forensics",
-    residueSub: "Extract hidden PDF metadata and check for suspect modifications to standard boilerplate text.",
 
-    alchemyTab: "The Alchemy",
-    alchemyHeader: "Contract to Code Compiler",
-    alchemySub: "Extract SLA constraints (uptime, latency, resolution times) and compile them into Prometheus Alert Rules."
   },
   hi: {
     title: "लेक्सीवॉल्ट का अभी प्रयास करें",
@@ -186,25 +180,19 @@ const workspaceTranslations = {
     shadowTab: "द शैडो",
     shadowHeader: "द शैडो: AI बनाम AI मुकाबला",
     shadowSub: "अपने अनुबंध में उच्च-जोखिम वाले खंडों पर विरोधी एआई वकीलों की बहस देखें।",
-    residueTab: "द रेजिड्यू",
-    residueHeader: "द रेजिड्यू: दस्तावेज़ फोरेंसिक",
-    residueSub: "छिपे हुए पीडीएफ मेटाडेटा को निकालें और मानक बॉयलरप्लेट टेक्स्ट में संदिग्ध संशोधनों की जांच करें।",
 
-    alchemyTab: "द अल्केमी",
-    alchemyHeader: "द अल्केमी: SLA कंपाइलर",
-    alchemySub: "SLA सीमाओं (अपटाइम, विलंबता, रिज़ॉल्यूशन समय) को निकालें और उन्हें प्रोमेथियस अलर्ट नियमों में संकलित करें।"
   }
 };
 
 const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
 
-type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow' | 'residue' | 'alchemy';
+type Tab = 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow';
 type Category = 'core' | 'negotiation' | 'advanced';
 
 const categoryTabs: Record<Category, Tab[]> = {
-  core: ['upload', 'chat', 'risks', 'plain', 'brief', 'redline', 'contradictions'],
+  core: ['chat', 'risks', 'plain', 'brief', 'redline', 'contradictions'],
   negotiation: ['negotiation', 'semanticDiff', 'timeline', 'shadow'],
-  advanced: ['portfolioDashboard', 'residue', 'alchemy']
+  advanced: ['portfolioDashboard']
 };
 
 export default function WorkspaceSection({ 
@@ -219,7 +207,6 @@ export default function WorkspaceSection({
   const t = workspaceTranslations[globalLanguage];
 
   const tabs: { id: Tab; label: string; icon: any }[] = [
-    { id: 'upload', label: t.uploadTab, icon: Upload },
     { id: 'chat', label: t.chatTab, icon: MessageSquare },
     { id: 'risks', label: t.risksTab, icon: ShieldAlert },
     { id: 'plain', label: t.plainTab, icon: FileText },
@@ -231,14 +218,12 @@ export default function WorkspaceSection({
     { id: 'timeline', label: t.timelineTab, icon: Clock },
     { id: 'portfolioDashboard', label: t.portfolioTab, icon: LayoutDashboard },
     { id: 'shadow', label: t.shadowTab, icon: Swords },
-    { id: 'residue', label: t.residueTab, icon: Binary },
 
-    { id: 'alchemy', label: t.alchemyTab, icon: Code },
   ];
 
-  const [activeTab, setActiveTab] = useState<Tab>('upload');
+  const [activeTab, setActiveTab] = useState<Tab>('chat');
   const [activeCategory, setActiveCategory] = useState<Category>('core');
-  const [viewMode, setViewMode] = useState<'hub' | 'module'>('hub');
+  const [viewMode, setViewMode] = useState<'hub' | 'module' | 'upload'>('upload');
 
   const handleCategoryChange = (cat: Category) => {
     setActiveCategory(cat);
@@ -342,8 +327,6 @@ export default function WorkspaceSection({
   } | null>(null);
   const [isFetchingPortfolio, setIsFetchingPortfolio] = useState(false);
 
-  // Alchemy copy state
-  const [copiedAlchemy, setCopiedAlchemy] = useState(false);
 
   // Shadow state
   const [selectedShadowDoc, setSelectedShadowDoc] = useState('');
@@ -356,41 +339,12 @@ export default function WorkspaceSection({
   const [isBattling, setIsBattling] = useState(false);
   const [shadowLang, setShadowLang] = useState('English');
 
-  // Residue state
-  const [selectedResidueDoc, setSelectedResidueDoc] = useState('');
-  const [residueResult, setResidueResult] = useState<{
-    metadata: {
-      author: string;
-      creator: string;
-      producer: string;
-      creation_date: string;
-      mod_date: string;
-      page_count: number;
-      file_size_bytes: number;
-    };
-    forensics_report: string;
-  } | null>(null);
-  const [isInspecting, setIsInspecting] = useState(false);
 
 
 
-  // Alchemy state
-  const [selectedAlchemyDoc, setSelectedAlchemyDoc] = useState('');
-  const [alchemyResult, setAlchemyResult] = useState<{
-    parameters: {
-      uptime_target: string;
-      latency_target: string;
-      resolution_target: string;
-    };
-    code_block: string;
-  } | null>(null);
-  const [isCompiling, setIsCompiling] = useState(false);
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedAlchemy(true);
-    setTimeout(() => setCopiedAlchemy(false), 2000);
-  };
+
+
 
   // Voice State & Helpers
   const [isListening, setIsListening] = useState(false);
@@ -462,10 +416,18 @@ export default function WorkspaceSection({
     if (successDocs.length > 0) {
       if (!selectedTimelineDoc) setSelectedTimelineDoc(successDocs[0].namespace);
       if (!selectedShadowDoc) setSelectedShadowDoc(successDocs[0].namespace);
-      if (!selectedResidueDoc) setSelectedResidueDoc(successDocs[0].namespace);
-      if (!selectedAlchemyDoc) setSelectedAlchemyDoc(successDocs[0].namespace);
     }
-  }, [documents, selectedTimelineDoc, selectedShadowDoc, selectedResidueDoc, selectedAlchemyDoc]);
+  }, [documents, selectedTimelineDoc, selectedShadowDoc]);
+
+  const prevDocCountRef = useRef(documents.length);
+  useEffect(() => {
+    if (documents.length === 0) {
+      setViewMode('upload');
+    } else if (prevDocCountRef.current === 0 && documents.length > 0) {
+      setViewMode('hub');
+    }
+    prevDocCountRef.current = documents.length;
+  }, [documents]);
 
   useEffect(() => {
     if (activeTab === 'portfolioDashboard') {
@@ -532,56 +494,6 @@ export default function WorkspaceSection({
       alert(err.message);
     } finally {
       setIsBattling(false);
-    }
-  };
-
-  const handleResidueForensics = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedResidueDoc) return;
-    setIsInspecting(true);
-    setResidueResult(null);
-    try {
-      const res = await fetch(`${API_BASE}/features/residue`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          namespace: selectedResidueDoc,
-          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Residue forensics failed');
-      setResidueResult(data);
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setIsInspecting(false);
-    }
-  };
-
-
-
-  const handleAlchemyCompile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedAlchemyDoc) return;
-    setIsCompiling(true);
-    setAlchemyResult(null);
-    try {
-      const res = await fetch(`${API_BASE}/features/alchemy`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          namespace: selectedAlchemyDoc,
-          language: globalLanguage === 'hi' ? 'Hindi' : 'English',
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Alchemy compilation failed');
-      setAlchemyResult(data);
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setIsCompiling(false);
     }
   };
 
@@ -1931,218 +1843,13 @@ export default function WorkspaceSection({
     );
   };
 
-  const renderResidue = () => {
-    const successDocs = documents.filter(d => d.status === 'success');
-
-    return (
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-bold text-neutral-100">{t.residueHeader}</h3>
-          <p className="text-xs text-neutral-450">{t.residueSub}</p>
-        </div>
-
-        {successDocs.length === 0 ? (
-          <div className="text-center py-16 text-neutral-400">
-            <Binary className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D92662]" />
-            <p className="text-sm">Upload documents first to run document forensics.</p>
-          </div>
-        ) : (
-          <form onSubmit={handleResidueForensics} className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-              <div className="flex-1">
-                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Select Document</label>
-                <select
-                  value={selectedResidueDoc}
-                  onChange={e => setSelectedResidueDoc(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer"
-                >
-                  {successDocs.map((doc, i) => (
-                    <option key={i} value={doc.namespace}>{doc.name}</option>
-                  ))}
-                </select>
-              </div>
-              <button
-                type="submit"
-                disabled={isInspecting}
-                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
-              >
-                {isInspecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Binary className="w-4 h-4" />}
-                {isInspecting ? "Inspecting..." : "Extract & Analyze"}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {residueResult && (
-          <div className="space-y-6 border-t border-neutral-850 pt-6">
-            <div className="bg-[#131118] border border-neutral-850 rounded-xl p-5 space-y-3">
-              <h4 className="font-bold text-sm text-neutral-200">Extracted PDF File Metadata</h4>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-neutral-850 text-xs">
-                  <thead>
-                    <tr className="text-left text-neutral-450 uppercase tracking-wider font-bold">
-                      <th className="py-2 px-3">Metadata Field</th>
-                      <th className="py-2 px-3">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-850 text-neutral-300 bg-[#131118]">
-                    <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Author</td>
-                      <td className="py-2.5 px-3">{residueResult.metadata.author || 'Unknown'}</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Creator / Application</td>
-                      <td className="py-2.5 px-3">{residueResult.metadata.creator || 'Unknown'}</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-400">PDF Producer</td>
-                      <td className="py-2.5 px-3">{residueResult.metadata.producer || 'Unknown'}</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Creation Date</td>
-                      <td className="py-2.5 px-3">{residueResult.metadata.creation_date || 'Unknown'}</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Modification Date</td>
-                      <td className="py-2.5 px-3">{residueResult.metadata.mod_date || 'Unknown'}</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-400">Page Count</td>
-                      <td className="py-2.5 px-3">{residueResult.metadata.page_count || 0}</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2.5 px-3 font-semibold text-neutral-400">File Size</td>
-                      <td className="py-2.5 px-3">
-                        {residueResult.metadata.file_size_bytes 
-                          ? `${(residueResult.metadata.file_size_bytes / 1024).toFixed(1)} KB` 
-                          : 'Unknown'}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Forensic AI Audits */}
-            <div className="bg-[#1D1016]/40 border border-[#D92662]/20 rounded-xl p-5 text-neutral-200">
-              <div className="flex items-center justify-between mb-3 border-b border-[#D92662]/20 pb-2">
-                <div className="flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-[#D92662]" />
-                  <h4 className="font-bold text-sm text-[#D92662]">Forensic Text Alteration Audit</h4>
-                </div>
-                
-              </div>
-              <div className="text-xs text-neutral-300 leading-relaxed whitespace-pre-wrap bg-[#1A1821] border border-neutral-850 p-3 rounded-lg">
-                {renderFormattedText(residueResult.forensics_report)}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-
-
-  const renderAlchemy = () => {
-    const successDocs = documents.filter(d => d.status === 'success');
-
-    return (
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-bold text-neutral-100">{t.alchemyHeader}</h3>
-          <p className="text-xs text-neutral-450">{t.alchemySub}</p>
-        </div>
-
-        {successDocs.length === 0 ? (
-          <div className="text-center py-16 text-neutral-400">
-            <Code className="w-10 h-10 mx-auto mb-3 opacity-40 text-[#D92662]" />
-            <p className="text-sm">Upload documents first to compile SLA metrics.</p>
-          </div>
-        ) : (
-          <form onSubmit={handleAlchemyCompile} className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-              <div className="flex-1">
-                <label className="text-xs font-semibold text-neutral-400 block mb-1.5">Select Document</label>
-                <select
-                  value={selectedAlchemyDoc}
-                  onChange={e => setSelectedAlchemyDoc(e.target.value)}
-                  className="w-full border border-neutral-850 rounded-lg p-2.5 text-sm bg-[#131118] focus:outline-none focus:border-[#D92662] cursor-pointer"
-                >
-                  {successDocs.map((doc, i) => (
-                    <option key={i} value={doc.namespace}>{doc.name}</option>
-                  ))}
-                </select>
-              </div>
-              <button
-                type="submit"
-                disabled={isCompiling}
-                className="bg-[#D92662] hover:bg-[#B71C4F] disabled:bg-[#222026] disabled:text-[#909098] text-white text-sm font-semibold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed h-[42px] shrink-0"
-              >
-                {isCompiling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Code className="w-4 h-4" />}
-                {isCompiling ? "Compiling..." : "Compile to Prometheus YAML"}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {alchemyResult && (
-          <div className="space-y-6 border-t border-neutral-150 pt-6">
-            {/* Metric Targets Cards */}
-            <div className="space-y-3">
-              <h4 className="font-bold text-sm text-neutral-200">Extracted SLA Targets</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-4 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Uptime Target</span>
-                  <span className="text-base font-bold text-[#D92662] mt-1">
-                    {alchemyResult.parameters.uptime_target || 'N/A'}
-                  </span>
-                </div>
-                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-4 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Latency Target</span>
-                  <span className="text-base font-bold text-[#D92662] mt-1">
-                    {alchemyResult.parameters.latency_target || 'N/A'}
-                  </span>
-                </div>
-                <div className="bg-[#1A1821] border border-neutral-850 rounded-xl p-4 flex flex-col justify-between">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Resolution Target</span>
-                  <span className="text-base font-bold text-[#D92662] mt-1">
-                    {alchemyResult.parameters.resolution_target || 'N/A'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Generated Prometheus Rule */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="font-bold text-sm text-neutral-200">Compiled Prometheus Alert Rules (.yml)</h4>
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(alchemyResult.code_block)}
-                  className="px-3 py-1 bg-[#D92662]/10 hover:bg-[#D92662]/20 text-[#D92662] rounded-md text-xs font-semibold cursor-pointer transition-colors"
-                >
-                  {copiedAlchemy ? "Copied!" : "Copy Code"}
-                </button>
-              </div>
-              <pre className="bg-neutral-900 text-neutral-200 p-5 rounded-xl text-xs font-mono overflow-x-auto max-h-[400px] border border-neutral-850 leading-relaxed">
-                <code>{alchemyResult.code_block}</code>
-              </pre>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   const renderers = {
-    upload: renderUpload, chat: renderChat, risks: renderRisks,
+    chat: renderChat, risks: renderRisks,
     plain: renderPlainLanguage, brief: renderBrief,
     redline: renderRedline, contradictions: renderContradictions,
     negotiation: renderNegotiation, semanticDiff: renderSemanticDiff,
     timeline: renderTimeline, portfolioDashboard: renderPortfolioDashboard,
-    shadow: renderShadow, residue: renderResidue,
-    alchemy: renderAlchemy,
+    shadow: renderShadow,
   };
 
   return (
@@ -2180,7 +1887,24 @@ export default function WorkspaceSection({
             ? "bg-[#131118] overflow-hidden flex flex-col flex-1 min-h-0 rounded-none border-0" 
             : "bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-2xl shadow-xl"
         }>
-          {viewMode === 'hub' ? (
+          {viewMode === 'upload' ? (
+            /* Upload View */
+            <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center bg-[#131118] overflow-y-auto">
+              {documents.length > 0 && (
+                <div className="mb-6 flex justify-start">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('hub')}
+                    className="flex items-center gap-2 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-900 hover:bg-[#1A1821] border border-neutral-800 hover:border-neutral-700 py-2.5 px-4 rounded-xl transition-all cursor-pointer shadow-sm"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    <span>{globalLanguage === 'hi' ? "हब पर वापस" : "Back to Hub"}</span>
+                  </button>
+                </div>
+              )}
+              {renderUpload()}
+            </div>
+          ) : viewMode === 'hub' ? (
             /* Hub View */
             <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center bg-[#131118] overflow-y-auto">
               <div className="text-center max-w-xl mx-auto mb-8">
@@ -2192,6 +1916,15 @@ export default function WorkspaceSection({
                     ? "अनुबंध का विश्लेषण करने, वार्ताओं का अनुकरण करने या उन्नत उपकरणों का उपयोग करने के लिए एक श्रेणी चुनें।"
                     : "Choose a suite of tools below to begin analyzing, simulating negotiations, or running deep forensic audits."}
                 </p>
+                <div className="mt-4 flex justify-center">
+                  <button
+                    onClick={() => setViewMode('upload')}
+                    className="flex items-center gap-2 text-xs font-semibold text-neutral-350 hover:text-white bg-[#17151D] hover:bg-[#1C1A24] border border-neutral-850 hover:border-neutral-700 py-2 px-3.5 rounded-lg transition-all cursor-pointer shadow-sm"
+                  >
+                    <Upload className="w-3.5 h-3.5 text-[#D92662]" />
+                    <span>{globalLanguage === 'hi' ? "दस्तावेज़ प्रबंधित करें" : "Manage Documents"} ({documents.length})</span>
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full">
@@ -2211,18 +1944,17 @@ export default function WorkspaceSection({
                     </h4>
                     <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
                       {globalLanguage === 'hi'
-                        ? "दस्तावेज़ अपलोड, चैट, जोखिम विश्लेषण, सारांश, और विरोधाभास डिटेक्टर।"
-                        : "Deconstruct and audit contracts. Upload documents, query with AI, scan risk profiles, extract clauses, and identify document contradictions."}
+                        ? "चैट, जोखिम विश्लेषण, सारांश, और विरोधाभास डिटेक्टर।"
+                        : "Deconstruct and audit contracts. Query with AI, scan risk profiles, extract clauses, and identify document contradictions."}
                     </p>
                   </div>
 
                   <div className="mt-auto">
                     <div className="flex flex-wrap gap-1.5 mb-6">
-                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Upload</span>
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Chat</span>
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Risks</span>
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Redline</span>
-                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">+3 more</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">+2 more</span>
                     </div>
                     <div className="flex items-center text-xs font-bold text-[#D92662] group-hover:text-white transition-colors">
                       <span>{globalLanguage === 'hi' ? "Open Module" : "Open Module"}</span>
@@ -2282,17 +2014,14 @@ export default function WorkspaceSection({
                     </h4>
                     <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
                       {globalLanguage === 'hi'
-                        ? "पोर्टफोलियो डैशबोर्ड, अदृश्य मेटाडेटा फोरेंसिक, अनुवाद जाल, और एसएलए कंपाइलर।"
-                        : "Cross-document portfolio views, deep metadata forensics, translation risk mappings, and SLA-to-code compiler."}
+                        ? "पोर्टफोलियो डैशबोर्ड।"
+                        : "Cross-document portfolio views."}
                     </p>
                   </div>
 
                   <div className="mt-auto">
                     <div className="flex flex-wrap gap-1.5 mb-6">
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Portfolio</span>
-                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Forensics</span>
-
-                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Prometheus Compiler</span>
                     </div>
                     <div className="flex items-center text-xs font-bold text-cyan-400 group-hover:text-white transition-colors">
                       <span>{globalLanguage === 'hi' ? "Open Module" : "Open Module"}</span>
@@ -2308,7 +2037,7 @@ export default function WorkspaceSection({
               {/* Sidebar Navigation - Left Side on Desktop */}
               <div className="hidden md:flex md:w-64 flex-col bg-[#17151D] shrink-0">
                 {/* Back to Hub Button */}
-                <div className="p-4 border-b border-neutral-850">
+                <div className="p-4 border-b border-neutral-850 space-y-2">
                   <button
                     type="button"
                     onClick={() => setViewMode('hub')}
@@ -2316,6 +2045,14 @@ export default function WorkspaceSection({
                   >
                     <ChevronLeft className="w-4 h-4" />
                     <span>{globalLanguage === 'hi' ? "हब पर वापस" : "Back to Hub"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('upload')}
+                    className="w-full flex items-center justify-center gap-2 text-xs font-semibold text-neutral-400 hover:text-white bg-transparent hover:bg-neutral-900/50 border border-transparent hover:border-neutral-850 py-2 px-4 rounded-xl transition-all cursor-pointer"
+                  >
+                    <Upload className="w-3.5 h-3.5 text-[#D92662]" />
+                    <span>{globalLanguage === 'hi' ? "दस्तावेज़ प्रबंधित करें" : "Manage Documents"}</span>
                   </button>
                 </div>
 
@@ -2364,6 +2101,15 @@ export default function WorkspaceSection({
                     >
                       <ChevronLeft className="w-4 h-4" />
                       <span>{globalLanguage === 'hi' ? "हब" : "Back"}</span>
+                    </button>
+                    <div className="h-4 w-px bg-neutral-800"></div>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('upload')}
+                      className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-white bg-neutral-900 border border-neutral-800 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer"
+                    >
+                      <Upload className="w-3 h-3 text-[#D92662]" />
+                      <span>{globalLanguage === 'hi' ? "दस्तावेज़" : "Docs"}</span>
                     </button>
                     <div className="h-4 w-px bg-neutral-800"></div>
                     <span className="text-xs font-bold uppercase tracking-wider text-[#D92662] max-w-[120px] truncate">

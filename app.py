@@ -61,8 +61,6 @@ from features.timeline_predictor import predict_lifecycle
 from features.counterparty_simulator import simulate_counterparty_pushback
 from features.negotiation_ghostwriter import draft_ghostwrite_response
 from features.shadow_battle import conduct_shadow_battle
-from features.residue_forensics import analyze_residue
-from features.alchemy_exporter import convert_sla_to_code
 
 # ---------------------------------------------------------------------------
 # Global State & Services
@@ -189,14 +187,6 @@ class GhostwriterRequest(BaseModel):
     language: str = "English"
 
 class ShadowRequest(BaseModel):
-    namespace: str
-    language: str = "English"
-
-class ResidueRequest(BaseModel):
-    namespace: str
-    language: str = "English"
-
-class AlchemyRequest(BaseModel):
     namespace: str
     language: str = "English"
 
@@ -501,28 +491,6 @@ def shadow_battle(req: ShadowRequest):
     if not text:
         raise HTTPException(status_code=400, detail="Could not read document text.")
     res = conduct_shadow_battle(text, req.language)
-    return res
-
-@app.post("/api/features/residue")
-def residue_forensics(req: ResidueRequest):
-    if req.namespace not in session_state["uploaded_files"]:
-        raise HTTPException(status_code=400, detail="Document not found or not indexed yet.")
-    temp_path = session_state["uploaded_files"][req.namespace]
-    text = extract_text_from_file(temp_path)
-    if not text:
-        raise HTTPException(status_code=400, detail="Could not read document text.")
-    res = analyze_residue(temp_path, text, req.language)
-    return res
-
-@app.post("/api/features/alchemy")
-def alchemy_exporter(req: AlchemyRequest):
-    if req.namespace not in session_state["uploaded_files"]:
-        raise HTTPException(status_code=400, detail="Document not found or not indexed yet.")
-    temp_path = session_state["uploaded_files"][req.namespace]
-    text = extract_text_from_file(temp_path)
-    if not text:
-        raise HTTPException(status_code=400, detail="Could not read document text.")
-    res = convert_sla_to_code(text, req.language)
     return res
 
 @app.get("/api/portfolio/dashboard")
