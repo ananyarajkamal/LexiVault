@@ -14,10 +14,10 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
   return (
     <section className="relative overflow-hidden bg-[radial-gradient(circle_at_75%_50%,#200c2e_0%,#0e0617_60%,#0e0617_100%)] border-b border-neutral-900/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-16 sm:pb-24">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           
           {/* LEFT - Text & Typography */}
-          <div className="lg:col-span-6 flex flex-col justify-center xl:pr-12 lg:pr-6">
+          <div className="lg:col-span-5 flex flex-col justify-center xl:pr-10 lg:pr-6">
             <h1 className="font-serif font-black text-[38px] sm:text-[54px] lg:text-[44px] xl:text-[60px] 2xl:text-[72px] leading-[0.96] tracking-tight uppercase select-none">
               {language === 'en' ? (
                 <>
@@ -105,7 +105,7 @@ export default function HeroSection({ onUploadClick, language, t }: HeroSectionP
           </div>
 
           {/* RIGHT - Interactive Document Mockup */}
-          <div className="lg:col-span-6 relative flex justify-center items-center py-4">
+          <div className="lg:col-span-7 relative flex justify-center items-center py-4">
             {/* Scalable Mockup Group */}
             <div className="relative w-full max-w-[580px] h-[520px] origin-center scale-[0.7] xs:scale-[0.8] sm:scale-90 md:scale-100 transition-all select-none">
               
