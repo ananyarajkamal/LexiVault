@@ -43,7 +43,7 @@ CLAUSE_EXTRACTION_PROMPT = (
 PLAIN_LANGUAGE_PROMPT = (
     "You are a plain language legal translator. Explain the following legal clause in one "
     "simple sentence that a non-lawyer can understand. "
-    "CRITICAL: If the user language is 'Hindi', you MUST respond in Hindi using the Devanagari script (e.g. 'यह क्लॉज...'). "
+    "CRITICAL: If the user language is 'Hindi', you MUST respond ENTIRELY in Hindi using the Devanagari script only (e.g. 'यह खंड बताता है कि...'). DO NOT use any Latin/Roman alphabet letters or English words. Every single word must be in Devanagari. "
     "If 'Hinglish', explain in simple, conversational Hinglish (Hindi written in the Latin/English script, e.g., 'Is clause ka matlab hai ki...'). "
     "If 'English', respond in plain English. "
     "Do not add any extra information beyond what the clause says. Clause: {clause} User language: {language}"
@@ -60,9 +60,9 @@ DECISION_BRIEF_PROMPT = (
     "Cite every claim with its exact page number and clause.\n\n"
     "Context: {context}\n\n"
     "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
-    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English (e.g. translate 'देयता की सीमा' to 'Limitation of Liability' or 'Deyata ki Seema') so that the final output contains no Devanagari characters.\n"
-    "If the language is 'Hindi', write everything in Devanagari script. If any terms or names from the context are in English, explain or translate them into Hindi so the output is readable in Hindi.\n"
-    "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet, e.g., 'Hum recommend karte hain ki...', 'Document summaries niche diye gaye hain...').\n"
+    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English so that the final output contains no Devanagari characters.\n"
+    "If the language is 'Hindi', you MUST write EVERYTHING in Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words anywhere in the response — not even for section headers, risk levels, or technical terms. Translate all English terms into Hindi. Use 'उच्च', 'मध्यम', 'निम्न' for High/Medium/Low.\n"
+    "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet, e.g., 'Hum recommend karte hain ki...').\n"
     "Do not use English for headers or summaries if Hindi or Hinglish is selected."
 )
 """Prompt template for decision brief generation. Placeholders: {context}, {language}."""
@@ -75,9 +75,9 @@ CONTRADICTION_PROMPT = (
     "Cite exact page numbers and clauses.\n\n"
     "Context: {context}\n\n"
     "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
-    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English (e.g. translate 'देयता की सीमा' to 'Limitation of Liability' or 'Deyata ki Seema') so that the final output contains no Devanagari characters.\n"
+    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English so that the final output contains no Devanagari characters.\n"
     "If no contradictions are found, you must state exactly: 'No contradictions detected.' in English, or 'कोई विरोधाभास नहीं मिला।' in Hindi, or 'Koi contradictions nahi mile' in Hinglish.\n"
-    "If the language is 'Hindi', write everything in Devanagari script. If any terms or names from the context are in English, explain or translate them into Hindi so the output is readable in Hindi.\n"
+    "If the language is 'Hindi', you MUST write EVERYTHING in Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words anywhere — not even for section headers or technical terms. Translate all English terms into their Hindi equivalents.\n"
     "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet).\n"
     "Do not use English for headers or summaries if Hindi or Hinglish is selected."
 )
@@ -90,8 +90,8 @@ REDLINE_PROMPT = (
     "or Low Risk for the user, and one suggested counter-clause if the change is unfavorable.\n\n"
     "Version 1: {version_1}\nVersion 2: {version_2}\n\n"
     "CRITICAL: You must generate the ENTIRE response (including all section titles, headers, bullet points, and citations) in the requested language: {language}.\n"
-    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English (e.g. translate 'देयता की सीमा' to 'Limitation of Liability' or 'Deyata ki Seema') so that the final output contains no Devanagari characters.\n"
-    "If the language is 'Hindi', write everything in Devanagari script. If any terms or names from the context are in English, explain or translate them into Hindi so the output is readable in Hindi.\n"
+    "If the language is 'English', the entire response must be strictly in English. If any terms, clause names, or text from the context are in Hindi, you must translate or transliterate them into English so that the final output contains no Devanagari characters.\n"
+    "If the language is 'Hindi', you MUST write EVERYTHING in Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words anywhere — not even for section headers, risk levels, or party names. Use 'उच्च जोखिम', 'मध्यम जोखिम', 'निम्न जोखिम' for risk levels. Translate all English terms into Hindi.\n"
     "If the language is 'Hinglish', write everything in conversational Hinglish (Hindi words written in the Latin/English alphabet).\n"
     "Do not use English for headers or summaries if Hindi or Hinglish is selected."
 )
@@ -104,7 +104,7 @@ NEGOTIATION_BUYER_PROMPT = (
     "Write your argument/objection (favoring the Buyer according to your stance) and "
     "propose a modified version of the clause. Keep your response brief, professional, "
     "and focused. Write in the specified language: {language}. "
-    "CRITICAL: If the language is 'Hindi', you MUST write everything in Devanagari script. "
+    "CRITICAL: If the language is 'Hindi', you MUST write EVERYTHING in Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words. Every single word must be in Devanagari. "
     "If 'Hinglish', you MUST write in conversational Hinglish (Hindi written in the Latin/English script, e.g. 'Hum propose karte hain...'). "
     "If 'English', write in plain English."
 )
@@ -117,7 +117,7 @@ NEGOTIATION_SELLER_PROMPT = (
     "Write your counterargument (favoring the Seller according to your stance) and "
     "propose an alternative compromise version of the clause. Keep your response brief, "
     "professional, and focused. Write in the specified language: {language}. "
-    "CRITICAL: If the language is 'Hindi', you MUST write everything in Devanagari script. "
+    "CRITICAL: If the language is 'Hindi', you MUST write EVERYTHING in Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words. Every single word must be in Devanagari. "
     "If 'Hinglish', you MUST write in conversational Hinglish (Hindi written in the Latin/English script, e.g. 'Hum accept nahi kar sakte...'). "
     "If 'English', write in plain English."
 )
@@ -135,7 +135,7 @@ NEGOTIATION_MEDIATOR_PROMPT = (
     "EXPLANATION:\n[The mediator explanation]\n\n"
     "Respond in the specified language: {language}. "
     "CRITICAL: Keep the marker keywords (COMPROMISE_CLAUSE:, EXPLANATION:) exactly in English uppercase and on their own lines. Do not translate the marker keywords themselves. The actual contents below them must be entirely in the requested language ({language}).\n"
-    "If the language is 'Hindi', you MUST write the explanation and clause (if translated) in Devanagari script. "
+    "If the language is 'Hindi', you MUST write EVERYTHING in Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words in the content sections. Every word of the clause and explanation must be in Devanagari. "
     "If 'Hinglish', you MUST write the explanation/clause in conversational Hinglish (Hindi written in the Latin/English script). "
     "If 'English', write in plain English."
 )
@@ -149,7 +149,7 @@ SEMANTIC_DIFF_PROMPT = (
     "same but just rephrased, say so. If there is a shift, detail exactly what changed, "
     "which party this change favors, and the severity of the shift (High, Medium, or Low). "
     "Respond in the specified language: {language}. "
-    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond ENTIRELY in Hindi using the Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words. Every word must be in Devanagari. "
     "If 'Hinglish', you MUST respond in conversational Hinglish (Hindi written in the Latin/English script). "
     "If 'English', write in plain English."
 )
@@ -164,7 +164,7 @@ LIFECYCLE_TIMELINE_PROMPT = (
     "cascade_effects (a clear description of expiration gaps or dependencies, e.g., 'This NDA "
     "expires 30 days before the master agreement, creating a coverage gap'). "
     "CRITICAL: Keep the JSON keys (negotiation_duration_days, amendment_frequency, renewal_risk_score, cascade_effects) exactly in English. Do not translate the keys themselves.\n"
-    "If the language is 'Hindi', the value for cascade_effects must be in Devanagari script, and the value for amendment_frequency must be 'कम', 'मध्यम', or 'उच्च'. "
+    "If the language is 'Hindi', the value for cascade_effects MUST be written entirely in Devanagari script with NO Latin/Roman letters, and the value for amendment_frequency must be 'कम', 'मध्यम', or 'उच्च'. DO NOT mix English or Latin characters in the Hindi values. "
     "If 'Hinglish', values must be in conversational Hinglish (Hindi written in the Latin/English script). "
     "If 'English', write in plain English. Contract text: {contract_text}"
 )
@@ -179,7 +179,7 @@ COUNTERPARTY_SIMULATION_PROMPT = (
     "RECOMMENDATION:\n[Brief strategy advice for the user to reach a compromise]\n\n"
     "Respond in the specified language: {language}. "
     "CRITICAL: Keep the marker keywords (COUNTER_ARGUMENTS:, PUSHBACK_CLAUSES:, RECOMMENDATION:) exactly in English uppercase and on their own lines. Do not translate the marker keywords themselves. The actual contents below them must be entirely in the requested language ({language}).\n"
-    "If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "If the language is 'Hindi', you MUST respond ENTIRELY in Hindi using the Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words in the content. Every word must be in Devanagari. "
     "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
     "If 'English', respond in plain English."
 )
@@ -208,7 +208,7 @@ NEGOTIATION_GHOSTWRITER_PROMPT = (
     "REJECT_WITH_RATIONALE:\n[Legal rationale or precedent explaining the rejection, followed by a proposed alternative/fallback clause]\n\n"
     "Respond in the specified language: {language}. "
     "CRITICAL: Keep the marker keywords (ACCEPT_WITH_MODIFICATION:, REJECT_WITH_RATIONALE:) exactly in English uppercase and on their own lines. Do not translate the marker keywords themselves. The actual contents below them must be entirely in the requested language ({language}).\n"
-    "If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "If the language is 'Hindi', you MUST respond ENTIRELY in Hindi using the Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words in the content sections. Every word must be in Devanagari. "
     "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
     "If 'English', respond in plain English."
 )
@@ -226,8 +226,8 @@ SHADOW_BATTLE_PROMPT = (
     "ATTACKER_TURN:\n[Attacker's arguments]\n\n"
     "DEFENDER_TURN:\n[Defender's counterarguments]\n\n"
     "ASSESSMENT:\n[Summary and recommendation]\n\n"
-    "CRITICAL: Keep the marker keywords (CLAUSE_FOCUS:, ATTACKER_TURN:, DEFENDER_TURN:, ASSESSMENT:) exactly in English uppercase. Do not translate the marker keywords themselves. The actual contents below them must be entirely in the requested language ({language}).\n"
-    "If the language is 'Hindi', write everything in Devanagari script.\n"
+    "CRITICAL: Keep the marker keywords (CLAUSE_FOCUS:, ATTACKER_TURN:, DEFENDER_TURN:, ASSESSMENT:) exactly in English uppercase. Do not translate the marker keywords themselves. The actual contents below each marker must be entirely in the requested language ({language}).\n"
+    "If the language is 'Hindi', you MUST write EVERYTHING in pure Devanagari script ONLY. This is non-negotiable. DO NOT use any Latin/Roman alphabet characters at all — not even for proper nouns, legal terms, clause names, or party names. Every single word of the content must be in Devanagari. For example: write 'अनुबंध' not 'contract', 'पक्षकार' not 'party', 'दायित्व' not 'liability'.\n"
     "If the language is 'Hinglish', write everything in conversational Hinglish (using ONLY the Latin/English alphabet, e.g., 'Hum agree karte hain', 'Yeh clause normal nahi hai'). DO NOT use Devanagari script under any circumstances."
 )
 """Prompt template for shadow battle. Placeholders: {contract_text}, {language}."""
@@ -239,7 +239,7 @@ RESIDUE_FORENSICS_PROMPT = (
     "Output a list of forensic findings. For each finding state: the clause/term involved, the "
     "suspicion level (High, Medium, Low), the nature of the anomaly, and a remediation advice.\n"
     "Respond in the specified language: {language}. "
-    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond ENTIRELY in Hindi using the Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words anywhere. Every single word must be in Devanagari. "
     "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
     "If 'English', respond in plain English."
 )
@@ -252,7 +252,7 @@ ECHO_HARMONICS_PROMPT = (
     "than 'reasonable efforts' and how those differences map to Hindi translations like 'भरसक प्रयास' "
     "vs 'उचित प्रयास'). Provide clear recommendations on how to draft it safely.\n"
     "Respond in the specified language: {language}. "
-    "CRITICAL: If the language is 'Hindi', you MUST respond in Hindi using the Devanagari script. "
+    "CRITICAL: If the language is 'Hindi', you MUST respond ENTIRELY in Hindi using the Devanagari script ONLY. DO NOT use any Latin/Roman alphabet letters or English words in your response. Every single word must be in Devanagari. "
     "If 'Hinglish', respond in conversational Hinglish (Hindi written in the Latin/English script). "
     "If 'English', respond in plain English."
 )
