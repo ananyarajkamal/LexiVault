@@ -794,51 +794,123 @@ export default function WorkspaceSection({
     </select>
   );
 
-  // ---- Helper to format text (remove raw ** and render bold, parse headers) ----
+  // ---- Helper to format text (remove raw ** and render bold, parse headers, render tables) ----
+  const renderFormattedTextInline = (text: string) => {
+    if (!text) return "";
+    const parts = text.split(/\*\*([^*]+)\*\*/g);
+    return parts.map((part, i) => 
+      i % 2 === 1 ? <strong key={i} className="font-bold text-[#D92662]">{part}</strong> : part
+    );
+  };
+
+  const renderSingleLine = (line: string, idx: number, linesCount: number) => {
+    // Robust regex header matching for # to ######
+    const headerMatch = line.match(/^(#{1,6})\s+(.*)$/);
+    if (headerMatch) {
+      const level = headerMatch[1].length;
+      const headerText = headerMatch[2];
+      const content = renderFormattedTextInline(headerText);
+
+      const classNames = [
+        "text-xl font-bold text-neutral-100 mt-4 mb-2",       // h1
+        "text-lg font-bold text-neutral-100 mt-3 mb-1.5",     // h2
+        "text-base font-bold text-neutral-100 mt-2.5 mb-1",   // h3
+        "text-sm font-bold text-neutral-100 mt-2 mb-1",       // h4
+        "text-xs font-bold text-neutral-100 mt-1.5 mb-1",     // h5
+        "text-xs font-bold text-neutral-100 mt-1 mb-1"        // h6
+      ];
+      const headingClass = classNames[Math.min(level - 1, 5)];
+      const TagName = `h${Math.min(level, 6)}`;
+      return React.createElement(TagName, { key: idx, className: headingClass }, content);
+    }
+
+    // Convert separator lines (=====, ----, ****) into a clean visual divider
+    if (/^[=\-*_]{3,}\s*$/.test(line.trim())) {
+      return <hr key={idx} className="border-neutral-800 my-3" />;
+    }
+
+    const content = renderFormattedTextInline(line);
+
+    return (
+      <React.Fragment key={idx}>
+        {content}
+        {idx < linesCount - 1 && <br />}
+      </React.Fragment>
+    );
+  };
+
   const renderFormattedText = (text: string) => {
     if (!text) return null;
     const lines = text.split('\n');
-    return lines.map((line, idx) => {
-      // Robust regex header matching for # to ######
-      const headerMatch = line.match(/^(#{1,6})\s+(.*)$/);
-      if (headerMatch) {
-        const level = headerMatch[1].length;
-        const headerText = headerMatch[2];
-        const parts = headerText.split(/\*\*([^*]+)\*\*/g);
-        const content = parts.map((part, i) => 
-          i % 2 === 1 ? <strong key={i} className="font-bold text-[#D92662]">{part}</strong> : part
+    const elements: React.ReactNode[] = [];
+    
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      const trimmedLine = line.trim();
+      
+      // Check if this is a markdown table
+      if (
+        trimmedLine.startsWith('|') && 
+        trimmedLine.endsWith('|') && 
+        i + 1 < lines.length && 
+        /^\|\s*(:?-+:?\s*\|)+\s*$/.test(lines[i+1].trim())
+      ) {
+        const headerRow = trimmedLine;
+        
+        const parseRowCells = (rowStr: string) => {
+          const cells = rowStr.slice(1, -1).split('|');
+          return cells.map(cell => cell.trim());
+        };
+        
+        const headers = parseRowCells(headerRow);
+        
+        const dataRows: string[][] = [];
+        let j = i + 2;
+        while (j < lines.length && lines[j].trim().startsWith('|') && lines[j].trim().endsWith('|')) {
+          dataRows.push(parseRowCells(lines[j].trim()));
+          j++;
+        }
+        
+        elements.push(
+          <div key={`table-${i}`} className="overflow-x-auto my-4 rounded-xl border border-neutral-850 bg-[#1A1821] shadow-lg">
+            <table className="min-w-full divide-y divide-neutral-800 text-left text-sm">
+              <thead className="bg-[#24212D]">
+                <tr>
+                  {headers.map((header, hIdx) => (
+                    <th key={hIdx} className="px-4 py-3 font-semibold text-neutral-200 border-b border-neutral-850">
+                      {renderFormattedTextInline(header)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-850">
+                {dataRows.map((row, rIdx) => (
+                  <tr key={rIdx} className={rIdx % 2 === 1 ? 'bg-[#1D1B24]' : 'bg-[#16141C] hover:bg-neutral-900/40 transition-colors'}>
+                    {row.map((cell, cIdx) => (
+                      <td key={cIdx} className="px-4 py-3 text-neutral-350 leading-relaxed border-r border-neutral-850 last:border-r-0">
+                        {renderFormattedTextInline(cell)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         );
-
-        const classNames = [
-          "text-xl font-bold text-neutral-100 mt-4 mb-2",       // h1
-          "text-lg font-bold text-neutral-100 mt-3 mb-1.5",     // h2
-          "text-base font-bold text-neutral-100 mt-2.5 mb-1",   // h3
-          "text-sm font-bold text-neutral-100 mt-2 mb-1",       // h4
-          "text-xs font-bold text-neutral-100 mt-1.5 mb-1",     // h5
-          "text-xs font-bold text-neutral-100 mt-1 mb-1"        // h6
-        ];
-        const headingClass = classNames[Math.min(level - 1, 5)];
-        const TagName = `h${Math.min(level, 6)}`;
-        return React.createElement(TagName, { key: idx, className: headingClass }, content);
+        
+        i = j;
+        continue;
       }
-
-      // Convert separator lines (=====, ----, ****) into a clean visual divider
-      if (/^[=\-*_]{3,}\s*$/.test(line.trim())) {
-        return <hr key={idx} className="border-neutral-800 my-3" />;
+      
+      const element = renderSingleLine(line, i, lines.length);
+      if (element !== null) {
+        elements.push(element);
       }
-
-      const parts = line.split(/\*\*([^*]+)\*\*/g);
-      const content = parts.map((part, i) => 
-        i % 2 === 1 ? <strong key={i} className="font-bold text-[#D92662]">{part}</strong> : part
-      );
-
-      return (
-        <React.Fragment key={idx}>
-          {content}
-          {idx < lines.length - 1 && <br />}
-        </React.Fragment>
-      );
-    });
+      i++;
+    }
+    
+    return elements;
   };
 
   // ---- Tab content renderers ----
