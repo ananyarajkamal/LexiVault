@@ -2,7 +2,7 @@ import os
 import re
 import json
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from langchain_groq import ChatGroq
 from config import GROQ_API_KEY, LLM_MODEL
 from llm.prompts import PORTFOLIO_EXTRACTION_PROMPT
@@ -86,11 +86,21 @@ def extract_and_save_metadata(namespace: str, contract_text: str) -> Dict[str, A
         save_metadata(portfolio)
         return record
 
-def get_portfolio_dashboard_stats() -> Dict[str, Any]:
+def remove_contract_metadata(namespace: str):
+    """Removes a contract record from the local JSON cache file."""
+    portfolio = load_metadata()
+    if "contracts" in portfolio and namespace in portfolio["contracts"]:
+        portfolio["contracts"].pop(namespace)
+        save_metadata(portfolio)
+
+def get_portfolio_dashboard_stats(active_namespaces: Optional[List[str]] = None) -> Dict[str, Any]:
     """Aggregates all contract records into portfolio dashboard metrics."""
     portfolio = load_metadata()
     contracts = portfolio.get("contracts", {})
     
+    if active_namespaces is not None:
+        contracts = {ns: c for ns, c in contracts.items() if ns in active_namespaces}
+        
     total_contracts = len(contracts)
     if total_contracts == 0:
         return {

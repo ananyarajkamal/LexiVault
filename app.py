@@ -304,6 +304,13 @@ def delete_document(namespace: str):
         store = FAISSStore(namespace)
         store.delete_index()
         
+        # Remove from portfolio metadata JSON cache
+        try:
+            from features.portfolio_manager import remove_contract_metadata
+            remove_contract_metadata(namespace)
+        except Exception as e:
+            print(f"Error removing contract metadata from portfolio cache: {e}")
+            
         return {"status": "success", "remaining_documents": session_state["namespaces"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -530,7 +537,7 @@ def alchemy_exporter(req: AlchemyRequest):
 
 @app.get("/api/portfolio/dashboard")
 def portfolio_dashboard():
-    stats = get_portfolio_dashboard_stats()
+    stats = get_portfolio_dashboard_stats(active_namespaces=session_state["namespaces"])
     return stats
 
 if __name__ == "__main__":
