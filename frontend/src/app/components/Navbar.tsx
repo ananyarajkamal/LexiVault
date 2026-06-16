@@ -180,13 +180,22 @@ export default function Navbar({
                   {t.login}
                 </button>
 
-                {/* Get Started button */}
-                <button
-                  onClick={onGetStarted}
-                  className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all cursor-pointer shadow-sm"
-                >
-                  {t.getStarted}
-                </button>
+                {/* Get Started / Back to Home button */}
+                {isFullscreen ? (
+                  <button
+                    onClick={() => setIsFullscreen(false)}
+                    className="bg-transparent hover:bg-white/5 border border-white/20 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all cursor-pointer shadow-sm"
+                  >
+                    {language === 'hi' ? 'मुख्य पृष्ठ' : 'Back to Home'}
+                  </button>
+                ) : (
+                  <button
+                    onClick={onGetStarted}
+                    className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all cursor-pointer shadow-sm"
+                  >
+                    {t.getStarted}
+                  </button>
+                )}
               </div>
             )}
 
@@ -255,12 +264,21 @@ export default function Navbar({
                 >
                   {t.login}
                 </button>
-                <button
-                  onClick={() => { setMobileOpen(false); onGetStarted(); }}
-                  className="w-full text-center bg-[#D92662] text-white text-sm font-semibold py-2 rounded-lg"
-                >
-                  {t.getStarted}
-                </button>
+                {isFullscreen ? (
+                  <button
+                    onClick={() => { setMobileOpen(false); setIsFullscreen(false); }}
+                    className="w-full text-center border border-white/20 text-white text-sm font-semibold py-2 rounded-lg"
+                  >
+                    {language === 'hi' ? 'मुख्य पृष्ठ' : 'Back to Home'}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { setMobileOpen(false); onGetStarted(); }}
+                    className="w-full text-center bg-[#D92662] text-white text-sm font-semibold py-2 rounded-lg"
+                  >
+                    {t.getStarted}
+                  </button>
+                )}
               </div>
             )}
           </div>

@@ -832,7 +832,7 @@ export default function WorkspaceSection({
   // ---- Tab content renderers ----
 
   const renderUpload = () => (
-    <div className="space-y-6">
+    <div className="max-w-2xl mx-auto w-full space-y-6 py-8">
       <div>
         <h3 className="text-lg font-bold text-neutral-100 mb-1">{t.uploadHeader}</h3>
         <p className="text-sm text-neutral-450">{t.uploadSub}</p>
