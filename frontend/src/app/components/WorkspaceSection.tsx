@@ -849,17 +849,21 @@ export default function WorkspaceSection({
       const line = lines[i];
       const trimmedLine = line.trim();
       
-      // Check if this is a markdown table
+      // 1. Check if this is a markdown table
       if (
-        trimmedLine.startsWith('|') && 
-        trimmedLine.endsWith('|') && 
         i + 1 < lines.length && 
-        /^\|\s*(:?-+:?\s*\|)+\s*$/.test(lines[i+1].trim())
+        trimmedLine.includes('|') && 
+        lines[i+1].trim().includes('|') && 
+        lines[i+1].trim().includes('-') && 
+        /^[|\s\-:]+$/.test(lines[i+1].trim())
       ) {
         const headerRow = trimmedLine;
         
         const parseRowCells = (rowStr: string) => {
-          const cells = rowStr.slice(1, -1).split('|');
+          let s = rowStr.trim();
+          if (s.startsWith('|')) s = s.slice(1);
+          if (s.endsWith('|')) s = s.slice(0, -1);
+          const cells = s.split('|');
           return cells.map(cell => cell.trim());
         };
         
@@ -867,7 +871,7 @@ export default function WorkspaceSection({
         
         const dataRows: string[][] = [];
         let j = i + 2;
-        while (j < lines.length && lines[j].trim().startsWith('|') && lines[j].trim().endsWith('|')) {
+        while (j < lines.length && lines[j].trim().includes('|')) {
           dataRows.push(parseRowCells(lines[j].trim()));
           j++;
         }
@@ -897,6 +901,54 @@ export default function WorkspaceSection({
               </tbody>
             </table>
           </div>
+        );
+        
+        i = j;
+        continue;
+      }
+      
+      // 2. Check if this is an unordered list (consecutive lines starting with *, -, or •)
+      if (/^[\s]*[*•\-][\s]+/.test(line)) {
+        const listItems: string[] = [];
+        let j = i;
+        while (j < lines.length && /^[\s]*[*•\-][\s]+/.test(lines[j])) {
+          const itemText = lines[j].replace(/^[\s]*[*•\-][\s]+/, '');
+          listItems.push(itemText);
+          j++;
+        }
+        
+        elements.push(
+          <ul key={`ul-${i}`} className="list-disc pl-5 my-2 space-y-1.5 text-neutral-300 text-sm leading-relaxed">
+            {listItems.map((item, idx) => (
+              <li key={idx}>
+                {renderFormattedTextInline(item)}
+              </li>
+            ))}
+          </ul>
+        );
+        
+        i = j;
+        continue;
+      }
+      
+      // 3. Check if this is an ordered list (consecutive lines starting with digits followed by period and space)
+      if (/^[\s]*\d+\.[\s]+/.test(line)) {
+        const listItems: string[] = [];
+        let j = i;
+        while (j < lines.length && /^[\s]*\d+\.[\s]+/.test(lines[j])) {
+          const itemText = lines[j].replace(/^[\s]*\d+\.[\s]+/, '');
+          listItems.push(itemText);
+          j++;
+        }
+        
+        elements.push(
+          <ol key={`ol-${i}`} className="list-decimal pl-5 my-2 space-y-1.5 text-neutral-300 text-sm leading-relaxed">
+            {listItems.map((item, idx) => (
+              <li key={idx}>
+                {renderFormattedTextInline(item)}
+              </li>
+            ))}
+          </ol>
         );
         
         i = j;
