@@ -3,7 +3,7 @@ import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
   CheckCircle2, XCircle, Scale, Diff, Mic, Clock, LayoutDashboard,
-  Swords, Binary, Languages, Code, Maximize2, Minimize2
+  Swords, Binary, Languages, Code, Maximize2, Minimize2, ChevronLeft
 } from 'lucide-react';
 import { LogoIcon } from './Navbar';
 
@@ -207,8 +207,8 @@ type Category = 'core' | 'negotiation' | 'advanced';
 
 const categoryTabs: Record<Category, Tab[]> = {
   core: ['upload', 'chat', 'risks', 'plain', 'brief', 'redline', 'contradictions'],
-  negotiation: ['negotiation', 'semanticDiff', 'timeline', 'portfolioDashboard', 'shadow'],
-  advanced: ['residue', 'echo', 'alchemy']
+  negotiation: ['negotiation', 'semanticDiff', 'timeline', 'shadow'],
+  advanced: ['portfolioDashboard', 'residue', 'echo', 'alchemy']
 };
 
 export default function WorkspaceSection({ 
@@ -242,10 +242,12 @@ export default function WorkspaceSection({
 
   const [activeTab, setActiveTab] = useState<Tab>('upload');
   const [activeCategory, setActiveCategory] = useState<Category>('core');
+  const [viewMode, setViewMode] = useState<'hub' | 'module'>('hub');
 
   const handleCategoryChange = (cat: Category) => {
     setActiveCategory(cat);
     setActiveTab(categoryTabs[cat][0]);
+    setViewMode('module');
   };
 
   // Upload state
@@ -2281,79 +2283,192 @@ export default function WorkspaceSection({
             ? "bg-[#131118] overflow-hidden flex flex-col flex-1 min-h-0 rounded-none border-0" 
             : "bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-2xl shadow-xl"
         }>
-          {/* Pillar / Category Selector Header */}
-          <div className="flex border-b border-neutral-850 bg-[#17151D] px-2 py-2 gap-2">
-            <button 
-              type="button"
-              onClick={() => handleCategoryChange('core')}
-              className={`flex-1 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-center ${
-                activeCategory === 'core' 
-                  ? 'bg-[#D92662] text-white shadow-lg shadow-[#D92662]/10' 
-                  : 'text-neutral-450 hover:text-neutral-200 hover:bg-[#1A1821]'
-              }`}
-            >
-              {globalLanguage === 'hi' ? "1. मुख्य विश्लेषण" : "1. Core Analysis"}
-            </button>
-            <button 
-              type="button"
-              onClick={() => handleCategoryChange('negotiation')}
-              className={`flex-1 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-center ${
-                activeCategory === 'negotiation' 
-                  ? 'bg-[#D92662] text-white shadow-lg shadow-[#D92662]/10' 
-                  : 'text-neutral-450 hover:text-neutral-200 hover:bg-[#1A1821]'
-              }`}
-            >
-              {globalLanguage === 'hi' ? "2. समझौता वार्ता" : "2. Negotiation Sandbox"}
-            </button>
-            <button 
-              type="button"
-              onClick={() => handleCategoryChange('advanced')}
-              className={`flex-1 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-center ${
-                activeCategory === 'advanced' 
-                  ? 'bg-[#D92662] text-white shadow-lg shadow-[#D92662]/10' 
-                  : 'text-neutral-450 hover:text-neutral-200 hover:bg-[#1A1821]'
-              }`}
-            >
-              {globalLanguage === 'hi' ? "3. उन्नत उपकरण" : "3. Advanced Utilities"}
-            </button>
-          </div>
+          {viewMode === 'hub' ? (
+            /* Hub View */
+            <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center bg-[#131118] overflow-y-auto">
+              <div className="text-center max-w-xl mx-auto mb-8">
+                <h3 className="text-xl sm:text-2xl font-serif font-bold text-neutral-100">
+                  {globalLanguage === 'hi' ? "अपने अनुबंध के लिए एक उपकरण चुनें" : "Select a Workspace Module"}
+                </h3>
+                <p className="mt-2 text-neutral-450 text-xs sm:text-sm">
+                  {globalLanguage === 'hi'
+                    ? "अनुबंध का विश्लेषण करने, वार्ताओं का अनुकरण करने या उन्नत उपकरणों का उपयोग करने के लिए एक श्रेणी चुनें।"
+                    : "Choose a suite of tools below to begin analyzing, simulating negotiations, or running deep forensic audits."}
+                </p>
+              </div>
 
-          {/* Sub-Tab bar */}
-          <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
-            <div className="flex-1 overflow-x-auto min-w-0">
-              <div className="flex min-w-max">
-                {tabs.filter(t => categoryTabs[activeCategory].includes(t.id)).map(t => (
-                  <button key={t.id} onClick={() => setActiveTab(t.id)}
-                    className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
-                      activeTab === t.id
-                        ? 'border-[#D92662] text-[#D92662] bg-[#D92662]/5'
-                        : 'border-transparent text-neutral-450 hover:text-neutral-300 hover:bg-[#1A1821]'
-                    }`}>
-                    <t.icon className="w-4 h-4" />
-                    <span>{t.label}</span>
-                  </button>
-                ))}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full">
+                {/* Card 1: Core Analysis */}
+                <div 
+                  onClick={() => handleCategoryChange('core')}
+                  className="group relative bg-[#17151D] hover:bg-[#1C1A24] border border-neutral-850 hover:border-[#D92662]/40 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-[#D92662]/5"
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#D92662]/10 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                  
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-[#D92662]/10 border border-[#D92662]/20 flex items-center justify-center mb-5 text-[#D92662]">
+                      <ShieldAlert className="w-6 h-6" />
+                    </div>
+                    <h4 className="text-lg font-bold text-neutral-100 mb-2 group-hover:text-white transition-colors">
+                      {globalLanguage === 'hi' ? "मुख्य विश्लेषण" : "Core Analysis"}
+                    </h4>
+                    <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
+                      {globalLanguage === 'hi'
+                        ? "दस्तावेज़ अपलोड, चैट, जोखिम विश्लेषण, सारांश, और विरोधाभास डिटेक्टर।"
+                        : "Deconstruct and audit contracts. Upload documents, query with AI, scan risk profiles, extract clauses, and identify document contradictions."}
+                    </p>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex flex-wrap gap-1.5 mb-6">
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Upload</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Chat</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Risks</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Redline</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">+3 more</span>
+                    </div>
+                    <div className="flex items-center text-xs font-bold text-[#D92662] group-hover:text-white transition-colors">
+                      <span>{globalLanguage === 'hi' ? "Open Module" : "Open Module"}</span>
+                      <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 2: Negotiation Sandbox */}
+                <div 
+                  onClick={() => handleCategoryChange('negotiation')}
+                  className="group relative bg-[#17151D] hover:bg-[#1C1A24] border border-neutral-850 hover:border-violet-500/40 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-violet-500/5"
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-500/10 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                  
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-5 text-violet-400">
+                      <Scale className="w-6 h-6" />
+                    </div>
+                    <h4 className="text-lg font-bold text-neutral-100 mb-2 group-hover:text-white transition-colors">
+                      {globalLanguage === 'hi' ? "समझौता वार्ता" : "Negotiation Sandbox"}
+                    </h4>
+                    <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
+                      {globalLanguage === 'hi'
+                        ? "एआई वकील वाद-विवाद, शब्दार्थ अंतर, समयरेखा और एआई मुकाबला।"
+                        : "Simulate clause debates between Buyer/Seller, check semantic similarity, predict contract durations, and watch active legal battles."}
+                    </p>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex flex-wrap gap-1.5 mb-6">
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Sandbox</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Semantic Diff</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Timeline</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">AI Battle</span>
+                    </div>
+                    <div className="flex items-center text-xs font-bold text-violet-400 group-hover:text-white transition-colors">
+                      <span>{globalLanguage === 'hi' ? "Open Module" : "Open Module"}</span>
+                      <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 3: Advanced Utilities */}
+                <div 
+                  onClick={() => handleCategoryChange('advanced')}
+                  className="group relative bg-[#17151D] hover:bg-[#1C1A24] border border-neutral-850 hover:border-cyan-500/40 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-cyan-500/5"
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                  
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5 text-cyan-400">
+                      <Code className="w-6 h-6" />
+                    </div>
+                    <h4 className="text-lg font-bold text-neutral-100 mb-2 group-hover:text-white transition-colors">
+                      {globalLanguage === 'hi' ? "उन्नत उपकरण" : "Advanced Utilities"}
+                    </h4>
+                    <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
+                      {globalLanguage === 'hi'
+                        ? "पोर्टफोलियो डैशबोर्ड, अदृश्य मेटाडेटा फोरेंसिक, अनुवाद जाल, और एसएलए कंपाइलर।"
+                        : "Cross-document portfolio views, deep metadata forensics, translation risk mappings, and SLA-to-code compiler."}
+                    </p>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex flex-wrap gap-1.5 mb-6">
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Portfolio</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Forensics</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Echo Translation</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Prometheus Compiler</span>
+                    </div>
+                    <div className="flex items-center text-xs font-bold text-cyan-400 group-hover:text-white transition-colors">
+                      <span>{globalLanguage === 'hi' ? "Open Module" : "Open Module"}</span>
+                      <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            {/* Maximize Toggle Button */}
-            <button
-              type="button"
-              onClick={() => setIsFullscreen(!isFullscreen)}
-              className="ml-2 p-2 text-neutral-450 hover:text-[#D92662] hover:bg-[#1A1821] rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center"
-              title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Workspace"}
-            >
-              {isFullscreen ? (
-                <Minimize2 className="w-4.5 h-4.5" />
-              ) : (
-                <Maximize2 className="w-4.5 h-4.5" />
-              )}
-            </button>
-          </div>
+          ) : (
+            /* Module View */
+            <>
+              {/* Module Header with Back Button */}
+              <div className="flex items-center justify-between border-b border-neutral-850 bg-[#17151D] px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('hub')}
+                    className="flex items-center gap-1 text-xs sm:text-sm font-semibold text-neutral-400 hover:text-white bg-neutral-900 border border-neutral-800 hover:border-neutral-700 px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    <span>{globalLanguage === 'hi' ? "हब पर वापस" : "Back to Hub"}</span>
+                  </button>
+                  <div className="h-4 w-px bg-neutral-800"></div>
+                  <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#D92662]">
+                    {activeCategory === 'core'
+                      ? (globalLanguage === 'hi' ? "मुख्य विश्लेषण" : "Core Analysis")
+                      : activeCategory === 'negotiation'
+                      ? (globalLanguage === 'hi' ? "समझौता वार्ता सैंडबॉक्स" : "Negotiation Sandbox")
+                      : (globalLanguage === 'hi' ? "उन्नत उपकरण" : "Advanced Utilities")}
+                  </span>
+                </div>
 
-          {/* Tab content */}
-          <div className="p-5 sm:p-8 overflow-y-auto flex-1 min-h-0 bg-[#131118]">
-            {renderers[activeTab]()}
-          </div>
+                {/* Fullscreen / Maximize Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  className="p-2 text-neutral-450 hover:text-[#D92662] hover:bg-[#1A1821] rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center"
+                  title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Workspace"}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-4.5 h-4.5" />
+                  ) : (
+                    <Maximize2 className="w-4.5 h-4.5" />
+                  )}
+                </button>
+              </div>
+
+              {/* Filtered Sub-Tab bar */}
+              <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
+                <div className="flex-1 overflow-x-auto min-w-0">
+                  <div className="flex min-w-max">
+                    {tabs.filter(t => categoryTabs[activeCategory].includes(t.id)).map(t => (
+                      <button key={t.id} onClick={() => setActiveTab(t.id)}
+                        className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
+                          activeTab === t.id
+                            ? 'border-[#D92662] text-[#D92662] bg-[#D92662]/5'
+                            : 'border-transparent text-neutral-450 hover:text-neutral-300 hover:bg-[#1A1821]'
+                        }`}>
+                        <t.icon className="w-4 h-4" />
+                        <span>{t.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Active Tab Content rendering */}
+              <div className="p-5 sm:p-8 overflow-y-auto flex-1 min-h-0 bg-[#131118]">
+                {renderers[activeTab]()}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </section>
