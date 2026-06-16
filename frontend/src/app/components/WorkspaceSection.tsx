@@ -203,6 +203,13 @@ const workspaceTranslations = {
 const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
 
 type Tab = 'upload' | 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow' | 'residue' | 'echo' | 'alchemy';
+type Category = 'core' | 'negotiation' | 'advanced';
+
+const categoryTabs: Record<Category, Tab[]> = {
+  core: ['upload', 'chat', 'risks', 'plain', 'brief', 'redline', 'contradictions'],
+  negotiation: ['negotiation', 'semanticDiff', 'timeline', 'portfolioDashboard', 'shadow'],
+  advanced: ['residue', 'echo', 'alchemy']
+};
 
 export default function WorkspaceSection({ 
   globalLanguage,
@@ -234,6 +241,12 @@ export default function WorkspaceSection({
   ];
 
   const [activeTab, setActiveTab] = useState<Tab>('upload');
+  const [activeCategory, setActiveCategory] = useState<Category>('core');
+
+  const handleCategoryChange = (cat: Category) => {
+    setActiveCategory(cat);
+    setActiveTab(categoryTabs[cat][0]);
+  };
 
   // Upload state
   const [isUploading, setIsUploading] = useState(false);
@@ -2268,11 +2281,48 @@ export default function WorkspaceSection({
             ? "bg-[#131118] overflow-hidden flex flex-col flex-1 min-h-0 rounded-none border-0" 
             : "bg-[#131118] border border-neutral-850 overflow-hidden flex flex-col flex-1 min-h-0 rounded-2xl shadow-xl"
         }>
-          {/* Tab bar */}
+          {/* Pillar / Category Selector Header */}
+          <div className="flex border-b border-neutral-850 bg-[#17151D] px-2 py-2 gap-2">
+            <button 
+              type="button"
+              onClick={() => handleCategoryChange('core')}
+              className={`flex-1 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-center ${
+                activeCategory === 'core' 
+                  ? 'bg-[#D92662] text-white shadow-lg shadow-[#D92662]/10' 
+                  : 'text-neutral-450 hover:text-neutral-200 hover:bg-[#1A1821]'
+              }`}
+            >
+              {globalLanguage === 'hi' ? "1. मुख्य विश्लेषण" : "1. Core Analysis"}
+            </button>
+            <button 
+              type="button"
+              onClick={() => handleCategoryChange('negotiation')}
+              className={`flex-1 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-center ${
+                activeCategory === 'negotiation' 
+                  ? 'bg-[#D92662] text-white shadow-lg shadow-[#D92662]/10' 
+                  : 'text-neutral-450 hover:text-neutral-200 hover:bg-[#1A1821]'
+              }`}
+            >
+              {globalLanguage === 'hi' ? "2. समझौता वार्ता" : "2. Negotiation Sandbox"}
+            </button>
+            <button 
+              type="button"
+              onClick={() => handleCategoryChange('advanced')}
+              className={`flex-1 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer text-center ${
+                activeCategory === 'advanced' 
+                  ? 'bg-[#D92662] text-white shadow-lg shadow-[#D92662]/10' 
+                  : 'text-neutral-450 hover:text-neutral-200 hover:bg-[#1A1821]'
+              }`}
+            >
+              {globalLanguage === 'hi' ? "3. उन्नत उपकरण" : "3. Advanced Utilities"}
+            </button>
+          </div>
+
+          {/* Sub-Tab bar */}
           <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
             <div className="flex-1 overflow-x-auto min-w-0">
               <div className="flex min-w-max">
-                {tabs.map(t => (
+                {tabs.filter(t => categoryTabs[activeCategory].includes(t.id)).map(t => (
                   <button key={t.id} onClick={() => setActiveTab(t.id)}
                     className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
                       activeTab === t.id
