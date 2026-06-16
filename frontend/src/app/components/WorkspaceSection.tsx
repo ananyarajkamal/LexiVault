@@ -419,14 +419,10 @@ export default function WorkspaceSection({
     }
   }, [documents, selectedTimelineDoc, selectedShadowDoc]);
 
-  const prevDocCountRef = useRef(documents.length);
   useEffect(() => {
     if (documents.length === 0) {
       setViewMode('upload');
-    } else if (prevDocCountRef.current === 0 && documents.length > 0) {
-      setViewMode('hub');
     }
-    prevDocCountRef.current = documents.length;
   }, [documents]);
 
   useEffect(() => {
@@ -846,6 +842,18 @@ export default function WorkspaceSection({
               )}
             </div>
           ))}
+        </div>
+      )}
+      {documents.length > 0 && (
+        <div className="pt-4 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setViewMode('hub')}
+            className="bg-[#D92662] hover:bg-[#B71C4F] text-white text-sm font-semibold px-6 py-2.5 rounded-xl flex items-center gap-2 transition-colors cursor-pointer shadow-lg hover:shadow-[#D92662]/10"
+          >
+            <span>{globalLanguage === 'hi' ? "वर्कस्पेस पर आगे बढ़ें" : "Proceed to Workspace"}</span>
+            <span className="text-base">→</span>
+          </button>
         </div>
       )}
     </div>
