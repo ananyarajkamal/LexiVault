@@ -2407,54 +2407,100 @@ export default function WorkspaceSection({
             </div>
           ) : (
             /* Module View */
-            <>
-              {/* Module Header with Back Button */}
-              <div className="flex items-center justify-between border-b border-neutral-850 bg-[#17151D] px-4 py-3">
-                <div className="flex items-center gap-3">
+            <div className="flex flex-col md:flex-row flex-1 min-h-0 divide-y md:divide-y-0 md:divide-x divide-neutral-850">
+              {/* Sidebar Navigation - Left Side on Desktop */}
+              <div className="hidden md:flex md:w-64 flex-col bg-[#17151D] shrink-0">
+                {/* Back to Hub Button */}
+                <div className="p-4 border-b border-neutral-850">
                   <button
                     type="button"
                     onClick={() => setViewMode('hub')}
-                    className="flex items-center gap-1 text-xs sm:text-sm font-semibold text-neutral-400 hover:text-white bg-neutral-900 border border-neutral-800 hover:border-neutral-700 px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-900 hover:bg-[#1A1821] border border-neutral-800 hover:border-neutral-700 py-2.5 px-4 rounded-xl transition-all cursor-pointer shadow-sm"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     <span>{globalLanguage === 'hi' ? "हब पर वापस" : "Back to Hub"}</span>
                   </button>
-                  <div className="h-4 w-px bg-neutral-800"></div>
-                  <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#D92662]">
+                </div>
+
+                {/* Active Category Display */}
+                <div className="px-5 py-4 border-b border-neutral-850 bg-[#1A1821]/30">
+                  <span className="text-[10px] font-bold text-neutral-450 uppercase tracking-widest block mb-1">
+                    {globalLanguage === 'hi' ? "सक्रिय मॉड्यूल" : "Active Module"}
+                  </span>
+                  <h4 className="text-sm font-bold text-[#D92662] truncate">
                     {activeCategory === 'core'
                       ? (globalLanguage === 'hi' ? "मुख्य विश्लेषण" : "Core Analysis")
                       : activeCategory === 'negotiation'
-                      ? (globalLanguage === 'hi' ? "समझौता वार्ता सैंडबॉक्स" : "Negotiation Sandbox")
+                      ? (globalLanguage === 'hi' ? "समझौता वार्ता" : "Negotiation Sandbox")
                       : (globalLanguage === 'hi' ? "उन्नत उपकरण" : "Advanced Utilities")}
-                  </span>
+                  </h4>
                 </div>
 
-                {/* Fullscreen / Maximize Toggle */}
-                <button
-                  type="button"
-                  onClick={() => setIsFullscreen(!isFullscreen)}
-                  className="p-2 text-neutral-450 hover:text-[#D92662] hover:bg-[#1A1821] rounded-lg transition-colors cursor-pointer shrink-0 flex items-center justify-center"
-                  title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Workspace"}
-                >
-                  {isFullscreen ? (
-                    <Minimize2 className="w-4.5 h-4.5" />
-                  ) : (
-                    <Maximize2 className="w-4.5 h-4.5" />
-                  )}
-                </button>
+                {/* Vertical Sub-Tabs List */}
+                <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+                  {tabs.filter(t => categoryTabs[activeCategory].includes(t.id)).map(t => (
+                    <button
+                      key={t.id}
+                      onClick={() => setActiveTab(t.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-xs sm:text-sm font-medium rounded-xl transition-all duration-200 cursor-pointer border-l-4 ${
+                        activeTab === t.id
+                          ? 'bg-[#D92662]/10 text-[#D92662] font-bold border-[#D92662]'
+                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#1A1821] border-transparent'
+                      }`}
+                    >
+                      <t.icon className="w-4.5 h-4.5" />
+                      <span className="truncate">{t.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* Filtered Sub-Tab bar */}
-              <div className="border-b border-neutral-850 flex items-center justify-between bg-[#131118] pr-4">
-                <div className="flex-1 overflow-x-auto min-w-0">
-                  <div className="flex min-w-max">
+              {/* Mobile Header and horizontal tabs - visible only on mobile (< md) */}
+              <div className="flex md:hidden flex-col bg-[#17151D] shrink-0">
+                {/* Module Header with Back Button */}
+                <div className="flex items-center justify-between border-b border-neutral-850 px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('hub')}
+                      className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-white bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span>{globalLanguage === 'hi' ? "हब" : "Back"}</span>
+                    </button>
+                    <div className="h-4 w-px bg-neutral-800"></div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#D92662] max-w-[120px] truncate">
+                      {activeCategory === 'core'
+                        ? (globalLanguage === 'hi' ? "मुख्य विश्लेषण" : "Core Analysis")
+                        : activeCategory === 'negotiation'
+                        ? (globalLanguage === 'hi' ? "समझौता वार्ता" : "Negotiation Sandbox")
+                        : (globalLanguage === 'hi' ? "उन्नत" : "Advanced")}
+                    </span>
+                  </div>
+                  
+                  {/* Fullscreen Toggle on Mobile */}
+                  <button
+                    type="button"
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="p-1.5 text-neutral-450 hover:text-[#D92662] rounded-lg transition-colors cursor-pointer"
+                  >
+                    {isFullscreen ? <Minimize2 className="w-4.5 h-4.5" /> : <Maximize2 className="w-4.5 h-4.5" />}
+                  </button>
+                </div>
+
+                {/* Horizontal Scrolling Tabs Row */}
+                <div className="border-b border-neutral-850 overflow-x-auto bg-[#131118]">
+                  <div className="flex min-w-max px-2">
                     {tabs.filter(t => categoryTabs[activeCategory].includes(t.id)).map(t => (
-                      <button key={t.id} onClick={() => setActiveTab(t.id)}
-                        className={`flex items-center gap-2 px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
+                      <button
+                        key={t.id}
+                        onClick={() => setActiveTab(t.id)}
+                        className={`flex items-center gap-2 px-4 py-3 text-xs font-medium whitespace-nowrap transition-colors cursor-pointer border-b-2 ${
                           activeTab === t.id
                             ? 'border-[#D92662] text-[#D92662] bg-[#D92662]/5'
                             : 'border-transparent text-neutral-450 hover:text-neutral-300 hover:bg-[#1A1821]'
-                        }`}>
+                        }`}
+                      >
                         <t.icon className="w-4 h-4" />
                         <span>{t.label}</span>
                       </button>
@@ -2463,11 +2509,40 @@ export default function WorkspaceSection({
                 </div>
               </div>
 
-              {/* Active Tab Content rendering */}
-              <div className="p-5 sm:p-8 overflow-y-auto flex-1 min-h-0 bg-[#131118]">
-                {renderers[activeTab]()}
+              {/* Main Content Area (Right Side on Desktop, Bottom on Mobile) */}
+              <div className="flex-1 flex flex-col min-w-0 bg-[#131118] overflow-hidden">
+                {/* Desktop-only Header Bar */}
+                <div className="hidden md:flex items-center justify-between border-b border-neutral-850 bg-[#17151D] px-6 py-3.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-neutral-450 uppercase tracking-widest">
+                      {activeCategory === 'core'
+                        ? (globalLanguage === 'hi' ? "मुख्य विश्लेषण" : "Core Analysis")
+                        : activeCategory === 'negotiation'
+                        ? (globalLanguage === 'hi' ? "समझौता वार्ता" : "Negotiation Sandbox")
+                        : (globalLanguage === 'hi' ? "उन्नत उपकरण" : "Advanced Utilities")}
+                    </span>
+                    <span className="text-xs text-neutral-600">/</span>
+                    <span className="text-xs font-semibold text-neutral-350">
+                      {tabs.find(t => t.id === activeTab)?.label}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="p-1.5 text-neutral-450 hover:text-[#D92662] hover:bg-[#1A1821] rounded-lg transition-colors cursor-pointer"
+                    title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Workspace"}
+                  >
+                    {isFullscreen ? <Minimize2 className="w-4.5 h-4.5" /> : <Maximize2 className="w-4.5 h-4.5" />}
+                  </button>
+                </div>
+
+                {/* Scrollable Tool Panel */}
+                <div className="p-5 sm:p-8 overflow-y-auto flex-1 min-h-0 bg-[#131118]">
+                  {renderers[activeTab]()}
+                </div>
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>
