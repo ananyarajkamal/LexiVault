@@ -7,16 +7,23 @@ from langchain_groq import ChatGroq
 from config import GROQ_API_KEY, LLM_MODEL
 from llm.prompts import PORTFOLIO_EXTRACTION_PROMPT
 
-METADATA_FILE = os.path.join("data", "portfolio_metadata.json")
+from session_context import active_session_id
+
+def get_metadata_file_path() -> str:
+    session_id = active_session_id.get()
+    if session_id == "default":
+        return os.path.join("data", "portfolio_metadata.json")
+    return os.path.join("data", f"portfolio_metadata_{session_id}.json")
 
 def load_metadata() -> Dict[str, Any]:
     """Loads portfolio metadata from the local JSON cache file."""
     os.makedirs("data", exist_ok=True)
-    if not os.path.exists(METADATA_FILE):
+    metadata_file = get_metadata_file_path()
+    if not os.path.exists(metadata_file):
         return {"contracts": {}}
     
     try:
-        with open(METADATA_FILE, "r", encoding="utf-8") as f:
+        with open(metadata_file, "r", encoding="utf-8") as f:
             data = json.load(f)
             if "contracts" not in data:
                 data = {"contracts": {}}
@@ -28,8 +35,9 @@ def load_metadata() -> Dict[str, Any]:
 def save_metadata(data: Dict[str, Any]):
     """Saves portfolio metadata to the local JSON cache file."""
     os.makedirs("data", exist_ok=True)
+    metadata_file = get_metadata_file_path()
     try:
-        with open(METADATA_FILE, "w", encoding="utf-8") as f:
+        with open(metadata_file, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
     except Exception as e:
         print(f"Error saving portfolio metadata: {e}")
@@ -115,7 +123,14 @@ def get_portfolio_dashboard_stats(active_namespaces: Optional[List[str]] = None)
     upcoming_renewals = []
     
     for ns, c in contracts.items():
-        vendor = c.get("vendor_name") or ns
+        clean_ns = ns
+        if ns.startswith("sess_") and "__" in ns:
+            clean_ns = ns.split("__", 1)[1]
+            
+        vendor = c.get("vendor_name") or clean_ns
+        if vendor.startswith("sess_") and "__" in vendor:
+            vendor = vendor.split("__", 1)[1]
+            
         limit = c.get("liability_limit") or 0
         vendor_liabilities[vendor] = vendor_liabilities.get(vendor, 0) + limit
         total_liability += limit
@@ -127,7 +142,7 @@ def get_portfolio_dashboard_stats(active_namespaces: Optional[List[str]] = None)
                 delta = exp_date - datetime.now()
                 days_remaining = delta.days
                 upcoming_renewals.append({
-                    "contract": ns,
+                    "contract": clean_ns,
                     "vendor": vendor,
                     "expiration_date": exp_date_str,
                     "days_remaining": max(0, days_remaining)

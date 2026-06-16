@@ -13,6 +13,8 @@ from typing import List, Dict, Any, Optional
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from starlette.middleware.base import BaseHTTPMiddleware
+from session_context import active_session_id
 
 # ---------------------------------------------------------------------------
 # Resilient LLM Wrapper Patch to handle Groq rate limits (429) automatically
@@ -91,16 +93,61 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory session state (for demonstration purposes, better to use Redis/DB in prod)
-session_state = {
-    "namespaces": [],
-    "uploaded_files": {},
-    "extracted_texts": {},
-    "qa_chain": QAChain(),
-    "brief": "",
-    "risks": [],
-    "analyzed_risks": {}
-}
+class SessionMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        session_id = request.headers.get("x-session-id") or "default"
+        token = active_session_id.set(session_id)
+        try:
+            response = await call_next(request)
+            return response
+        finally:
+            active_session_id.reset(token)
+
+app.add_middleware(SessionMiddleware)
+
+# Multi-tenant in-memory session states
+session_states = {}
+
+def get_session_state(session_id: str) -> dict:
+    if session_id not in session_states:
+        session_states[session_id] = {
+            "namespaces": [],
+            "uploaded_files": {},
+            "extracted_texts": {},
+            "qa_chain": QAChain(),
+            "brief": "",
+            "risks": [],
+            "analyzed_risks": {}
+        }
+    return session_states[session_id]
+
+class SessionStateProxy:
+    def _get_current_dict(self):
+        sid = active_session_id.get()
+        return get_session_state(sid)
+    
+    def __getitem__(self, key):
+        return self._get_current_dict()[key]
+        
+    def __setitem__(self, key, value):
+        self._get_current_dict()[key] = value
+        
+    def __contains__(self, key):
+        return key in self._get_current_dict()
+        
+    def get(self, key, default=None):
+        return self._get_current_dict().get(key, default)
+        
+    def pop(self, key, default=None):
+        return self._get_current_dict().pop(key, default)
+        
+    def __str__(self):
+        return str(self._get_current_dict())
+        
+    def __repr__(self):
+        return repr(self._get_current_dict())
+
+session_state = SessionStateProxy()
 
 def restore_session_state():
     upload_dir = os.path.join("data", "uploads")
@@ -110,6 +157,13 @@ def restore_session_state():
         for filename in os.listdir(upload_dir):
             file_path = os.path.join(upload_dir, filename)
             if os.path.isfile(file_path):
+                # Parse session_id from filename prefix
+                if filename.startswith("sess_") and "__" in filename:
+                    parts = filename.split("__", 1)
+                    session_id = parts[0][5:]
+                else:
+                    session_id = "default"
+                    
                 namespace = os.path.splitext(filename)[0]
                 
                 # Check if FAISS index files exist for this namespace
@@ -117,15 +171,16 @@ def restore_session_state():
                 pkl_file = os.path.join(faiss_dir, f"{namespace}.pkl")
                 
                 if os.path.exists(faiss_file) and os.path.exists(pkl_file):
-                    if namespace not in session_state["namespaces"]:
-                        session_state["namespaces"].append(namespace)
-                    session_state["uploaded_files"][namespace] = file_path
+                    state = get_session_state(session_id)
+                    if namespace not in state["namespaces"]:
+                        state["namespaces"].append(namespace)
+                    state["uploaded_files"][namespace] = file_path
                     
                     # Extract text and store in cache
                     try:
                         text = extract_text_from_file(file_path)
                         if text:
-                            session_state["extracted_texts"][namespace] = text
+                            state["extracted_texts"][namespace] = text
                     except Exception as e:
                         print(f"Failed to restore text for {namespace}: {e}")
 
@@ -200,6 +255,8 @@ def get_documents():
     for ns in session_state["namespaces"]:
         file_path = session_state["uploaded_files"].get(ns, "")
         filename = os.path.basename(file_path) if file_path else f"{ns}.pdf"
+        if filename.startswith("sess_") and "__" in filename:
+            filename = filename.split("__", 1)[1]
         docs.append({
             "name": filename,
             "status": "success",
@@ -212,19 +269,22 @@ def get_documents():
 async def upload_documents(files: List[UploadFile] = File(...)):
     if not files:
         raise HTTPException(status_code=400, detail="No files uploaded.")
-    
+
     results = []
     upload_dir = os.path.join("data", "uploads")
     os.makedirs(upload_dir, exist_ok=True)
-    
+
+    session_id = active_session_id.get()
+
     for file in files:
         try:
-            # Save to project persistent upload folder
-            temp_path = os.path.join(upload_dir, file.filename)
+            # Save to project persistent upload folder with session prefix
+            unique_filename = f"sess_{session_id}__{file.filename}"
+            temp_path = os.path.join(upload_dir, unique_filename)
             with open(temp_path, "wb") as f:
                 f.write(await file.read())
-                
-            namespace = os.path.splitext(file.filename)[0]
+
+            namespace = os.path.splitext(unique_filename)[0]
             
             # Parse & Index
             text = extract_text_from_file(temp_path)

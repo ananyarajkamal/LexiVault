@@ -186,6 +186,39 @@ const workspaceTranslations = {
 
 const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000/api`;
 
+const getSessionId = (): string => {
+  if (typeof window === 'undefined') return 'default';
+  let sid = localStorage.getItem('lexivault_session_id');
+  if (!sid) {
+    sid = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem('lexivault_session_id', sid);
+  }
+  return sid;
+};
+
+const secureFetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const headers = new Headers();
+  if (init?.headers) {
+    if (init.headers instanceof Headers) {
+      init.headers.forEach((value, key) => {
+        headers.set(key, value);
+      });
+    } else if (Array.isArray(init.headers)) {
+      init.headers.forEach(([key, value]) => {
+        headers.set(key, value);
+      });
+    } else {
+      Object.entries(init.headers).forEach(([key, value]) => {
+        headers.set(key, value);
+      });
+    }
+  }
+  headers.set('X-Session-ID', getSessionId());
+  return fetch(input, { ...init, headers });
+};
+
 type Tab = 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' | 'negotiation' | 'semanticDiff' | 'timeline' | 'portfolioDashboard' | 'shadow';
 type Category = 'core' | 'negotiation' | 'advanced';
 
@@ -226,6 +259,10 @@ export default function WorkspaceSection({
   const [viewMode, setViewMode] = useState<'hub' | 'module' | 'upload'>('upload');
 
   const handleCategoryChange = (cat: Category) => {
+    if (documents.length === 0) {
+      setViewMode('upload');
+      return;
+    }
     setActiveCategory(cat);
     setActiveTab(categoryTabs[cat][0]);
     setViewMode('module');
@@ -399,7 +436,7 @@ export default function WorkspaceSection({
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const res = await fetch(`${API_BASE}/documents`);
+        const res = await secureFetch(`${API_BASE}/documents`);
         const data = await res.json();
         if (res.ok && data.documents) {
           setDocuments(data.documents);
@@ -434,7 +471,7 @@ export default function WorkspaceSection({
   const fetchPortfolioStats = async () => {
     setIsFetchingPortfolio(true);
     try {
-      const res = await fetch(`${API_BASE}/portfolio/dashboard`);
+      const res = await secureFetch(`${API_BASE}/portfolio/dashboard`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Failed to fetch portfolio stats');
       setPortfolioStats(data);
@@ -451,7 +488,7 @@ export default function WorkspaceSection({
     setIsPredictingTimeline(true);
     setTimelineResult(null);
     try {
-      const res = await fetch(`${API_BASE}/features/predict-timeline`, {
+      const res = await secureFetch(`${API_BASE}/features/predict-timeline`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -475,7 +512,7 @@ export default function WorkspaceSection({
     setIsBattling(true);
     setShadowResult(null);
     try {
-      const res = await fetch(`${API_BASE}/features/shadow`, {
+      const res = await secureFetch(`${API_BASE}/features/shadow`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -499,7 +536,7 @@ export default function WorkspaceSection({
     setIsCounterSimulating(true);
     setCounterSimResult(null);
     try {
-      const res = await fetch(`${API_BASE}/features/counterparty-sim`, {
+      const res = await secureFetch(`${API_BASE}/features/counterparty-sim`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -524,7 +561,7 @@ export default function WorkspaceSection({
     setIsGhostwriting(true);
     setGhostResult(null);
     try {
-      const res = await fetch(`${API_BASE}/features/ghostwrite`, {
+      const res = await secureFetch(`${API_BASE}/features/ghostwrite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -551,7 +588,7 @@ export default function WorkspaceSection({
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) formData.append('files', e.target.files[i]);
     try {
-      const res = await fetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
+      const res = await secureFetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Upload failed');
       const newDocs = data.results.map((r: any) => ({
@@ -566,7 +603,7 @@ export default function WorkspaceSection({
   const handleDeleteDocument = async (namespace: string) => {
     if (!confirm("Are you sure you want to remove this document?")) return;
     try {
-      const res = await fetch(`${API_BASE}/documents/${namespace}`, { method: 'DELETE' });
+      const res = await secureFetch(`${API_BASE}/documents/${namespace}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Delete failed');
       setDocuments(prev => {
@@ -591,7 +628,7 @@ export default function WorkspaceSection({
     setChatHistory(prev => [...prev, { role: 'user', content: q }]);
     setIsAsking(true);
     try {
-      const res = await fetch(`${API_BASE}/ask`, {
+      const res = await secureFetch(`${API_BASE}/ask`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: q }),
       });
@@ -604,14 +641,14 @@ export default function WorkspaceSection({
   };
 
   const handleClearChat = async () => {
-    try { await fetch(`${API_BASE}/clear-chat`, { method: 'POST' }); } catch {}
+    try { await secureFetch(`${API_BASE}/clear-chat`, { method: 'POST' }); } catch {}
     setChatHistory([]);
   };
 
   const handleRisks = async () => {
     setIsAnalyzing(true);
     try {
-      const res = await fetch(`${API_BASE}/risks`);
+      const res = await secureFetch(`${API_BASE}/risks`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Error');
       setRisks(data.risks || []);
@@ -626,7 +663,7 @@ export default function WorkspaceSection({
     if (!clauseInput.trim()) return;
     setIsExplaining(true);
     try {
-      const res = await fetch(`${API_BASE}/features/plain-language`, {
+      const res = await secureFetch(`${API_BASE}/features/plain-language`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clause_text: clauseInput, language: plainLang }),
       });
@@ -640,7 +677,7 @@ export default function WorkspaceSection({
   const handleBrief = async () => {
     setIsBriefing(true);
     try {
-      const res = await fetch(`${API_BASE}/features/decision-brief`, {
+      const res = await secureFetch(`${API_BASE}/features/decision-brief`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ language: briefLang }),
       });
@@ -660,7 +697,7 @@ export default function WorkspaceSection({
     formData.append('file_v2', redlineV2);
     formData.append('language', redlineLang);
     try {
-      const res = await fetch(`${API_BASE}/features/redline`, { method: 'POST', body: formData });
+      const res = await secureFetch(`${API_BASE}/features/redline`, { method: 'POST', body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Error');
       setRedlineResult(data.redline);
@@ -671,7 +708,7 @@ export default function WorkspaceSection({
   const handleContradictions = async () => {
     setIsDetecting(true);
     try {
-      const res = await fetch(`${API_BASE}/features/contradictions`, {
+      const res = await secureFetch(`${API_BASE}/features/contradictions`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ language: contraLang }),
       });
@@ -690,7 +727,7 @@ export default function WorkspaceSection({
     setNegotiationCompromise('');
     setNegotiationExplanation('');
     try {
-      const res = await fetch(`${API_BASE}/features/negotiate`, {
+      const res = await secureFetch(`${API_BASE}/features/negotiate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -720,7 +757,7 @@ export default function WorkspaceSection({
     setDiffSimilarity(null);
     setDiffExplanation('');
     try {
-      const res = await fetch(`${API_BASE}/features/semantic-diff`, {
+      const res = await secureFetch(`${API_BASE}/features/semantic-diff`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
