@@ -240,4 +240,5 @@ npm run build
 
 ## Demo Link
 
-* **Demo Link:** https://youtu.be/N3sBv4WVUpA
+* **Demo Video Link:** https://youtu.be/N3sBv4WVUpA
+* **Deployed Live Link:** https://lexi-vault.vercel.app/
