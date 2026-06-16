@@ -8,6 +8,9 @@ ENV PYTHONUNBUFFERED=1 \
 # Install system dependencies (like git if needed, and clean up)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
+    tesseract-ocr \
+    tesseract-ocr-eng \
+    tesseract-ocr-hin \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up user with UID 1000 (standard for Hugging Face Spaces)

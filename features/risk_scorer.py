@@ -46,10 +46,11 @@ def score_risk(clauses: dict) -> list:
             })
             added_clauses.add(clause_name)
 
-    # 1. Check for LLM 'RISK' flags in any clause value
+    # 1. Check for LLM 'RISK' flags or Hindi risk words (जोखिम, खतरा, खतरे) in any clause value
     for key, val in clauses.items():
         val_str = str(val)
-        if "RISK" in val_str.upper():
+        val_upper = val_str.upper()
+        if "RISK" in val_upper or "जोखिम" in val_str or "खतरा" in val_str or "खतरे" in val_str:
             if key in ["liability_cap", "indemnification", "non_compete", "termination_clause"]:
                 add_risk(key, val_str, "High")
             elif key in ["governing_law", "penalty_clauses"]:
