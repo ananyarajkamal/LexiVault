@@ -815,6 +815,11 @@ export default function WorkspaceSection({
         return React.createElement(TagName, { key: idx, className: headingClass }, content);
       }
 
+      // Convert separator lines (=====, ----, ****) into a clean visual divider
+      if (/^[=\-*_]{3,}\s*$/.test(line.trim())) {
+        return <hr key={idx} className="border-neutral-800 my-3" />;
+      }
+
       const parts = line.split(/\*\*([^*]+)\*\*/g);
       const content = parts.map((part, i) => 
         i % 2 === 1 ? <strong key={i} className="font-bold text-[#D92662]">{part}</strong> : part
