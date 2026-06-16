@@ -43,60 +43,7 @@ LexiVault blends a content-rich landing page with a dedicated, focused web-appli
 
 ---
 
-## Product Showcase
 
-### 1. Interactive Landing Page & Advanced Mockups
-![LexiVault Hero Landing Page](assets/hero.png)
-
-### 2. Multi-Contract Portfolio Dashboard
-![Portfolio Risk Dashboard](assets/portfolio.png)
-
-### 3. Core Workspace Features
-<details>
-  <summary>Click to view Core Analysis Showcase (Chat, Risk Scoring, Plain Language, Brief, Redline, Contradictions)</summary>
-  <br/>
-
-  #### Bilingual Chat & Q&A
-  ![Bilingual Chat & Q&A](assets/chat.png)
-
-  #### Risk Scorer & Analysis
-  ![Risk Scorer & Analysis](assets/risks.png)
-
-  #### Plain Language Mode
-  ![Plain Language Mode](assets/plain.png)
-
-  #### Multi-Document Decision Brief
-  ![Multi-Document Decision Brief](assets/brief.png)
-
-  #### Contract Redline Compare (Hindi Output)
-  ![Contract Redline Compare](assets/redline.png)
-
-  #### Contradiction Detector (Hindi Output)
-  ![Contradiction Detector](assets/contradictions.png)
-</details>
-
-### 4. Advanced Intelligence Showcase
-<details>
-  <summary>Click to view Advanced Features (Negotiation Sandbox, Semantic Diff, Contract Battle, Timeline, Forensics, SLA Compiler)</summary>
-  <br/>
-
-  #### AI Negotiation Sandbox
-  ![AI Negotiation Sandbox](assets/negotiate.png)
-
-  #### Semantic Diff Analyzer
-  ![Semantic Diff Analyzer](assets/diff.png)
-
-  #### AI vs. AI Contract Battle (The Shadow)
-  ![AI vs. AI Contract Battle](assets/shadow.png)
-
-  #### Contract Lifecycle Timeline Predictor
-  ![Contract Lifecycle Timeline](assets/timeline.png)
-
-
-
-</details>
-
----
 
 ## Target Audience
 
