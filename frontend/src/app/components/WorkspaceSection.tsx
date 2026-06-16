@@ -3,7 +3,7 @@ import {
   Upload, MessageSquare, ShieldAlert, FileText, Sparkles,
   GitCompareArrows, Search, Send, Loader2, Trash2, AlertTriangle,
   CheckCircle2, XCircle, Scale, Diff, Mic, Clock, LayoutDashboard,
-  Swords, Code, Maximize2, Minimize2, ChevronLeft
+  Swords, Maximize2, Minimize2, ChevronLeft
 } from 'lucide-react';
 import { LogoIcon } from './Navbar';
 
@@ -223,9 +223,9 @@ type Tab = 'chat' | 'risks' | 'plain' | 'brief' | 'redline' | 'contradictions' |
 type Category = 'core' | 'negotiation' | 'advanced';
 
 const categoryTabs: Record<Category, Tab[]> = {
-  core: ['chat', 'risks', 'plain', 'brief', 'redline', 'contradictions'],
+  core: ['chat', 'risks', 'plain', 'brief', 'redline'],
   negotiation: ['negotiation', 'semanticDiff', 'timeline', 'shadow'],
-  advanced: ['portfolioDashboard']
+  advanced: ['portfolioDashboard', 'contradictions']
 };
 
 export default function WorkspaceSection({ 
@@ -1989,8 +1989,8 @@ export default function WorkspaceSection({
                     </h4>
                     <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
                       {globalLanguage === 'hi'
-                        ? "चैट, जोखिम विश्लेषण, सारांश, और विरोधाभास डिटेक्टर।"
-                        : "Deconstruct and audit contracts. Query with AI, scan risk profiles, extract clauses, and identify document contradictions."}
+                        ? "चैट, जोखिम विश्लेषण, सरल भाषा और निर्णय सारांश।"
+                        : "Deconstruct and audit contracts. Query with AI, scan risk profiles, translate clauses, and generate decision briefs."}
                     </p>
                   </div>
 
@@ -2052,21 +2052,22 @@ export default function WorkspaceSection({
                   
                   <div>
                     <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5 text-cyan-400">
-                      <Code className="w-6 h-6" />
+                      <LayoutDashboard className="w-6 h-6" />
                     </div>
                     <h4 className="text-lg font-bold text-neutral-100 mb-2 group-hover:text-white transition-colors">
                       {globalLanguage === 'hi' ? "उन्नत उपकरण" : "Advanced Utilities"}
                     </h4>
                     <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
                       {globalLanguage === 'hi'
-                        ? "पोर्टफोलियो डैशबोर्ड।"
-                        : "Cross-document portfolio views."}
+                        ? "पोर्टफोलियो जोखिम डैशबोर्ड और दस्तावेज़ विरोधाभास डिटेक्टर।"
+                        : "Cross-document portfolio views and document contradiction detectors."}
                     </p>
                   </div>
 
                   <div className="mt-auto">
                     <div className="flex flex-wrap gap-1.5 mb-6">
                       <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Portfolio</span>
+                      <span className="px-2 py-0.5 bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 rounded-md font-mono">Contradictions</span>
                     </div>
                     <div className="flex items-center text-xs font-bold text-cyan-400 group-hover:text-white transition-colors">
                       <span>{globalLanguage === 'hi' ? "Open Module" : "Open Module"}</span>
