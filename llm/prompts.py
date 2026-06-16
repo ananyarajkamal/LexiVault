@@ -5,32 +5,49 @@ Contains all prompt templates used across the application for legal Q&A,
 clause extraction, plain language translation, decision briefs, contradiction
 detection, and redline comparison. Each template uses Python format string
 placeholders for dynamic content injection.
-
-Language enforcement rules (applied to every prompt):
-  - English : respond ENTIRELY in English. Zero Devanagari characters allowed.
-  - Hindi   : respond ENTIRELY in Devanagari script. Zero Latin/Roman characters allowed.
-  - Hinglish: respond in conversational Hinglish using ONLY the Latin/English alphabet.
-              Zero Devanagari characters allowed.
 """
 
+class SmartPrompt(str):
+    def format(self, *args, **kwargs) -> str:
+        # Intercept formatting to dynamically inject the strict language rule
+        language = kwargs.get("language")
+        if language:
+            if language == "English":
+                lang_rule = (
+                    "ABSOLUTE LANGUAGE RULE — follow this exactly, no exceptions:\n"
+                    "Your response MUST be written ENTIRELY in English. "
+                    "DO NOT use any Devanagari (Hindi) characters under any circumstances. "
+                    "You must translate all Hindi/Devanagari terms, quotes, and names from the context document into English."
+                )
+            elif language == "Hindi":
+                lang_rule = (
+                    "ABSOLUTE LANGUAGE RULE — follow this exactly, no exceptions:\n"
+                    "Your response MUST be written ENTIRELY in Hindi (using Devanagari script). "
+                    "DO NOT use any Latin/Roman alphabet letters or English words — not even for headers, "
+                    "risk levels, party names, or technical terms. "
+                    "Use 'उच्च'/'मध्यम'/'निम्न' for High/Medium/Low. "
+                    "Write 'अनुबंध' not 'contract', 'दायित्व' not 'liability', 'पक्षकार' not 'party'."
+                )
+            elif language == "Hinglish":
+                lang_rule = (
+                    "ABSOLUTE LANGUAGE RULE — follow this exactly, no exceptions:\n"
+                    "Your response MUST be written in conversational Hinglish using ONLY the Latin/English alphabet. "
+                    "DO NOT use any Devanagari script/Hindi characters at all. "
+                    "Example style: 'Yeh clause risky hai kyunki...', 'Hum recommend karte hain ki...'."
+                )
+            else:
+                lang_rule = f"Please respond in {language}."
+            
+            kwargs["language_rule"] = lang_rule
+            
+        return super().format(*args, **kwargs)
+
+
 # ---------------------------------------------------------------------------
-# Helper snippet reused verbatim in every prompt that accepts {language}
+# Helper snippet reused dynamically in every prompt that accepts {language}
 # ---------------------------------------------------------------------------
-_LANG_RULE = (
-    "ABSOLUTE LANGUAGE RULE — follow this exactly, no exceptions:\n"
-    "If language is 'English': respond ENTIRELY in English. "
-    "DO NOT use any Devanagari (Hindi) characters. "
-    "Translate any Hindi terms from the document into English.\n"
-    "If language is 'Hindi': respond ENTIRELY in Devanagari script. "
-    "DO NOT use any Latin/Roman alphabet letters or English words — not even for headers, "
-    "risk levels, party names, or technical terms. "
-    "Use 'उच्च'/'मध्यम'/'निम्न' for High/Medium/Low. "
-    "Write 'अनुबंध' not 'contract', 'दायित्व' not 'liability', 'पक्षकार' not 'party'.\n"
-    "If language is 'Hinglish': respond in conversational Hinglish using ONLY the Latin/English alphabet. "
-    "DO NOT use any Devanagari script at all. "
-    "Example style: 'Yeh clause risky hai kyunki...', 'Hum recommend karte hain ki...'.\n"
-    "Current language: {language}.\n"
-)
+_LANG_RULE = "{language_rule}\n"
+
 
 LEGAL_QA_PROMPT = (
     "You are LexiVault, an expert legal document analyst. You answer ONLY from the "
@@ -68,7 +85,7 @@ CLAUSE_EXTRACTION_PROMPT = (
 )
 """Prompt template for clause extraction. Placeholder: {contract_text}."""
 
-PLAIN_LANGUAGE_PROMPT = (
+PLAIN_LANGUAGE_PROMPT = SmartPrompt(
     "You are a plain language legal translator. Explain the following legal clause in one "
     "simple sentence that a non-lawyer can understand. "
     "Do not add any extra information beyond what the clause says.\n"
@@ -77,7 +94,7 @@ PLAIN_LANGUAGE_PROMPT = (
 )
 """Prompt template for plain language explanation. Placeholders: {clause}, {language}."""
 
-DECISION_BRIEF_PROMPT = (
+DECISION_BRIEF_PROMPT = SmartPrompt(
     "You are LexiVault. Analyze the following retrieved document chunks from multiple "
     "documents and produce a structured decision brief with these exact sections:\n"
     "1. Document Summaries (two sentences per document)\n"
@@ -93,7 +110,7 @@ DECISION_BRIEF_PROMPT = (
 )
 """Prompt template for decision brief generation. Placeholders: {context}, {language}."""
 
-CONTRADICTION_PROMPT = (
+CONTRADICTION_PROMPT = SmartPrompt(
     "You are LexiVault. Analyze the following chunks retrieved from multiple documents and "
     "identify every contradiction, conflict, or inconsistency between them. For each "
     "contradiction state: which documents conflict, which clauses conflict, what the "
@@ -104,13 +121,12 @@ CONTRADICTION_PROMPT = (
     "Generate the ENTIRE response — including all section titles, headers, bullet points, "
     "and citations — strictly in the language specified above. "
     "If no contradictions are found, state exactly: "
-    "'No contradictions detected.' (English) / 'कोई विरोधाभास नहीं मिला।' (Hindi) / "
-    "'Koi contradictions nahi mile.' (Hinglish). "
+    "'{no_contradictions_message}'. "
     "Do not use English for headers or summaries if Hindi or Hinglish is selected."
 )
-"""Prompt template for contradiction detection. Placeholders: {context}, {language}."""
+"""Prompt template for contradiction detection. Placeholders: {context}, {language}, {no_contradictions_message}."""
 
-REDLINE_PROMPT = (
+REDLINE_PROMPT = SmartPrompt(
     "You are LexiVault. You are given two versions of the same document. Identify every "
     "change between version 1 and version 2. For each change state: what changed in plain "
     "language, which party this change favors, whether this change is High Risk Medium Risk "
@@ -123,7 +139,7 @@ REDLINE_PROMPT = (
 )
 """Prompt template for redline comparison. Placeholders: {version_1}, {version_2}, {language}."""
 
-NEGOTIATION_BUYER_PROMPT = (
+NEGOTIATION_BUYER_PROMPT = SmartPrompt(
     "You are the Buyer's legal counsel. Your negotiation stance is '{stance}'. "
     "You want to negotiate the '{clause_type}' clause of a contract. "
     "Review the current clause text: '{current_text}'. "
@@ -134,7 +150,7 @@ NEGOTIATION_BUYER_PROMPT = (
 )
 """Prompt template for the buyer agent in the negotiation sandbox. Placeholders: {stance}, {clause_type}, {current_text}, {language}."""
 
-NEGOTIATION_SELLER_PROMPT = (
+NEGOTIATION_SELLER_PROMPT = SmartPrompt(
     "You are the Seller's legal counsel. Your negotiation stance is '{stance}'. "
     "You want to negotiate the '{clause_type}' clause of a contract. "
     "Review the Buyer's argument and proposed clause: '{buyer_proposal}'. "
@@ -145,7 +161,7 @@ NEGOTIATION_SELLER_PROMPT = (
 )
 """Prompt template for the seller agent in the negotiation sandbox. Placeholders: {stance}, {clause_type}, {buyer_proposal}, {language}."""
 
-NEGOTIATION_MEDIATOR_PROMPT = (
+NEGOTIATION_MEDIATOR_PROMPT = SmartPrompt(
     "You are LexiVault, a neutral mediator. Review the negotiation transcript between "
     "the Buyer's counsel and the Seller's counsel regarding the '{clause_type}' clause:\n"
     "Transcript:\n{transcript}\n\n"
@@ -162,7 +178,7 @@ NEGOTIATION_MEDIATOR_PROMPT = (
 )
 """Prompt template for the mediator agent in the negotiation sandbox. Placeholders: {clause_type}, {transcript}, {language}."""
 
-SEMANTIC_DIFF_PROMPT = (
+SEMANTIC_DIFF_PROMPT = SmartPrompt(
     "You are a semantic legal diff auditor. Compare Version 1 and Version 2 of a clause.\n"
     "Version 1: {version_1}\n"
     "Version 2: {version_2}\n\n"
@@ -173,7 +189,7 @@ SEMANTIC_DIFF_PROMPT = (
 )
 """Prompt template for semantic diff auditing. Placeholders: {version_1}, {version_2}, {language}."""
 
-LIFECYCLE_TIMELINE_PROMPT = (
+LIFECYCLE_TIMELINE_PROMPT = SmartPrompt(
     "You are LexiVault, a predictive contract manager. Analyze the following contract "
     "text and predict its full lifecycle. Output valid JSON only with these exact keys: "
     "negotiation_duration_days (estimated negotiation timeline in days as an integer), "
@@ -190,7 +206,7 @@ LIFECYCLE_TIMELINE_PROMPT = (
 )
 """Prompt template for predicting contract lifecycles. Placeholders: {contract_text}, {language}."""
 
-COUNTERPARTY_SIMULATION_PROMPT = (
+COUNTERPARTY_SIMULATION_PROMPT = SmartPrompt(
     "You are the opposing party's legal counsel. Review the original contract clause: "
     "'{clause_text}'. The other party has proposed this edit: '{proposed_edit}'.\n"
     "Your job is to formulate realistic pushback. Output your response exactly in this format:\n"
@@ -217,7 +233,7 @@ PORTFOLIO_EXTRACTION_PROMPT = (
 )
 """Prompt template for portfolio metadata extraction. Placeholders: {contract_text}."""
 
-NEGOTIATION_GHOSTWRITER_PROMPT = (
+NEGOTIATION_GHOSTWRITER_PROMPT = SmartPrompt(
     "You are LexiVault, an expert legal negotiation co-pilot. You are given an original "
     "contract clause: '{clause_text}' and a redlined edit proposed by the other party: "
     "'{redlined_text}'.\n"
@@ -232,7 +248,7 @@ NEGOTIATION_GHOSTWRITER_PROMPT = (
 )
 """Prompt template for negotiation ghostwriter. Placeholders: {clause_text}, {redlined_text}, {language}."""
 
-SHADOW_BATTLE_PROMPT = (
+SHADOW_BATTLE_PROMPT = SmartPrompt(
     "You are an adversarial legal battle simulator. Analyze the contract text: '{contract_text}'.\n"
     "1. Find the single most controversial, high-liability, or risky clause in the contract.\n"
     "2. Simulate a sharp, realistic 3-turn debate in character:\n"
@@ -251,7 +267,7 @@ SHADOW_BATTLE_PROMPT = (
 )
 """Prompt template for shadow battle. Placeholders: {contract_text}, {language}."""
 
-RESIDUE_FORENSICS_PROMPT = (
+RESIDUE_FORENSICS_PROMPT = SmartPrompt(
     "You are a document forensics expert. Analyze the contract text: '{contract_text}'.\n"
     "Examine the phrasing for non-standard boilerplate terms, suspicious formatting anomalies, "
     "hidden traps, or unusual deviations from industry standards.\n"
@@ -261,7 +277,7 @@ RESIDUE_FORENSICS_PROMPT = (
 )
 """Prompt template for residue forensics. Placeholders: {contract_text}, {language}."""
 
-ECHO_HARMONICS_PROMPT = (
+ECHO_HARMONICS_PROMPT = SmartPrompt(
     "You are a cross-language legal semantics expert. Analyze the legal phrase or clause: '{clause_text}'.\n"
     "Evaluate its semantic legal weight and compare it across English, Hindi, and Hinglish.\n"
     "Explain standard semantic gaps and traps (for example, why 'best efforts' is legally heavier "
@@ -271,7 +287,7 @@ ECHO_HARMONICS_PROMPT = (
 )
 """Prompt template for echo harmonics. Placeholders: {clause_text}, {language}."""
 
-ALCHEMY_EXPORTER_PROMPT = (
+ALCHEMY_EXPORTER_PROMPT = SmartPrompt(
     "You are a DevOps SLA-to-Code compiler. Parse the following contract text for service level "
     "agreements (SLAs), uptime guarantees, latency limits, support resolution times, or performance "
     "targets: '{contract_text}'.\n"
