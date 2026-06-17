@@ -588,6 +588,22 @@ export default function WorkspaceSection({
 
   // ---- API Handlers ----
 
+  // Re-sync the local document list from backend truth
+  const syncDocumentsFromBackend = async () => {
+    try {
+      const res = await secureFetch(`${API_BASE}/documents?t=${Date.now()}`);
+      const data = await res.json();
+      if (res.ok && data.documents) {
+        setDocuments(data.documents);
+      } else {
+        // Backend has no documents — clear local state
+        setDocuments([]);
+      }
+    } catch {
+      // Network error — keep existing state
+    }
+  };
+
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     setIsUploading(true);
@@ -598,11 +614,23 @@ export default function WorkspaceSection({
       const res = await secureFetch(`${API_BASE}/upload?language=${uploadLang}`, { method: 'POST', body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Upload failed');
-      const newDocs = data.results.map((r: any) => ({
-        name: r.file, status: r.status, namespace: r.namespace,
-        message: r.message || (r.status === 'success' ? t.successMsg : 'Failed'),
-      }));
-      setDocuments(prev => [...newDocs, ...prev]);
+      // Only add successfully indexed documents — discard failed ones
+      const successDocs = data.results
+        .filter((r: any) => r.status === 'success')
+        .map((r: any) => ({
+          name: r.file, status: r.status, namespace: r.namespace,
+          message: r.message || t.successMsg,
+        }));
+      const failedDocs = data.results.filter((r: any) => r.status !== 'success');
+      if (failedDocs.length > 0) {
+        const failedNames = failedDocs.map((r: any) => r.file).join(', ');
+        alert(globalLanguage === 'hi'
+          ? `इन फ़ाइलों को इंडेक्स नहीं किया जा सका: ${failedNames}`
+          : `Could not index these files: ${failedNames}`);
+      }
+      if (successDocs.length > 0) {
+        setDocuments(prev => [...successDocs, ...prev]);
+      }
     } catch (err: any) { alert('Upload error: ' + err.message); }
     finally { setIsUploading(false); if (fileInputRef.current) fileInputRef.current.value = ''; }
   };
@@ -640,10 +668,21 @@ export default function WorkspaceSection({
         body: JSON.stringify({ query: q }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Error');
+      if (!res.ok) {
+        const errMsg = data.detail || 'Error';
+        // If backend says no documents indexed, re-sync and clear stale docs
+        if (errMsg.toLowerCase().includes('no documents indexed')) {
+          await syncDocumentsFromBackend();
+          const friendlyMsg = globalLanguage === 'hi'
+            ? '⚠️ दस्तावेज़ सत्र समाप्त हो गया। कृपया अपना दस्तावेज़ पुनः अपलोड करें।'
+            : '⚠️ Document session expired. Please re-upload your documents.';
+          throw new Error(friendlyMsg);
+        }
+        throw new Error(errMsg);
+      }
       setChatHistory(prev => [...prev, { role: 'assistant', content: data.answer, sources: data.sources }]);
     } catch (err: any) {
-      setChatHistory(prev => [...prev, { role: 'assistant', content: `❌ ${err.message}` }]);
+      setChatHistory(prev => [...prev, { role: 'assistant', content: `${err.message}` }]);
     } finally { setIsAsking(false); }
   };
 
@@ -657,7 +696,17 @@ export default function WorkspaceSection({
     try {
       const res = await secureFetch(`${API_BASE}/risks?t=${Date.now()}`);
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Error');
+      if (!res.ok) {
+        const errMsg = data.detail || 'Error';
+        if (errMsg.toLowerCase().includes('no documents indexed')) {
+          await syncDocumentsFromBackend();
+          const friendlyMsg = globalLanguage === 'hi'
+            ? 'दस्तावेज़ सत्र समाप्त हो गया। कृपया अपना दस्तावेज़ पुनः अपलोड करें।'
+            : 'Document session expired. Please re-upload your documents.';
+          throw new Error(friendlyMsg);
+        }
+        throw new Error(errMsg);
+      }
       setRisks(data.risks || []);
       setWolframCtx(data.wolfram_context || []);
       setHasAnalyzedRisks(true);
@@ -689,7 +738,17 @@ export default function WorkspaceSection({
         body: JSON.stringify({ language: briefLang }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Error');
+      if (!res.ok) {
+        const errMsg = data.detail || 'Error';
+        if (errMsg.toLowerCase().includes('no documents indexed')) {
+          await syncDocumentsFromBackend();
+          const friendlyMsg = globalLanguage === 'hi'
+            ? 'दस्तावेज़ सत्र समाप्त हो गया। कृपया अपना दस्तावेज़ पुनः अपलोड करें।'
+            : 'Document session expired. Please re-upload your documents.';
+          throw new Error(friendlyMsg);
+        }
+        throw new Error(errMsg);
+      }
       setBriefResult(data.brief);
     } catch (err: any) { setBriefResult('❌ ' + err.message); }
     finally { setIsBriefing(false); }
